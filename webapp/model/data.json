@@ -1,0 +1,46 @@
+{
+  "Prestamos": [
+    {
+      "key": "01",
+      "text": "Préstamo Calamidad"
+    },
+    {
+      "key": "02",
+      "text": "Préstamo Educativo"
+    }
+  ],
+  "Cuotas": [
+    { "key": "01", "text": "01" },
+    { "key": "02", "text": "02" },
+    { "key": "03", "text": "03" },
+    { "key": "04", "text": "04" },
+    { "key": "05", "text": "05" },
+    { "key": "06", "text": "06" },
+    { "key": "07", "text": "07" },
+    { "key": "08", "text": "08" },
+    { "key": "09", "text": "09" },
+    { "key": "10", "text": "10" },
+    { "key": "11", "text": "11" },
+    { "key": "12", "text": "12" }
+  ],
+  "Modalidad": [
+    {
+      "key": "01",
+      "text": "Técnico"
+    },
+    {
+      "key": "02",
+      "text": "Universitario"
+    }
+  ],
+  "OrigenUniversidad": [
+    {
+      "key": "01",
+      "text": "Nacional"
+    },
+    {
+      "key": "02",
+      "text": "Extranjera"
+    }
+  ]
+}

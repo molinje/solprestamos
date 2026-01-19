@@ -1,0 +1,169 @@
+{
+  "_version": "1.76.0",
+  "sap.app": {
+    "id": "prestamos.ccb.org.solprestamos",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+
+     "dataSources": {
+      "localData": {
+        "type": "JSON",
+        "uri": "model/data.json"
+      }
+    },
+     
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.20.0",
+      "toolsId": "8c1e7ff7-a002-4a09-b341-ad1150f97f6c"
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    
+    "dependencies": {
+      "minUI5Version": "1.143.2",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "prestamos.ccb.org.solprestamos.i18n.i18n"
+        }
+      },
+       "": {
+        "dataSource": "localData",
+        "type": "sap.ui.model.json.JSONModel"
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "prestamos.ccb.org.solprestamos.view",
+        "async": true,
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+          "name": "RouteViewini",
+          "pattern": ":?query:",
+          "target": [
+            "TargetViewini"
+          ]
+        },
+        {
+          "name": "RouteView2",
+          "pattern": "view2",
+          "target": ["TargetView2"]
+        },
+        {
+          "name": "RouteView3",
+          "pattern": "view3",
+          "target": ["TargetView3"]
+        },
+         {
+          "name": "RouteComputador",
+          "pattern": "computador",
+          "target": ["TargetComputador"]
+        },
+        {
+          "name": "Routeelectric",
+          "pattern": "electric",
+          "target": ["Targetelectric"]
+        }
+      ],
+      "targets": {
+        "TargetViewini": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "id": "Viewini",
+          "name": "Viewini"
+        },
+        "TargetView2": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "id": "View2",
+          "name": "View2"
+        },
+        "TargetView3": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "id": "View3",
+          "name": "View3"
+        },
+         "TargetComputador": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "id": "Computador",
+          "name": "Computador"
+        },
+         "TargetMelectrica": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "id": "Melectrica",
+          "name": "Melectrica"
+        },
+         "Targetelectric": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "id": "electric",
+          "name": "electric"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "prestamos.ccb.org.solprestamos.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}

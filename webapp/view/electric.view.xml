@@ -1,0 +1,140 @@
+<mvc:View
+  controllerName="prestamos.ccb.org.solprestamos.controller.electric"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns:layout="sap.ui.layout"
+  xmlns:form="sap.ui.layout.form"
+  displayBlock="true"
+  xmlns="sap.m">
+  <Page
+    id="Pageelectric"
+    title="Préstamo Movilidad eléctrica"
+    showNavButton="true"
+    navButtonPress=".onNavBack">
+    <content>
+        <Wizard id="wizardelectric" complete="onWizardComplete" class="sapUiResponsiveMargin">
+                
+                <!-- Paso 1: Datos del Préstamo Educativo -->
+                <WizardStep
+                    id="stepelectric01"
+                    title="Datos del Préstamo"
+                    validated="true">
+                    <VBox class="sapUiSmallMargin">
+                        <Label text="Valor Solicitado" labelFor="inputValorSolicitado" class="sapUiSmallMarginBottom"/>
+                        <Input
+                            id="inputValorelectric"
+                            value="{educaView>/valorSolicitado}"
+                            type="Number"
+                            width="100%"
+                            placeholder="Ingrese el valor solicitado"/>
+                        
+                        <Label text="Origen Universidad" labelFor="selectOrigen" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Select
+                            id="selectOrigenelectric"
+                            selectedKey="{educaView>/origenUniversidad}"
+                            items="{/OrigenUniversidad}"
+                            width="100%">
+                            <core:Item key="{key}" text="{text}"/>
+                        </Select>
+                        
+                        <Label text="Modalidad" labelFor="selectModalidad" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Select
+                            id="selectModalidadelectric"
+                            selectedKey="{educaView>/modalidad}"
+                            items="{/Modalidad}"
+                            width="100%">
+                            <core:Item key="{key}" text="{text}"/>
+                        </Select>
+                    </VBox>
+                </WizardStep>
+                
+                <!-- Paso 2: Información del Solicitante -->
+                <WizardStep
+                    id="stepelectric02"
+                    title="Información del Solicitante"
+                    validated="true">
+                    <VBox class="sapUiSmallMargin">
+                        <Label text="¿Tiene codeudor?" class="sapUiSmallMarginBottom"/>
+                        <RadioButtonGroup
+                            id="rbGroupCodeudorelectric"
+                            selectedIndex="{educaView>/tieneCodeudor}">
+                            <RadioButton text="Sí"/>
+                            <RadioButton text="No"/>
+                        </RadioButtonGroup>
+                        
+                        <Label text="Número de Documento" labelFor="inputDocumento" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Input
+                            id="inputDocumentoelectric"
+                            value="{educaView>/numeroDocumento}"
+                            width="100%"
+                            placeholder="Ingrese número de documento"/>
+                    </VBox>
+                </WizardStep>
+                
+                <!-- Paso 3: Compromisos -->
+                <WizardStep
+                    id="stepelectric03"
+                    title="Compromisos"
+                    validated="true">
+                    <VBox class="sapUiSmallMargin">
+                        <Label text="Fecha" labelFor="datePicker" class="sapUiSmallMarginBottom"/>
+                        <DatePicker
+                            id="datePickerelectric"
+                            value="{educaView>/fecha}"
+                            width="100%"
+                            placeholder="Seleccione una fecha"/>
+                        
+                        <Label text="Valor Comprometido" labelFor="inputValorComp" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Input
+                            id="inputValorCompelectric"
+                            value="{educaView>/valorComprometido}"
+                            type="Number"
+                            width="100%"
+                            placeholder="Ingrese el valor comprometido"/>
+                    </VBox>
+                </WizardStep>
+                
+                <!-- Paso 4: Documentos -->
+                <WizardStep
+                    id="stepelectric04"
+                    title="Adjuntar Documentos"
+                    validated="true">
+                    <VBox class="sapUiSmallMargin">
+                        <Label text="Adjuntar Documentos" class="sapUiSmallMarginBottom"/>
+                      
+                        
+                        <Button
+                            id="btnCrearSolicelectric"
+                            text="Crear Solicitud"
+                            type="Emphasized"
+                            press="onCrearSolicitud"
+                            enabled="{educaView>/solicitudEnabled}"
+                            class="sapUiMediumMarginTop"
+                            width="200px"/>
+                    </VBox>
+                </WizardStep>
+                
+       </Wizard>
+      <VBox
+        alignItems="Center"
+        justifyContent="Center"
+        class="sapUiMediumMarginTop">
+        <items>
+          <Title
+            text="Esta es la Vista 3"
+            level="H2"
+            class="sapUiMediumMarginBottom"/>
+          <Text
+            text="Aquí puedes añadir el contenido específico de la Vista 3"
+            class="sapUiMediumMarginBottom"/>
+          <Button
+            text="Volver al Inicio"
+            type="Emphasized"
+            icon="sap-icon://home"
+            press=".onNavBack"
+            class="sapUiSmallMarginTop"/>
+        </items>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>

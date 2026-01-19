@@ -1,0 +1,163 @@
+<mvc:View
+  controllerName="prestamos.ccb.org.solprestamos.controller.View2"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
+  xmlns:layout="sap.ui.layout"
+  xmlns:form="sap.ui.layout.form"
+  displayBlock="true"
+  xmlns="sap.m">
+  <Page
+    id="page2"
+    title="Prestamo Calamidad"
+    showNavButton="true"
+    navButtonPress=".onNavBack">
+    <content>
+      <Wizard id="wizardCalam" complete="onWizardComplete" class="sapUiResponsiveMargin">
+                
+                <!-- Paso 1: Datos del Préstamo -->
+                <WizardStep
+                    id="step1"
+                    title="Datos del Préstamo"
+                    validated="true">
+                    <VBox class="sapUiSmallMargin">
+                    	<form:SimpleForm
+										editable="true"
+										layout="ResponsiveGridLayout">
+                     <Label text="Monto máximo a solicitar" labelFor="MaxValor" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Input
+                            id="MaxValor"
+                            value="3.000.000"
+                            editable="false"
+                            width="100%"
+                            />
+                        <Label text="Cuotas" labelFor="selectCuotas" class="sapUiSmallMarginBottom"/>
+                        <Select
+                            id="selectCuotas"
+                            width="100%"
+                            selectedKey="{/selectedCuotas}"
+                            items="{/CuotasCollection}">
+                            <core:Item key="{CuotasId}" text="{Name}"/>
+                        </Select>
+                        
+                        <Label text="Valor solicitado" labelFor="inputValor" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Input
+                            id="inputValor"
+                            value="{calamView>/valor}"
+                            type="Number"
+                            width="100%"
+                            placeholder="Ingrese el valor del préstamo"/>
+                         <Label text="Valor prestamo" labelFor="ValorPrestamo" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Input
+                            id="ValorPrestamo"
+                            value="{calamView>/valor}"
+                            type="Number"
+                            editable="false"
+                            width="100%"
+                            />
+                         <Label text="Valor cuota prestamo" labelFor="ValorCuotaP" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Input
+                            id="ValorCuotaP"
+                            value="{calamView>/valor}"
+                            type="Number"
+                            editable="false"
+                            width="100%"
+                            />            
+                      </form:SimpleForm>
+                    </VBox>
+                </WizardStep>
+                
+                <!-- Paso 2: Información del Solicitante -->
+                <WizardStep
+                    id="step2"
+                    title="Datos codeudor"
+                    validated="true">
+                    <VBox class="sapUiSmallMargin">
+                        <Label text="¿Tiene codeudor?" class="sapUiSmallMarginBottom"/>
+                        <RadioButtonGroup
+                            id="rbGroupCodeudor"
+                            selectedIndex="{calamView>/tieneCodeudor}">
+                            <RadioButton text="Sí"/>
+                            <RadioButton text="No"/>
+                        </RadioButtonGroup>
+                        
+                        <Label text="Número de Documento" labelFor="inputDocumento" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Input
+                            id="inputDocumento"
+                            value="{calamView>/numeroDocumento}"
+                            width="100%"
+                            placeholder="Ingrese número de documento"/>
+                    </VBox>
+                </WizardStep>
+                
+                <!-- Paso 3: Compromisos -->
+                <WizardStep
+                    id="step3"
+                    title="Primas y bonificaciones"
+                    validated="true">
+                    <VBox class="sapUiSmallMargin">
+                        <Label text="Fecha" labelFor="datePicker" class="sapUiSmallMarginBottom"/>
+                        <DatePicker
+                            id="datePicker"
+                            value="{calamView>/fecha}"
+                            width="100%"
+                            placeholder="Seleccione una fecha"/>
+                        
+                        <Label text="Valor Comprometido" labelFor="inputValorComp" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Input
+                            id="inputValorComp"
+                            value="{calamView>/valorComprometido}"
+                            type="Number"
+                            width="100%"
+                            placeholder="Ingrese el valor comprometido"/>
+                    </VBox>
+                </WizardStep>
+                
+                <!-- Paso 4: Documentos -->
+                <WizardStep
+                    id="step4"
+                    title="Soportes"
+                    validated="true">
+                    <VBox class="sapUiSmallMargin">
+                        <Label text="Adjuntar Documentos" class="sapUiSmallMarginBottom"/>
+                        <UploadCollection
+                            id="uploadCollection"
+                            uploadUrl="/upload"
+                            multiple="true"
+                            uploadComplete="onUploadComplete">
+                        </UploadCollection>
+                        
+                        <Button
+                            id="btnCrearSolicitud"
+                            text="Crear Solicitud"
+                            type="Emphasized"
+                            press="onCrearSolicitud"
+                            enabled="{calamView>/solicitudEnabled}"
+                            class="sapUiMediumMarginTop"
+                            width="200px"/>
+                    </VBox>
+                </WizardStep>
+                
+      </Wizard>
+      <VBox
+        alignItems="Center"
+        justifyContent="Center"
+        class="sapUiMediumMarginTop">
+        <items>
+          <Title
+            text="Esta es la Vista 2"
+            level="H2"
+            class="sapUiMediumMarginBottom"/>
+          <Text
+            text="Aquí puedes añadir el contenido específico de la Vista 2"
+            class="sapUiMediumMarginBottom"/>
+          <Button
+            text="Volver al Inicio"
+            type="Emphasized"
+            icon="sap-icon://home"
+            press=".onNavBack"
+            class="sapUiSmallMarginTop"/>
+        </items>
+      </VBox>
+    </content>
+  </Page>
+</mvc:View>

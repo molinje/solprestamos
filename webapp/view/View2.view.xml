@@ -23,7 +23,7 @@
                     	<form:SimpleForm
 										editable="true"
 										layout="ResponsiveGridLayout">
-                     <Label text="Monto máximo a solicitar" labelFor="MaxValor" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                     <Label text="Monto máximo a solicitar" labelFor="MaxValor" />
                         <Input
                             id="MaxValor"
                             value="3.000.000"
@@ -39,14 +39,14 @@
                             <core:Item key="{CuotasId}" text="{Name}"/>
                         </Select>
                         
-                        <Label text="Valor solicitado" labelFor="inputValor" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Label text="Valor solicitado" labelFor="inputValor" />
                         <Input
                             id="inputValor"
                             value="{calamView>/valor}"
                             type="Number"
                             width="100%"
                             placeholder="Ingrese el valor del préstamo"/>
-                         <Label text="Valor prestamo" labelFor="ValorPrestamo" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                         <Label text="Valor prestamo" labelFor="ValorPrestamo" />
                         <Input
                             id="ValorPrestamo"
                             value="{calamView>/valor}"
@@ -54,7 +54,7 @@
                             editable="false"
                             width="100%"
                             />
-                         <Label text="Valor cuota prestamo" labelFor="ValorCuotaP" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                         <Label text="Valor cuota prestamo" labelFor="ValorCuotaP" />
                         <Input
                             id="ValorCuotaP"
                             value="{calamView>/valor}"
@@ -72,6 +72,9 @@
                     title="Datos codeudor"
                     validated="true">
                     <VBox class="sapUiSmallMargin">
+                        <form:SimpleForm
+										editable="true"
+										layout="ResponsiveGridLayout">
                         <Label text="¿Tiene codeudor?" class="sapUiSmallMarginBottom"/>
                         <RadioButtonGroup
                             id="rbGroupCodeudor"
@@ -80,12 +83,42 @@
                             <RadioButton text="No"/>
                         </RadioButtonGroup>
                         
-                        <Label text="Número de Documento" labelFor="inputDocumento" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Label text="Número de Documento" labelFor="inputDocumento" />
                         <Input
                             id="inputDocumento"
                             value="{calamView>/numeroDocumento}"
                             width="100%"
                             placeholder="Ingrese número de documento"/>
+                         <Label text="Nombre" labelFor="CodeudorNombre" />
+                        <Input 
+                            id="CodeudorNombre"  
+                            value="{calamView>/nombreCodeudor}"                         
+                            editable="true"
+                            width="100%"
+                            />
+                            <Label text="Cédula" labelFor="CodeudorCedula" />
+                        <Input 
+                            id="CodeudorCedula"  
+                            value="{calamView>/cedulaCodeudor}"                         
+                            editable="true"
+                            width="100%"
+                            />      
+                            <Label text="Dirección" labelFor="CodeudorDireccion" />
+                        <Input 
+                            id="CodeudorDireccion"  
+                            value="{calamView>/direccionCodeudor}"                         
+                            editable="true"
+                            width="100%"
+                            />
+                        <Label text="Teléfono" labelFor="CodeudorTelefono" />
+                        <Input 
+                            id="CodeudorTelefono"  
+                            value="{calamView>/telefonoCodeudor}"                         
+                            editable="true"
+                            width="100%"
+                            />                     
+                        </form:SimpleForm>
+                        	
                     </VBox>
                 </WizardStep>
                 
@@ -95,6 +128,9 @@
                     title="Primas y bonificaciones"
                     validated="true">
                     <VBox class="sapUiSmallMargin">
+                       <form:SimpleForm
+										editable="true"
+										layout="ResponsiveGridLayout">
                         <Label text="Fecha" labelFor="datePicker" class="sapUiSmallMarginBottom"/>
                         <DatePicker
                             id="datePicker"
@@ -102,13 +138,14 @@
                             width="100%"
                             placeholder="Seleccione una fecha"/>
                         
-                        <Label text="Valor Comprometido" labelFor="inputValorComp" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                        <Label text="Valor Comprometido" labelFor="inputValorComp" />
                         <Input
                             id="inputValorComp"
                             value="{calamView>/valorComprometido}"
                             type="Number"
                             width="100%"
                             placeholder="Ingrese el valor comprometido"/>
+                            </form:SimpleForm>
                     </VBox>
                 </WizardStep>
                 

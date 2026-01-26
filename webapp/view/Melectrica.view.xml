@@ -8,7 +8,7 @@
   xmlns="sap.m">
   <Page
     id="PageMelectrica"
-    title="Préstamo Movilidad eléctrica"
+    title="Préstamo Movilidad E."
     showNavButton="true"
     navButtonPress=".onNavBack">
     <content>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test SAP Integration Suite Services</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .test-section {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #0070f3;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0051cc;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test SAP Integration Suite Services</h1>
+    
+    <div class="info">
+        <strong>📍 Ubicación actual:</strong> <span id="currentLocation"></span>
+    </div>
+
+    <!-- Test 1: Verificar Configuración -->
+    <div class="test-section">
+        <h2>1️⃣ Verificar Configuración</h2>
+        <button onclick="checkConfig()">Verificar Config</button>
+        <div id="configResult"></div>
+    </div>
+
+    <!-- Test 2: Test OAuth Token -->
+    <div class="test-section">
+        <h2>2️⃣ Test OAuth Token</h2>
+        <button onclick="testOAuth()">Obtener Token</button>
+        <div id="oauthResult"></div>
+    </div>
+
+    <!-- Test 3: Test Servicio HTTP -->
+    <div class="test-section">
+        <h2>3️⃣ Test Servicio HTTP (GET)</h2>
+        <label>User ID: <input type="text" id="userId" value="00201663"></label>
+        <button onclick="testHttpService()">Ejecutar GET</button>
+        <div id="httpResult"></div>
+    </div>
+
+    <!-- Test 4: Test Completo -->
+    <div class="test-section">
+        <h2>4️⃣ Test Completo (Token + Servicio)</h2>
+        <button onclick="testComplete()">Ejecutar Test Completo</button>
+        <div id="completeResult"></div>
+    </div>
+
+    <script>
+        // Mostrar ubicación actual
+        document.getElementById('currentLocation').textContent = window.location.origin;
+
+        // Test 1: Verificar Configuración
+        function checkConfig() {
+            const result = document.getElementById('configResult');
+            result.innerHTML = `
+                <div class="info">
+                    <strong>Configuración Actual:</strong><br>
+                    Origin: ${window.location.origin}<br>
+                    OAuth URL: ${window.location.origin}/oauth/token<br>
+                    Service URL: ${window.location.origin}/http/pruebaconsulta<br><br>
+                    <strong>✅ URLs configuradas correctamente para usar proxy local</strong>
+                </div>
+            `;
+        }
+
+        // Test 2: OAuth Token
+        async function testOAuth() {
+            const result = document.getElementById('oauthResult');
+            result.innerHTML = '<div class="info">⏳ Obteniendo token...</div>';
+
+            const clientId = 'sb-929514f2-7649-4f9b-9d7a-33c735214f2d!b514001|it-rt-ccb-is-dev-5v6vds1v!b410334';
+            const clientSecret = '919238f2-d4b4-4a21-9cdd-c5223c761188$Wo35vsb0eRDV1ZhdjBRGRYidXQ-XnxRL94hk_sPweFI=';
+            const credentials = btoa(clientId + ':' + clientSecret);
+
+            try {
+                const response = await fetch('/oauth/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Authorization': 'Basic ' + credentials
+                    },
+                    body: 'grant_type=client_credentials'
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    result.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Token obtenido exitosamente</strong><br>
+                            Status: ${response.status}<br>
+                            Access Token: ${data.access_token.substring(0, 50)}...<br>
+                            Expires In: ${data.expires_in} segundos
+                        </div>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    `;
+                } else {
+                    const errorText = await response.text();
+                    result.innerHTML = `
+                        <div class="error">
+                            <strong>❌ Error al obtener token</strong><br>
+                            Status: ${response.status}<br>
+                            Error: ${errorText}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Error de red</strong><br>
+                        ${error.message}<br><br>
+                        <strong>Posible causa:</strong> El proxy no está configurado correctamente en ui5.yaml
+                    </div>
+                `;
+            }
+        }
+
+        // Test 3: Servicio HTTP
+        async function testHttpService() {
+            const result = document.getElementById('httpResult');
+            const userId = document.getElementById('userId').value;
+            result.innerHTML = '<div class="info">⏳ Ejecutando servicio HTTP...</div>';
+
+            // Primero obtener el token
+            const clientId = 'sb-929514f2-7649-4f9b-9d7a-33c735214f2d!b514001|it-rt-ccb-is-dev-5v6vds1v!b410334';
+            const clientSecret = '919238f2-d4b4-4a21-9cdd-c5223c761188$Wo35vsb0eRDV1ZhdjBRGRYidXQ-XnxRL94hk_sPweFI=';
+            const credentials = btoa(clientId + ':' + clientSecret);
+
+            try {
+                // Paso 1: Obtener token
+                const tokenResponse = await fetch('/oauth/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Authorization': 'Basic ' + credentials
+                    },
+                    body: 'grant_type=client_credentials'
+                });
+
+                if (!tokenResponse.ok) {
+                    throw new Error('Error al obtener token');
+                }
+
+                const tokenData = await tokenResponse.json();
+                const accessToken = tokenData.access_token;
+
+                // Paso 2: Llamar al servicio HTTP
+                const serviceResponse = await fetch('/http/pruebaconsulta', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + accessToken,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "Consul": [
+                            {
+                                "userId": userId
+                            }
+                        ]
+                    })
+                });
+
+                if (serviceResponse.ok) {
+                    const serviceData = await serviceResponse.json();
+                    result.innerHTML = `
+                        <div class="success">
+                            <strong>✅ Servicio ejecutado exitosamente</strong><br>
+                            Status: ${serviceResponse.status}<br>
+                            User ID enviado: ${userId}
+                        </div>
+                        <pre>${JSON.stringify(serviceData, null, 2)}</pre>
+                    `;
+                } else {
+                    const errorText = await serviceResponse.text();
+                    result.innerHTML = `
+                        <div class="error">
+                            <strong>❌ Error en el servicio</strong><br>
+                            Status: ${serviceResponse.status}<br>
+                            Error: ${errorText}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                result.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Error de red o CORS</strong><br>
+                        ${error.message}<br><br>
+                        <strong>Verificar:</strong><br>
+                        1. El servidor ui5 está corriendo (npm start)<br>
+                        2. El archivo ui5.yaml tiene la configuración del proxy<br>
+                        3. La URL en el código usa rutas relativas (/http/pruebaconsulta)
+                    </div>
+                `;
+            }
+        }
+
+        // Test 4: Test Completo
+        async function testComplete() {
+            const result = document.getElementById('completeResult');
+            result.innerHTML = '<div class="info">⏳ Ejecutando test completo...</div>';
+            
+            let html = '<h3>Resultados:</h3>';
+
+            // Test OAuth
+            html += '<p>1. Probando OAuth...</p>';
+            try {
+                const clientId = 'sb-929514f2-7649-4f9b-9d7a-33c735214f2d!b514001|it-rt-ccb-is-dev-5v6vds1v!b410334';
+                const clientSecret = '919238f2-d4b4-4a21-9cdd-c5223c761188$Wo35vsb0eRDV1ZhdjBRGRYidXQ-XnxRL94hk_sPweFI=';
+                const credentials = btoa(clientId + ':' + clientSecret);
+
+                const tokenResponse = await fetch('/oauth/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Authorization': 'Basic ' + credentials
+                    },
+                    body: 'grant_type=client_credentials'
+                });
+
+                if (tokenResponse.ok) {
+                    html += '<p>✅ OAuth: OK</p>';
+                    const tokenData = await tokenResponse.json();
+                    
+                    // Test Servicio HTTP
+                    html += '<p>2. Probando Servicio HTTP...</p>';
+                    const serviceResponse = await fetch('/http/pruebaconsulta', {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': 'Bearer ' + tokenData.access_token,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            "Consul": [{ "userId": "00201663" }]
+                        })
+                    });
+
+                    if (serviceResponse.ok) {
+                        html += '<p>✅ Servicio HTTP: OK</p>';
+                        const serviceData = await serviceResponse.json();
+                        result.innerHTML = `
+                            <div class="success">
+                                ${html}
+                                <strong>🎉 TODOS LOS TESTS PASARON EXITOSAMENTE</strong>
+                            </div>
+                            <pre>${JSON.stringify(serviceData, null, 2)}</pre>
+                        `;
+                    } else {
+                        html += '<p>❌ Servicio HTTP: FAILED</p>';
+                        result.innerHTML = `<div class="error">${html}</div>`;
+                    }
+                } else {
+                    html += '<p>❌ OAuth: FAILED</p>';
+                    result.innerHTML = `<div class="error">${html}</div>`;
+                }
+            } catch (error) {
+                html += `<p>❌ Error: ${error.message}</p>`;
+                result.innerHTML = `<div class="error">${html}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>

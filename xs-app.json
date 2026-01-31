@@ -1,0 +1,24 @@
+{
+  "welcomeFile": "/index.html",
+  "authenticationMethod": "route",
+  "routes": [
+    {
+      "source": "^/oauth/(.*)$",
+      "target": "/oauth/$1",
+      "destination": "oauth-destination",
+      "authenticationType": "none"
+    },
+    {
+      "source": "^/http/(.*)$",
+      "target": "/http/$1",
+      "destination": "integration-suite-destination",
+      "authenticationType": "none"
+    },
+    {
+      "source": "^(.*)$",
+      "target": "$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
+    }
+  ]
+}

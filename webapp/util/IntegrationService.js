@@ -65,7 +65,7 @@ sap.ui.define([
             return new Promise(function (resolve, reject) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", url, true);
-                
+                //token = "";
                 // Configurar headers
                 xhr.setRequestHeader("Authorization", "Bearer " + token);
                 xhr.setRequestHeader("Content-Type", "application/json");

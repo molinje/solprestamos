@@ -3,16 +3,16 @@
   "authenticationMethod": "route",
   "routes": [
     {
-      "source": "^/oauth/(.*)$",
-      "target": "/oauth/$1",
-      "destination": "oauth-destination",
-      "authenticationType": "none"
+      "source": "^/resources/(.*)$",
+      "target": "/resources/$1",
+      "authenticationType": "none",
+      "destination": "ui5"
     },
     {
-      "source": "^/http/(.*)$",
-      "target": "/http/$1",
-      "destination": "integration-suite-destination",
-      "authenticationType": "none"
+      "source": "^/test-resources/(.*)$",
+      "target": "/test-resources/$1",
+      "authenticationType": "none",
+      "destination": "ui5"
     },
     {
       "source": "^(.*)$",

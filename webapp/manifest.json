@@ -7,14 +7,16 @@
     "applicationVersion": {
       "version": "0.0.1"
     },
-
-     "dataSources": {
+    "dataSources": {
+       "restService": {
+        "uri": "/dest_int_s/http/prueba_test",
+        "type": "JSON"
+        },
       "localData": {
         "type": "JSON",
         "uri": "model/data.json"
       }
     },
-     
     "title": "{{appTitle}}",
     "description": "{{appDescription}}",
     "resources": "resources.json",
@@ -42,7 +44,6 @@
   },
   "sap.ui5": {
     "flexEnabled": false,
-    
     "dependencies": {
       "minUI5Version": "1.143.2",
       "libs": {
@@ -61,7 +62,7 @@
           "bundleName": "prestamos.ccb.org.solprestamos.i18n.i18n"
         }
       },
-       "": {
+      "": {
         "dataSource": "localData",
         "type": "sap.ui.model.json.JSONModel"
       }
@@ -96,22 +97,30 @@
         {
           "name": "RouteView2",
           "pattern": "view2",
-          "target": ["TargetView2"]
+          "target": [
+            "TargetView2"
+          ]
         },
         {
           "name": "RouteView3",
           "pattern": "view3",
-          "target": ["TargetView3"]
+          "target": [
+            "TargetView3"
+          ]
         },
-         {
+        {
           "name": "RouteComputador",
           "pattern": "computador",
-          "target": ["TargetComputador"]
+          "target": [
+            "TargetComputador"
+          ]
         },
         {
           "name": "Routeelectric",
           "pattern": "electric",
-          "target": ["Targetelectric"]
+          "target": [
+            "Targetelectric"
+          ]
         }
       ],
       "targets": {
@@ -136,21 +145,21 @@
           "id": "View3",
           "name": "View3"
         },
-         "TargetComputador": {
+        "TargetComputador": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "id": "Computador",
           "name": "Computador"
         },
-         "TargetMelectrica": {
+        "TargetMelectrica": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
           "id": "Melectrica",
           "name": "Melectrica"
         },
-         "Targetelectric": {
+        "Targetelectric": {
           "viewType": "XML",
           "transition": "slide",
           "clearControlAggregation": false,
@@ -165,5 +174,9 @@
       "id": "App",
       "async": true
     }
+  },
+  "sap.cloud": {
+    "public": true,
+    "service": "prestamosccborgsolprestamos"
   }
 }

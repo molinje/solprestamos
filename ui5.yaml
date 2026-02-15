@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
-
 specVersion: "4.0"
 metadata:
   name: prestamos.ccb.org.solprestamos
@@ -18,18 +16,8 @@ server:
         backend:
           - path: /http
             url: https://ccb-is-dev-5v6vds1v.it-cpi034-rt.cfapps.us10-002.hana.ondemand.com
-    - name: fiori-tools-proxy
-      afterMiddleware: compression
-      configuration:
-        ignoreCertErrors: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
-        ui5:
-          path:
-            - /resources
-            - /test-resources
-          url: https://ui5.sap.com
-        backend:
-          - path: /oauth
-            url: https://ccb-is-dev-5v6vds1v.authentication.us10.hana.ondemand.com
+            destination: dest_int_s
+            destinationRefreshToken: true 
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

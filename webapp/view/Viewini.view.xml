@@ -11,8 +11,8 @@
                         id="selectPrestamo"
                         width="100%"
                         selectedKey="{/selectedPrestamo}"
-                        items="{/PrestamoCollection}">
-                        <core:Item key="{PrestamoId}" text="{Name}"/>
+                        items="{prestamos>/PrestamoCollection}">
+                        <core:Item key="{prestamos>PrestamoId}" text="{prestamos>Name}"/>
                     </Select>
                     
                     <Button

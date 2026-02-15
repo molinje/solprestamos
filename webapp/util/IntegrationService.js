@@ -26,7 +26,8 @@ sap.ui.define([
         getPruebaConsulta: function (userId) {
             var that = this;
             // Usar ruta relativa para que use el proxy configurado en ui5.yaml
-            var serviceUrl = "/http/pruebaconsulta";
+            //var serviceUrl = "/http/pruebaconsulta";
+            var serviceUrl = "/http/prueba_test";
             
             // Preparar el body con el formato requerido
             var requestBody = {

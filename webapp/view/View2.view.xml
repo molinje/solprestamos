@@ -26,9 +26,21 @@
                      <Label text="Monto máximo a solicitar" labelFor="MaxValor" />
                         <Input
                             id="MaxValor"
-                            value="3.000.000"
+                            value="{
+                                parts: [
+                                    {path: 'calamView>/montoMaximo'},
+                                    {path: 'calamView>/moneda'}
+                                ],
+                                type: 'sap.ui.model.type.Currency',
+                                formatOptions: {
+                                    showMeasure: true,
+                                    currencyCode: true,
+                                    maxFractionDigits: 0
+                                }
+                            }"
                             editable="false"
                             width="100%"
+                            textAlign="End"
                             />
                         <Label text="Cuotas" labelFor="selectCuotas" class="sapUiSmallMarginBottom"/>
                         <Select
@@ -41,27 +53,70 @@
                         
                         <Label text="Valor solicitado" labelFor="inputValor" />
                         <Input
-                            id="inputValor"
-                            value="{calamView>/valor}"
-                            type="Number"
+                             id="inputValor"
+                            value="{
+                                parts: [
+                                    {path: 'calamView>/valorSolicitado'},
+                                    {path: 'calamView>/moneda'}
+                                ],
+                                type: 'sap.ui.model.type.Currency',
+                                formatOptions: {
+                                    showMeasure: true,
+                                    currencyCode: true,
+                                    maxFractionDigits: 0
+                                }
+                            }"
+                            change="onValorSolicitadoChange"
                             width="100%"
+                            textAlign="End"
                             placeholder="Ingrese el valor del préstamo"/>
                          <Label text="Valor prestamo" labelFor="ValorPrestamo" />
                         <Input
-                            id="ValorPrestamo"
-                            value="{calamView>/valor}"
-                            type="Number"
+                             id="ValorPrestamo"
+                            value="{
+                                parts: [
+                                    {path: 'calamView>/valorPrestamo'},
+                                    {path: 'calamView>/moneda'}
+                                ],
+                                type: 'sap.ui.model.type.Currency',
+                                formatOptions: {
+                                    showMeasure: true,
+                                    currencyCode: true,
+                                    maxFractionDigits: 0
+                                }
+                            }"
                             editable="false"
                             width="100%"
+                            textAlign="End"
                             />
                          <Label text="Valor cuota prestamo" labelFor="ValorCuotaP" />
                         <Input
-                            id="ValorCuotaP"
-                            value="{calamView>/valor}"
-                            type="Number"
+                           id="ValorCuotaP"
+                            value="{
+                                parts: [
+                                    {path: 'calamView>/valorCuota'},
+                                    {path: 'calamView>/moneda'}
+                                ],
+                                type: 'sap.ui.model.type.Currency',
+                                formatOptions: {
+                                    showMeasure: true,
+                                    currencyCode: true,
+                                    maxFractionDigits: 0
+                                }
+                            }"
                             editable="false"
                             width="100%"
-                            />            
+                            textAlign="End"
+                            /> 
+                        <Select
+					        forceSelection="false"
+					        selectedKey="{/selectedMotCalamidad}"
+					        items="{
+						            path: 'pcalamidad>/gt_motcalamidad',
+                            sorter: { path: 'DDTEXT' } 
+                                    }">
+					        <core:Item key="{pcalamidad>DOMVALUE_L}" text="{pcalamidad>DDTEXT}" />
+				        </Select>              
                       </form:SimpleForm>
                     </VBox>
                 </WizardStep>

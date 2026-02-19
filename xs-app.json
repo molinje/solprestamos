@@ -3,6 +3,13 @@
   "authenticationMethod": "route",
   "routes": [
     {
+      "source": "^/http/(.*)$",
+      "target": "/http/$1",
+      "destination": "dest_int_s",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
       "source": "^/resources/(.*)$",
       "target": "/resources/$1",
       "authenticationType": "none",

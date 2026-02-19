@@ -8,10 +8,10 @@
       "version": "0.0.1"
     },
     "dataSources": {
-       "restService": {
+      "restService": {
         "uri": "/dest_int_s/http/prueba_test",
         "type": "JSON"
-        },
+      },
       "localData": {
         "type": "JSON",
         "uri": "model/data.json"

@@ -14,9 +14,12 @@ sap.ui.define([
             var oRouter = this.getOwnerComponent().getRouter();
             //oRouter.getRoute("RouteViewini").attachPatternMatched(this._onObjectMatched, this);
 
-             //this.getView().getModel().setProperty("/EmpleadoInfo", "");
+            //this.getView().getModel().setProperty("/EmpleadoInfo", "");
 
-                  
+            // Obtener el modelo
+            var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+
+
 
             this._loadDatafromEmployee();
 
@@ -54,7 +57,8 @@ sap.ui.define([
         },
 
         /**
-        * Carga datos desde el servicio SAP Integration Suite
+        * Carga datos desde el servicio SAP Integration Suite, leemos los prestamos a los cuales el 
+        * empleado tiene derecho
         * @param {string} userId - ID del usuario (opcional, por defecto "00201663")
         * @private
         */
@@ -97,35 +101,18 @@ sap.ui.define([
 
                     var oModel = that.getView().getModel();
 
-                    oModel.setProperty("/EmpleadoInfo", {
-                        PERNR: empleadoInfo.PERNR,
-                        Nombres: empleadoInfo.NOMBRES,
-                        Apellidos: empleadoInfo.APELLIDOS,
-                        Salario: empleadoInfo.SALARIO,
-                        Correo: empleadoInfo.CORREO
-                    });
+                    if (oModel != undefined) {
 
+                        oModel.setProperty("/EmpleadoInfo", {
+                            "PERNR": empleadoInfo.PERNR,
+                            "Nombres": empleadoInfo.NOMBRES,
+                            "Apellidos": empleadoInfo.APELLIDOS,
+                            "Salario": empleadoInfo.SALARIO,
+                            "Correo": empleadoInfo.CORREO
+                        });
 
+                    }
 
-                    /*
-                                             var listPrest = oResponse["n0:ZMFCOHCM_INFO_INIResponse"].E_INFO.item.LIST_PREST;
-                        
-                                            // Si solo quieres el array de items
-                                            var prestamosArray = listPrest.item;
-                        
-                                            // Crear un nuevo objeto JSON con los préstamos
-                                            
-                                            var prestamosJSON = {
-                                                ListPrestamos: prestamosArray
-                                            };
-                                            
-                    
-                                             // También puedes crear un JSONModel directamente
-                                            var oPrestamosModel = new JSONModel(prestamosArray);
-                    
-                                            that.getView().setModel(oPrestamosModel, "ListPrestamos");
-                                            //that.getView().getModel().refresh(true);
-                                            */
 
 
                 },
@@ -136,7 +123,6 @@ sap.ui.define([
                 }
 
             });
-
 
 
         },
@@ -230,19 +216,30 @@ sap.ui.define([
                 return;
             }
 
-            this._executeServiceBeforeNavigation();
+            //this._executeServiceBeforeNavigation();
 
             var oRouter = this.getOwnerComponent().getRouter();
 
             // Navegar según el tipo de préstamo seleccionado
             if (sSelectedPrestamo === "01") {
-                oRouter.navTo("RouteView2");
-            } else if (sSelectedPrestamo === "02") {
-                oRouter.navTo("RouteView3");
-            } else if (sSelectedPrestamo === "03") {
+                // Prestamo Computador   
                 oRouter.navTo("RouteComputador");
+
+            } else if (sSelectedPrestamo === "02") {
+                // Prestamo Movilidad   
+
+            } else if (sSelectedPrestamo === "03") {
+
+                oRouter.navTo("RouteView3"); // Prestamos Educativo
+
             } else if (sSelectedPrestamo === "04") {
-                oRouter.navTo("Routeelectric");
+
+                oRouter.navTo("RouteView2"); // calamidad
+                //oRouter.navTo("Routeelectric");
+
+            } else if (sSelectedPrestamo === "05") {
+
+                oRouter.navTo("RouteView3"); // Prestamos Educativo    
             }
         }
 

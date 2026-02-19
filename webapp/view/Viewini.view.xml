@@ -7,13 +7,17 @@
       <VBox alignItems="Center" justifyContent="Center" class="sapUiMediumMargin">
             <VBox width="400px" class="sapUiSmallMarginTop">
                     <Label text="Tipo Préstamo" labelFor="selectPrestamo" class="sapUiSmallMarginBottom"/>
-                    <Select
-                        id="selectPrestamo"
-                        width="100%"
-                        selectedKey="{/selectedPrestamo}"
-                        items="{prestamos>/PrestamoCollection}">
-                        <core:Item key="{prestamos>PrestamoId}" text="{prestamos>Name}"/>
-                    </Select>
+
+
+                <Select
+					forceSelection="false"
+					selectedKey="{/selectedPrestamo}"
+					items="{
+						path: 'prestamos>/PrestamoCollection',
+                        sorter: { path: 'Name' }
+					}">
+					<core:Item key="{prestamos>PrestamoId}" text="{prestamos>Name}" />
+				</Select>
                     
                     <Button
                         text="Ir"

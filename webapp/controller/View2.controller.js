@@ -1,7 +1,9 @@
 sap.ui.define([
 	"sap/ui/core/mvc/Controller",
-	'sap/ui/model/json/JSONModel'
-], (Controller, JSONModel) => {
+	'sap/ui/model/json/JSONModel',
+	"sap/m/MessageBox",
+	"sap/m/MessageToast"
+], (Controller, JSONModel, MessageBox, MessageToast) => {
 	"use strict";
 
 	return Controller.extend("prestamos.ccb.org.solprestamos.controller.View2", {
@@ -12,34 +14,42 @@ sap.ui.define([
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 
 			// Modelo de datos para la vista 
-			  var oViewModel = new JSONModel({
-                // Configuración de moneda
-                moneda: "COP",              // Código de moneda (Peso Colombiano)
-                
-                // Valores monetarios
-                montoMaximo: 3000000,       // Monto máximo a solicitar
-                valorSolicitado: 0,         // Valor que ingresa el usuario
-                valorPrestamo: 0,           // Valor calculado del préstamo
-                valorCuota: 0,              // Valor de cada cuota
-                valorComprometido: 0,       // Valor comprometido
-                
-                // Configuración de cuotas
-                selectedCuotas: "",         // Cuotas seleccionadas
-                numeroCuotas: 0,            // Número de cuotas (numérico)
-                tasaInteres: 0.015,         // Tasa de interés mensual (1.5%)
-                
-                // Otros campos
-                tieneCodeudor: -1,
-                numeroDocumento: "",
-                nombreCodeudor: "",
-                cedulaCodeudor: "",
-                direccionCodeudor: "",
-                telefonoCodeudor: "",
-                fecha: "",
-                selectedMotCalamidad: "",
-                solicitudEnabled: false
-            });
-            this.getView().setModel(oViewModel, "calamView");
+			var oViewModel = new JSONModel({
+				// Configuración de moneda
+				moneda: "COP",              // Código de moneda (Peso Colombiano)
+
+				// Valores monetarios
+				montoMaximo: 3000000,       // Monto máximo a solicitar
+				valorSolicitado: 0,         // Valor que ingresa el usuario
+				valorPrestamo: 0,           // Valor calculado del préstamo
+				valorCuota: 0,              // Valor de cada cuota
+				valorComprometido: 0,       // Valor comprometido
+
+				// Configuración de cuotas
+				selectedCuotas: "",         // Cuotas seleccionadas
+				numeroCuotas: 0,            // Número de cuotas (numérico)
+				tasaInteres: 0.015,         // Tasa de interés mensual (1.5%)
+
+				// Estados de validación para los campos obligatorios
+				cuotasValueState: "None",           // Estado de validación de cuotas
+				cuotasValueStateText: "",           // Mensaje de error de cuotas
+				valorValueState: "None",            // Estado de validación de valor
+				valorValueStateText: "",            // Mensaje de error de valor
+				motivoValueState: "None",           // Estado de validación de motivo
+				motivoValueStateText: "",           // Mensaje de error de motivo
+
+				// Otros campos
+				tieneCodeudor: -1,
+				numeroDocumento: "",
+				nombreCodeudor: "",
+				cedulaCodeudor: "",
+				direccionCodeudor: "",
+				telefonoCodeudor: "",
+				fecha: "",
+				selectedMotCalamidad: "",
+				solicitudEnabled: true
+			});
+			this.getView().setModel(oViewModel, "calamView");
 
 
 			if (oGlobalModel.oData.gt_motcalamidad != undefined) {
@@ -116,6 +126,330 @@ sap.ui.define([
 			var oModel = new JSONModel(oData);
 			this.getView().setModel(oModel);
 
+		},
+
+		/**
+		 * Evento cuando se activa el Step 1
+		 */
+		onStep1Activate: function () {
+			// Limpiar estados de validación cuando se regresa al paso 1
+			this._clearValidationStates();
+		},
+
+		/**
+		 * Valida el Step 1 antes de permitir avanzar
+		 */
+		onValidateStep1: function () {
+			var oViewModel = this.getView().getModel("calamView");
+			var bValid = true;
+			var aErrorMessages = [];
+
+			// Limpiar estados de validación anteriores
+			this._clearValidationStates();
+
+			// 1. Validar Cuotas
+			var sSelectedCuotas = oViewModel.getProperty("/selectedCuotas");
+			if (!sSelectedCuotas || sSelectedCuotas === "") {
+				oViewModel.setProperty("/cuotasValueState", "Error");
+				oViewModel.setProperty("/cuotasValueStateText", "Debe seleccionar el número de cuotas");
+				aErrorMessages.push("• Cuotas");
+				bValid = false;
+			}
+
+			// 2. Validar Valor Solicitado
+			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
+			if (!fValorSolicitado || fValorSolicitado <= 0) {
+				oViewModel.setProperty("/valorValueState", "Error");
+				oViewModel.setProperty("/valorValueStateText", "Debe ingresar un valor válido");
+				aErrorMessages.push("• Valor solicitado");
+				bValid = false;
+			}
+
+			// 3. Validar Motivo Calamidad
+			var sSelectedMotivo = oViewModel.getProperty("/selectedMotCalamidad");
+			if (!sSelectedMotivo || sSelectedMotivo === "") {
+				oViewModel.setProperty("/motivoValueState", "Error");
+				oViewModel.setProperty("/motivoValueStateText", "Debe seleccionar un motivo de calamidad");
+				aErrorMessages.push("• Motivo de Calamidad");
+				bValid = false;
+			}
+
+			// Si no es válido, mostrar mensaje de error
+			if (!bValid) {
+				MessageBox.error(
+					"Por favor complete los siguientes campos obligatorios:\n\n" +
+					aErrorMessages.join("\n"),
+					{
+						title: "Campos Obligatorios",
+						styleClass: "sapUiSizeCompact"
+					}
+				);
+				return;
+			}
+
+			// Si es válido, marcar el paso como validado y avanzar
+			var oWizard = this.byId("wizardCalam");
+			var oStep1 = this.byId("step1");
+
+			// Validar el paso 1
+			oStep1.setValidated(true);
+
+			// Avanzar al siguiente paso
+			oWizard.nextStep();
+
+			MessageToast.show("Paso 1 completado correctamente");
+		},
+
+		/**
+		 * Limpia los estados de validación
+		 * @private
+		 */
+		_clearValidationStates: function () {
+			var oViewModel = this.getView().getModel("calamView");
+
+			oViewModel.setProperty("/cuotasValueState", "None");
+			oViewModel.setProperty("/cuotasValueStateText", "");
+			oViewModel.setProperty("/valorValueState", "None");
+			oViewModel.setProperty("/valorValueStateText", "");
+			oViewModel.setProperty("/motivoValueState", "None");
+			oViewModel.setProperty("/motivoValueStateText", "");
+		},
+		/**
+	 * Evento cuando cambian las cuotas
+	 */
+		onCuotasChange: function (oEvent) {
+			var oViewModel = this.getView().getModel("calamView");
+			var sSelectedKey = oEvent.getParameter("selectedItem").getKey();
+
+			// Guardar en el modelo de vista
+			oViewModel.setProperty("/selectedCuotas", sSelectedKey);
+
+			// Guardar el número de cuotas para cálculos
+			var iNumeroCuotas = parseInt(sSelectedKey);
+			oViewModel.setProperty("/numeroCuotas", iNumeroCuotas);
+
+			// Limpiar estado de error si había uno
+			if (sSelectedKey) {
+				oViewModel.setProperty("/cuotasValueState", "None");
+				oViewModel.setProperty("/cuotasValueStateText", "");
+			}
+
+			// Recalcular el valor del préstamo
+			this._calcularValorPrestamo();
+		},
+
+		/**
+		 * Evento cuando cambia el valor solicitado
+		 */
+		onValorSolicitadoChange: function (oEvent) {
+			var oViewModel = this.getView().getModel("calamView");
+
+			// Obtener el valor ingresado por el usuario
+			var sValue = oEvent.getParameter("value");
+
+			// Parsear el valor (remover formato de moneda)
+			var fValorSolicitado = this._parseMoneyValue(sValue);
+
+			// Actualizar el modelo
+			oViewModel.setProperty("/valorSolicitado", fValorSolicitado);
+
+			// Validar que no exceda el monto máximo
+			var fMontoMaximo = oViewModel.getProperty("/montoMaximo");
+			if (fValorSolicitado > fMontoMaximo) {
+				MessageBox.warning(
+					"El valor solicitado excede el monto máximo permitido de " +
+					this._formatCurrency(fMontoMaximo, "COP"),
+					{
+						title: "Valor Excedido"
+					}
+				);
+				oViewModel.setProperty("/valorSolicitado", fMontoMaximo);
+				return;
+			}
+
+			// Limpiar estado de error si había uno
+			if (fValorSolicitado > 0) {
+				oViewModel.setProperty("/valorValueState", "None");
+				oViewModel.setProperty("/valorValueStateText", "");
+			}
+
+			// Calcular el valor del préstamo
+			this._calcularValorPrestamo();
+		},
+
+		/**
+		 * Parsea un valor monetario a número
+		 * @private
+		 */
+		_parseMoneyValue: function (sValue) {
+			if (!sValue) {
+				return 0;
+			}
+
+			var sCleanValue = sValue.toString()
+				.replace(/COP/g, '')
+				.replace(/\$/g, '')
+				.replace(/\./g, '')
+				.replace(/,/g, '')
+				.replace(/\s/g, '')
+				.trim();
+
+			var fValue = parseFloat(sCleanValue);
+			return isNaN(fValue) ? 0 : fValue;
+		},
+
+		/**
+		 * Calcula el valor del préstamo y la cuota mensual
+		 * @private
+		 */
+		_calcularValorPrestamo: function () {
+			var oViewModel = this.getView().getModel("calamView");
+
+			// Obtener valores del modelo
+			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado") || 0;
+			var iNumeroCuotas = oViewModel.getProperty("/numeroCuotas") || 0;
+			var fTasaInteres = oViewModel.getProperty("/tasaInteres") || 0;
+
+			if (fValorSolicitado <= 0 || iNumeroCuotas <= 0) {
+				oViewModel.setProperty("/valorPrestamo", 0);
+				oViewModel.setProperty("/valorCuota", 0);
+				return;
+			}
+
+			// Cálculo con intereses (sistema francés)
+			var fValorPrestamo = fValorSolicitado;
+			var fValorCuota;
+
+			if (fTasaInteres > 0) {
+				// Fórmula de cuota con interés compuesto
+				var numerador = fTasaInteres * Math.pow(1 + fTasaInteres, iNumeroCuotas);
+				var denominador = Math.pow(1 + fTasaInteres, iNumeroCuotas) - 1;
+				fValorCuota = fValorPrestamo * (numerador / denominador);
+			} else {
+				// Sin intereses
+				fValorCuota = fValorPrestamo / iNumeroCuotas;
+			}
+
+			// Redondear a entero
+			fValorPrestamo = Math.round(fValorPrestamo);
+			fValorCuota = Math.round(fValorCuota);
+
+			// Actualizar el modelo
+			oViewModel.setProperty("/valorPrestamo", fValorPrestamo);
+			oViewModel.setProperty("/valorCuota", fValorCuota);
+
+			// Mostrar mensaje informativo
+			MessageToast.show(
+				"Cuota mensual: " + this._formatCurrency(fValorCuota, "COP")
+			);
+		},
+
+		/**
+		 * Formatea un valor como moneda
+		 * @private
+		 */
+		_formatCurrency: function (fValue, sCurrency) {
+			var oFormat = sap.ui.core.format.NumberFormat.getCurrencyInstance({
+				currencyCode: true,
+				maxFractionDigits: 0
+			});
+			return oFormat.format(fValue, sCurrency);
+		},
+
+		/**
+ * Crea la solicitud
+ */
+		onCrearSolicitud: function () {
+
+			var dataSolic = {
+				"IV_PRESTAMO": {
+					DARBT: 0,
+					PERNR:"",
+					DBTCU: "COP",
+					ZCODEX: "",
+					ZNUCEX: "",
+					ZDIREX: "",
+					ZTELEX: "",
+					ZMOCA: "",
+					ZVALSO: "",
+					ZNUCUCA: ""
+				}
+			};
+			var that = this;
+			var oViewModel = this.getView().getModel("calamView");
+			var oData = oViewModel.getData();
+
+			console.log("Solicitud de Préstamo Calamidad:", oData);
+
+			if (oData.valorPrestamo >= 0) {
+
+				dataSolic.IV_PRESTAMO.DARBT = oData.valorPrestamo;
+				dataSolic.IV_PRESTAMO.ZVALSO = oData.valorPrestamo;
+
+			} else {
+
+				MessageBox.error(
+					"Por favor registro el valor a solicitar"
+				);
+				return;
+
+			}
+
+			if (oData.numeroCuotas >= 0) {
+
+				dataSolic.IV_PRESTAMO.ZNUCUCA = oData.numeroCuotas;
+
+			} else {
+
+				MessageBox.error(
+					"Por favor registro número de cuotas"
+				);
+				return;
+
+			}
+
+			if (oData.nombreCodeudor == "" || oData.cedulaCodeudor == "" ||
+				oData.direccionCodeudor == "" || oData.telefonoCodeudor == "") {
+
+				MessageBox.error(
+					"Complete los datos del codeudor"
+				);
+				return;
+
+
+
+			} else {
+
+				dataSolic.IV_PRESTAMO.ZCODEX = oData.nombreCodeudor;
+				dataSolic.IV_PRESTAMO.ZNUCEX = oData.cedulaCodeudor;
+				dataSolic.IV_PRESTAMO.ZDIREX = oData.direccionCodeudor;
+				dataSolic.IV_PRESTAMO.ZTELEX = oData.telefonoCodeudor;
+
+			}
+
+			if ( oData.selectedMotCalamidad != "" ){
+
+				dataSolic.IV_PRESTAMO.ZMOCA = oData.selectedMotCalamidad;
+
+			}else{
+
+				MessageBox.error(
+					"Debe indicar el motivo de la calamidad"
+				);
+				return;
+
+			}
+
+
+
+			MessageBox.success("Solicitud de Préstamo Calamidad creada exitosamente", {
+				details: "Monto: " + this._formatCurrency(oData.valorPrestamo, oData.moneda) +
+					"\nCuotas: " + oData.numeroCuotas +
+					"\nValor Cuota: " + this._formatCurrency(oData.valorCuota, oData.moneda),
+				onClose: function () {
+					that.onNavBack();
+				}
+			});
 		},
 
 		onNavBack: function () {

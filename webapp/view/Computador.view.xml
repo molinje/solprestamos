@@ -14,98 +14,175 @@
     <content>
         <Wizard id="wizardComputador" complete="onWizardComplete" class="sapUiResponsiveMargin">
                 
-                <!-- Paso 1: Datos del Préstamo Educativo -->
+               <!-- Paso 1: Datos del Préstamo Computador -->
                 <WizardStep
                     id="stepComput01"
                     title="Datos del Préstamo"
-                    validated="true">
+                    validated="false"
+                    activate="onStep1Activate">
                     <VBox class="sapUiSmallMargin">
-                        <Label text="Valor Solicitado" labelFor="inputValorSolicitado" class="sapUiSmallMarginBottom"/>
-                        <Input
-                            id="inputValorSolicCompu"
-                            value="{educaView>/valorSolicitado}"
-                            type="Number"
-                            width="100%"
-                            placeholder="Ingrese el valor solicitado"/>
+                        <form:SimpleForm
+                            editable="true"
+                            layout="ResponsiveGridLayout">
+                            
+                            <Label text="Valor Solicitado *" labelFor="inputValorSolicCompu" required="true"/>
+                            <Input
+                                id="inputValorSolicCompu"
+                                value="{
+                                    parts: [
+                                        {path: 'compuView>/valorSolicitado'},
+                                        {path: 'compuView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: true,
+                                        currencyCode: true,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
+                                change="onValorSolicitadoChange"
+                                width="100%"
+                                textAlign="End"
+                                valueState="{compuView>/valorValueState}"
+                                valueStateText="{compuView>/valorValueStateText}"
+                                placeholder="Ingrese el valor solicitado"/>
+                            
+                            <Label text="Número de Cuotas *" labelFor="selectCuotasCompu" required="true"/>
+                            <Select 
+                                id="selectCuotasCompu" 
+                                selectedKey="{compuView>/selectedCuotas}"
+                                change="onCuotasChange"
+                                width="100%"
+                                valueState="{compuView>/cuotasValueState}"
+                                valueStateText="{compuView>/cuotasValueStateText}">
+                                <core:Item key="01" text="1"/>
+                                <core:Item key="02" text="2"/>
+                                <core:Item key="03" text="3"/>
+                                <core:Item key="04" text="4"/>
+                                <core:Item key="05" text="5"/>
+                                <core:Item key="06" text="6"/>
+                                <core:Item key="07" text="7"/>
+                                <core:Item key="08" text="8"/>
+                                <core:Item key="09" text="9"/>
+                                <core:Item key="10" text="10"/>
+                                <core:Item key="11" text="11"/>
+                                <core:Item key="12" text="12"/>
+                                <core:Item key="13" text="13"/>
+                                <core:Item key="14" text="14"/>
+                                <core:Item key="15" text="15"/>
+                                <core:Item key="16" text="16"/>
+                                <core:Item key="17" text="17"/>
+                                <core:Item key="18" text="18"/>
+                            </Select>
+                            
+                            <Label text="Valor Cuota Préstamo" labelFor="ValorCuotaPCompu"/> 
+                            <Input
+                                id="ValorCuotaPCompu"
+                                value="{
+                                    parts: [
+                                        {path: 'compuView>/valorCuota'},
+                                        {path: 'compuView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: true,
+                                        currencyCode: true,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
+                                editable="false"
+                                width="100%"
+                                textAlign="End"/>
+                            
+                            <Label text="Valor Préstamo" labelFor="ValorPCompu"/> 
+                            <Input
+                                id="ValorPCompu"
+                                value="{
+                                    parts: [
+                                        {path: 'compuView>/valorPrestamo'},
+                                        {path: 'compuView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: true,
+                                        currencyCode: true,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
+                                editable="false"
+                                width="100%"
+                                textAlign="End"/>
+
+                            <Label text="Destino *" labelFor="selectDestino" required="true"/>
+                            <Select 
+                                id="selectDestino" 
+                                selectedKey="{compuView>/selectedDestino}"
+                                change="onDestinoChange"
+                                width="100%"
+                                valueState="{compuView>/destinoValueState}"
+                                valueStateText="{compuView>/destinoValueStateText}">
+                                <core:Item key="01" text="Colaborador"/>
+                                <core:Item key="02" text="Proveedor"/>
+                            </Select>
+                            
+                            <Label text="Descuento en Primas" labelFor="selectDescuentoPrimas"/>
+                            <Select 
+                                id="selectDescuentoPrimas"
+                                selectedKey="{compuView>/descuentoPrimas}" 
+                                width="100%">
+                                <core:Item key="NO" text="No Aplica"/>
+                                <core:Item key="SI" text="Descontar Primas"/>
+                            </Select>
+                        </form:SimpleForm>
                         
-                           <Label text="N Cuotas"/>
-									<Select selectedKey="{/CuotasCompu}" width="100%">
-										<core:Item key="01" text="1"/>
-                                        <core:Item key="02" text="2"/>
-                                        <core:Item key="03" text="3"/>
-                                        <core:Item key="04" text="4"/>
-                                        <core:Item key="05" text="5"/>
-                                        <core:Item key="06" text="6"/>
-                                        <core:Item key="07" text="7"/>
-                                        <core:Item key="08" text="8"/>
-                                        <core:Item key="09" text="9"/>
-                                        <core:Item key="10" text="10"/>
-                                        <core:Item key="11" text="11"/>
-                                        <core:Item key="12" text="12"/>
-                                        <core:Item key="13" text="13"/>
-                                        <core:Item key="14" text="14"/>
-                                        <core:Item key="15" text="15"/>
-                                        <core:Item key="16" text="16"/>
-                                        <core:Item key="17" text="17"/>
-                                        <core:Item key="18" text="18"/>
-
-						</Select>
-                           <Label text="Valor cuota préstamo" labelFor="ValorCuotaPCompu" /> 
-                          <Input
-                            id="ValorCuotaPCompu"
-                            value="{educaView>/ValorCuotaPCompu}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />
-                        <Label text="Valor préstamo" labelFor="ValorPCompu" /> 
-                          <Input
-                            id="ValorPCompu"
-                            value="{educaView>/ValorPCompu}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />
-
-                          <Label text="Destino"/>
-									<Select selectedKey="{/Destino}" width="100%">
-										<core:Item key="01" text="Colaborador"/>
-                                        <core:Item key="02" text="Proveedor"/>
-                                      
-						</Select>
-                           <Label text="Descuento en Primas"/>
-									<Select selectedKey="{/DescuentoPrimasCompu}" width="100%">
-										<core:Item key="NO" text="No Aplica"/>
-                                        <core:Item key="SI" text="Descontar Primas"/>
-                                      
-						</Select>                      
+                        <!-- Botón de Siguiente -->
+                        <Button
+                            text="Siguiente"
+                            type="Emphasized"
+                            icon="sap-icon://navigation-right-arrow"
+                            iconFirst="false"
+                            press="onValidateStep1"
+                            class="sapUiSmallMarginTop"/>
                     </VBox>
                 </WizardStep>
                 
-                <!-- Paso 2: Información del Solicitante -->
+                <!-- Paso 2: Primas y Bonificaciones -->
                 <WizardStep
                     id="stepComput02"
                     title="Primas y Bonificaciones"
-                    validated="true">
+                    validated="false">
                     <VBox class="sapUiSmallMargin">
-                        <Label text="Valor cuota préstamo" labelFor="ValorDescPrinasCompu" /> 
-                          <Input
-                            id="ValorDescPrinasCompu"
-                            value="{educaView>/ValorDescPrinasCompu}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />
+                        <form:SimpleForm
+                            editable="true"
+                            layout="ResponsiveGridLayout">
+                            
+                            <Label text="Valor Descuento Primas" labelFor="ValorDescPrinasCompu"/> 
+                            <Input
+                                id="ValorDescPrinasCompu"
+                                value="{
+                                    parts: [
+                                        {path: 'compuView>/valorDescuentoPrimas'},
+                                        {path: 'compuView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: true,
+                                        currencyCode: true,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
+                                editable="false"
+                                width="100%"
+                                textAlign="End"/>
+                        </form:SimpleForm>
                     </VBox>
                 </WizardStep>
-                
-               
                 
                 <!-- Paso 3: Documentos -->
                 <WizardStep
                     id="stepComput03"
                     title="Soportes"
-                    validated="true">
+                    validated="false">
                     <VBox class="sapUiSmallMargin">
                         <Label text="Adjuntar Documentos" class="sapUiSmallMarginBottom"/>
                         <UploadCollection
@@ -120,7 +197,7 @@
                             text="Crear Solicitud"
                             type="Emphasized"
                             press="onCrearSolicitud"
-                            enabled="{educaView>/solicitudEnabled}"
+                            enabled="{compuView>/solicitudEnabled}"
                             class="sapUiMediumMarginTop"
                             width="200px"/>
                     </VBox>
@@ -132,13 +209,7 @@
         justifyContent="Center"
         class="sapUiMediumMarginTop">
         <items>
-          <Title
-            text="Esta es la Vista 3"
-            level="H2"
-            class="sapUiMediumMarginBottom"/>
-          <Text
-            text="Aquí puedes añadir el contenido específico de la Vista 3"
-            class="sapUiMediumMarginBottom"/>
+        
           <Button
             text="Volver al Inicio"
             type="Emphasized"

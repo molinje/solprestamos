@@ -18,7 +18,8 @@
                 <WizardStep
                     id="step1"
                     title="Datos del Préstamo"
-                    validated="true">
+                    validated="false"
+                    activate="onStep1Activate">
                     <VBox class="sapUiSmallMargin">
                     	<form:SimpleForm
 										editable="true"
@@ -42,16 +43,19 @@
                             width="100%"
                             textAlign="End"
                             />
-                        <Label text="Cuotas" labelFor="selectCuotas" class="sapUiSmallMarginBottom"/>
+                        <Label text="Cuotas *" labelFor="selectCuotas" class="sapUiSmallMarginBottom" required="true"/>
                         <Select
                             id="selectCuotas"
                             width="100%"
-                            selectedKey="{/selectedCuotas}"
-                            items="{/CuotasCollection}">
+                            selectedKey="{calamView>/selectedCuotas}"
+                            change="onCuotasChange"
+                            items="{/CuotasCollection}"
+                            valueState="{calamView>/cuotasValueState}"
+                            valueStateText="{calamView>/cuotasValueStateText}">
                             <core:Item key="{CuotasId}" text="{Name}"/>
                         </Select>
                         
-                        <Label text="Valor solicitado" labelFor="inputValor" />
+                        <Label text="Valor solicitado" labelFor="inputValor" class="sapUiSmallMarginTop" required="true" />
                         <Input
                              id="inputValor"
                             value="{
@@ -69,8 +73,10 @@
                             change="onValorSolicitadoChange"
                             width="100%"
                             textAlign="End"
+                            valueState="{calamView>/valorValueState}"
+                            valueStateText="{calamView>/valorValueStateText}"
                             placeholder="Ingrese el valor del préstamo"/>
-                         <Label text="Valor prestamo" labelFor="ValorPrestamo" />
+                         <Label text="Valor prestamo" labelFor="ValorPrestamo" class="sapUiSmallMarginTop" />
                         <Input
                              id="ValorPrestamo"
                             value="{
@@ -89,7 +95,7 @@
                             width="100%"
                             textAlign="End"
                             />
-                         <Label text="Valor cuota prestamo" labelFor="ValorCuotaP" />
+                         <Label text="Valor cuota prestamo" labelFor="ValorCuotaP"  class="sapUiSmallMarginTop"/>
                         <Input
                            id="ValorCuotaP"
                             value="{
@@ -107,17 +113,30 @@
                             editable="false"
                             width="100%"
                             textAlign="End"
-                            /> 
+                            />
+                        <Label text="Motivo Calamidad *" labelFor="selectMotCalamidad" class="sapUiSmallMarginTop" required="true"/>     
                         <Select
+					      id="selectMotCalamidad"
 					        forceSelection="false"
-					        selectedKey="{/selectedMotCalamidad}"
+					        selectedKey="{calamView>/selectedMotCalamidad}"
+					        change="onMotivoCalamidadChange"
+					        valueState="{calamView>/motivoValueState}"
+                            valueStateText="{calamView>/motivoValueStateText}"
 					        items="{
 						            path: 'pcalamidad>/gt_motcalamidad',
-                            sorter: { path: 'DDTEXT' } 
+                                    sorter: { path: 'DDTEXT' } 
                                     }">
 					        <core:Item key="{pcalamidad>DOMVALUE_L}" text="{pcalamidad>DDTEXT}" />
 				        </Select>              
                       </form:SimpleForm>
+                        <!-- Botón de Siguiente (reemplaza el botón por defecto del Wizard) -->
+                      <Button
+                          text="Siguiente"
+                          type="Emphasized"
+                          icon="sap-icon://navigation-right-arrow"
+                          iconFirst="false"
+                          press="onValidateStep1"
+                          class="sapUiSmallMarginTop"/>
                     </VBox>
                 </WizardStep>
                 
@@ -235,13 +254,7 @@
         justifyContent="Center"
         class="sapUiMediumMarginTop">
         <items>
-          <Title
-            text="Esta es la Vista 2"
-            level="H2"
-            class="sapUiMediumMarginBottom"/>
-          <Text
-            text="Aquí puedes añadir el contenido específico de la Vista 2"
-            class="sapUiMediumMarginBottom"/>
+  
           <Button
             text="Volver al Inicio"
             type="Emphasized"

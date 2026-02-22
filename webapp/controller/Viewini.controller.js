@@ -27,21 +27,27 @@ sap.ui.define([
                 "SelectedPrestamo": "SP-1001",
 
                 "PrestamoCollection": [
+
                     {
                         "PrestamoId": "01",
-                        "Name": "Préstamo Calamidad"
-                    },
-                    {
-                        "PrestamoId": "02",
-                        "Name": "Préstamo Educativo"
-                    },
-                    {
-                        "PrestamoId": "03",
                         "Name": "Prestamo computador"
                     },
                     {
+                        "PrestamoId": "02",
+                        "Name": "Préstamo Movilidad"
+                    },
+
+                    {
+                        "PrestamoId": "03",
+                        "Name": "Prestamo Educativo"
+                    },
+                    {
                         "PrestamoId": "04",
-                        "Name": "Préstamo Movilidad Eléctrica"
+                        "Name": "Préstamo Calamidad"
+                    },
+                    {
+                        "PrestamoId": "05",
+                        "Name": "Prestamo Educativo"
                     }
                 ],
                 "Editable": true,
@@ -119,6 +125,44 @@ sap.ui.define([
                 error: function (error) {
                     MessageBox.error("Ha ocurrido un error: " + error.status + "-" + error.statusText);
                     oBusyDialog.close();
+
+                    var oData = {
+                        "SelectedPrestamo": "SP-1001",
+
+                        "PrestamoCollection": [
+
+                            {
+                                "PrestamoId": "01",
+                                "Name": "Prestamo computador"
+                            },
+                            {
+                                "PrestamoId": "02",
+                                "Name": "Préstamo Movilidad"
+                            },
+
+                            {
+                                "PrestamoId": "03",
+                                "Name": "Prestamo Educativo"
+                            },
+                            {
+                                "PrestamoId": "04",
+                                "Name": "Préstamo Calamidad"
+                            },
+                            {
+                                "PrestamoId": "05",
+                                "Name": "Prestamo Educativo"
+                            }
+                        ],
+                        "Editable": true,
+                        "Enabled": true
+                    };
+
+                    var oPrestamosModel = new JSONModel({
+                       "PrestamoCollection": oData.PrestamoCollection
+                    });
+
+                    // Aquí 'this' funciona porque usamos .bind(this) abajo
+                    that.getView().setModel(oPrestamosModel, "prestamos");
 
                 }
 

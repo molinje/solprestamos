@@ -3,9 +3,9 @@ sap.ui.define([
     'sap/ui/model/json/JSONModel',
     "sap/m/MessageBox",
     "sap/ui/core/BusyIndicator",
-    "prestamos/ccb/org/solprestamos/util/IntegrationService"
+    //"prestamos/ccb/org/solprestamos/util/IntegrationService"
 
-], (Controller, JSONModel, MessageBox, BusyIndicator, IntegrationService) => {
+], (Controller, JSONModel, MessageBox, BusyIndicator) => {
     "use strict";
 
 
@@ -55,7 +55,7 @@ sap.ui.define([
             };
 
 
-            this._integrationService = new IntegrationService();
+            //this._integrationService = new IntegrationService();
 
             // set explored app's demo model on this sample
             var oModel = new JSONModel(oData);
@@ -170,6 +170,7 @@ sap.ui.define([
 
 
         },
+        /*
         _loadDataFromService: function (userId) {
             var that = this;
 
@@ -204,7 +205,7 @@ sap.ui.define([
                     MessageBox.error(errorMessage);
                 });
         },
-
+       */
         _onObjectMatched: function () {
             //       // Limpiar selección al volver a la vista principal
             var oModel = this.getView().getModel();
@@ -226,6 +227,7 @@ sap.ui.define([
      * Ejemplo de cómo ejecutar el servicio antes de navegar
      * @private
      */
+    /*
         _executeServiceBeforeNavigation: function () {
             var that = this;
 
@@ -250,6 +252,7 @@ sap.ui.define([
                     });
                 });
         },
+        */
 
         onNavigate: function () {
             var oModel = this.getView().getModel();

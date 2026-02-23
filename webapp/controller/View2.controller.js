@@ -2,14 +2,17 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller",
 	'sap/ui/model/json/JSONModel',
 	"sap/m/MessageBox",
-	"sap/m/MessageToast"
-], (Controller, JSONModel, MessageBox, MessageToast) => {
+	"sap/m/MessageToast",
+	"prestamos/ccb/org/solprestamos/util/BackendService"
+], (Controller, JSONModel, MessageBox, MessageToast, BackendService) => {
 	"use strict";
 
 	return Controller.extend("prestamos.ccb.org.solprestamos.controller.View2", {
 		onInit() {
 			// Inicialización del controlador View2
 			// Controller Calamidad
+			this._oBackendService = new BackendService();
+
 			// Obtener el modelo
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 
@@ -442,14 +445,27 @@ sap.ui.define([
 
 
 
-			MessageBox.success("Solicitud de Préstamo Calamidad creada exitosamente", {
-				details: "Monto: " + this._formatCurrency(oData.valorPrestamo, oData.moneda) +
-					"\nCuotas: " + oData.numeroCuotas +
-					"\nValor Cuota: " + this._formatCurrency(oData.valorCuota, oData.moneda),
-				onClose: function () {
-					that.onNavBack();
-				}
-			});
+			oViewModel.setProperty("/solicitudEnabled", false);
+
+			that._oBackendService.guardarPrestamo(dataSolic)
+				.then(function (oResponse) {
+					oViewModel.setProperty("/solicitudEnabled", true);
+					MessageBox.success("Solicitud de Préstamo Calamidad creada exitosamente", {
+						details: "Monto: " + that._formatCurrency(oData.valorPrestamo, oData.moneda) +
+							"\nCuotas: " + oData.numeroCuotas +
+							"\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda),
+						onClose: function () {
+							that.onNavBack();
+						}
+					});
+				})
+				.catch(function (oError) {
+					oViewModel.setProperty("/solicitudEnabled", true);
+					MessageBox.error(
+						"Error al guardar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
+						{ title: "Error al guardar" }
+					);
+				});
 		},
 
 		onNavBack: function () {

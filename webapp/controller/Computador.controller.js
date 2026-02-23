@@ -403,7 +403,7 @@ sap.ui.define([
       var oViewModel = this.getView().getModel("compuView");
       var oData = oViewModel.getData();
       var oComponent = this.getOwnerComponent();
-      var integrationService = oComponent.getIntegrationService();
+      //var integrationService = oComponent.getIntegrationService();
 
       // Preparar los datos en el formato requerido por el servicio
       var prestamoData = {

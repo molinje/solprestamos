@@ -48,7 +48,7 @@ sap.ui.define([
         _executePost: function (sUrl, sToken, oData) {
             return new Promise(function (resolve, reject) {
                 var xhr = new XMLHttpRequest();
-                xhr.open("POST", sUrl, true);
+                xhr.open("GET", sUrl, true);
 
                 xhr.setRequestHeader("Authorization", "Bearer " + sToken);
                 xhr.setRequestHeader("Content-Type", "application/json");

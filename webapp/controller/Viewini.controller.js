@@ -105,6 +105,9 @@ sap.ui.define([
                     // Aquí 'this' funciona porque usamos .bind(this) abajo
                     that.getView().setModel(oPrestamosModel, "prestamos");
 
+                    // Leemos datos globales
+                    var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+
                     var oModel = that.getView().getModel();
 
                     if (oModel != undefined) {
@@ -117,6 +120,17 @@ sap.ui.define([
                             "Correo": empleadoInfo.CORREO
                         });
 
+                    }
+
+                    if ( oGlobalModel != undefined){
+
+                        oGlobalModel.setProperty("/userData", {
+                            "PERNR": empleadoInfo.PERNR,
+                            "Nombres": empleadoInfo.NOMBRES,
+                            "Apellidos": empleadoInfo.APELLIDOS,
+                            "Salario": empleadoInfo.SALARIO,
+                            "Correo": empleadoInfo.CORREO
+                        });
                     }
 
 

@@ -365,18 +365,17 @@ sap.ui.define([
 		onCrearSolicitud: function () {
 
 			var dataSolic = {
-				"IV_PRESTAMO": {
-					DARBT: 0,
-					PERNR:"",
-					DBTCU: "COP",
-					ZCODEX: "",
-					ZNUCEX: "",
-					ZDIREX: "",
-					ZTELEX: "",
-					ZMOCA: "",
-					ZVALSO: "",
-					ZNUCUCA: ""
-				}
+
+				DARBT: 0,
+				PERNR: "",
+				DBTCU: "COP",
+				ZCODEX: "",
+				ZNUCEX: "",
+				ZDIREX: "",
+				ZTELEX: "",
+				ZMOCA: "",
+				ZVALSO: "",
+				ZNUCUCA: ""
 			};
 			var that = this;
 			var oViewModel = this.getView().getModel("calamView");
@@ -386,8 +385,8 @@ sap.ui.define([
 
 			if (oData.valorPrestamo >= 0) {
 
-				dataSolic.IV_PRESTAMO.DARBT = oData.valorPrestamo;
-				dataSolic.IV_PRESTAMO.ZVALSO = oData.valorPrestamo;
+				dataSolic.DARBT = oData.valorPrestamo;
+				dataSolic.ZVALSO = oData.valorPrestamo;
 
 			} else {
 
@@ -400,7 +399,7 @@ sap.ui.define([
 
 			if (oData.numeroCuotas >= 0) {
 
-				dataSolic.IV_PRESTAMO.ZNUCUCA = oData.numeroCuotas;
+				dataSolic.ZNUCUCA = oData.numeroCuotas;
 
 			} else {
 
@@ -423,18 +422,19 @@ sap.ui.define([
 
 			} else {
 
-				dataSolic.IV_PRESTAMO.ZCODEX = oData.nombreCodeudor;
-				dataSolic.IV_PRESTAMO.ZNUCEX = oData.cedulaCodeudor;
-				dataSolic.IV_PRESTAMO.ZDIREX = oData.direccionCodeudor;
-				dataSolic.IV_PRESTAMO.ZTELEX = oData.telefonoCodeudor;
+				dataSolic.ZCODEX = oData.nombreCodeudor;
+				dataSolic.ZNUCEX = oData.cedulaCodeudor;
+				dataSolic.ZDIREX = oData.direccionCodeudor;
+				dataSolic.ZTELEX = oData.telefonoCodeudor;
+				dataSolic.PERNR = "00205382";
 
 			}
 
-			if ( oData.selectedMotCalamidad != "" ){
+			if (oData.selectedMotCalamidad != "") {
 
-				dataSolic.IV_PRESTAMO.ZMOCA = oData.selectedMotCalamidad;
+				dataSolic.ZMOCA = oData.selectedMotCalamidad;
 
-			}else{
+			} else {
 
 				MessageBox.error(
 					"Debe indicar el motivo de la calamidad"
@@ -443,11 +443,49 @@ sap.ui.define([
 
 			}
 
-
+			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 
 			oViewModel.setProperty("/solicitudEnabled", false);
 
-			that._oBackendService.guardarPrestamo(dataSolic)
+			var dataService = {
+				"n0:ZCOHCMFM_0045GUARDARPRESTAMO": {
+					"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+					"IV_PRESTAMO":
+						dataSolic
+
+				}
+			};
+			/*
+			var sServiceUrl = "/http/CCB_Guardar_Prestamos";
+			$.ajax({
+				dataType: "json",
+				url: sServiceUrl,
+				async: false,
+				data: JSON.stringify(dataService),
+				success: function (oResponse) {
+					//MessageBox.error("va todo bien " );
+
+					if (oResponse = !undefined) {
+
+						MessageBox.success("Solicitud de Préstamo Calamidad creada exitosamente");
+
+					}
+
+
+
+				},
+				error: function (error) {
+					MessageBox.error("Ha ocurrido un error: " + error.status + "-" + error.statusText);
+
+
+
+
+				}
+
+			});
+			*/
+
+			that._oBackendService.guardarPrestamo(dataService)
 				.then(function (oResponse) {
 					oViewModel.setProperty("/solicitudEnabled", true);
 					MessageBox.success("Solicitud de Préstamo Calamidad creada exitosamente", {
@@ -466,6 +504,7 @@ sap.ui.define([
 						{ title: "Error al guardar" }
 					);
 				});
+
 		},
 
 		onNavBack: function () {

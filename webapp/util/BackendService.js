@@ -1,7 +1,6 @@
 sap.ui.define([
-    "sap/ui/base/Object",
-    "prestamos/ccb/org/solprestamos/util/OAuthService"
-], function (BaseObject, OAuthService) {
+    "sap/ui/base/Object"
+], function (BaseObject) {
     "use strict";
 
     return BaseObject.extend("prestamos.ccb.org.solprestamos.util.BackendService", {
@@ -9,48 +8,27 @@ sap.ui.define([
         _guardarPrestamosUrl: "/http/CCB_Guardar_Prestamos",
 
         /**
-         * Constructor
-         */
-        constructor: function () {
-            BaseObject.apply(this, arguments);
-            this._oAuthService = new OAuthService();
-        },
-
-        /**
          * Guarda la solicitud de préstamo en el backend
          * @param {object} oData - JSON con los datos del préstamo a guardar
          * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
          */
         guardarPrestamo: function (oData) {
-            var that = this;
-            return new Promise(function (resolve, reject) {
-                that._oAuthService.getAccessToken()
-                    .then(function (sToken) {
-                        return that._executePost(that._guardarPrestamosUrl, sToken, oData);
-                    })
-                    .then(function (oResponse) {
-                        resolve(oResponse);
-                    })
-                    .catch(function (oError) {
-                        reject(oError);
-                    });
-            });
+            return this._executePost(this._guardarPrestamosUrl, oData);
         },
 
         /**
          * Ejecuta una petición POST al servicio
+         * La autenticación la gestiona el destination dest_int_s configurado en ui5.yaml
          * @param {string} sUrl - URL del servicio
-         * @param {string} sToken - Token de acceso OAuth
          * @param {object} oData - Datos a enviar en el body como JSON
          * @returns {Promise} Promise que resuelve con el JSON de respuesta
          * @private
          */
-        _executePost: function (sUrl, sToken, oData) {
+        _executePost: function (sUrl, oData) {
             return new Promise(function (resolve, reject) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", sUrl, true);
 
-                xhr.setRequestHeader("Authorization", "Bearer " + sToken);
                 xhr.setRequestHeader("Content-Type", "application/json");
                 xhr.setRequestHeader("Accept", "application/json");
 

@@ -106,7 +106,7 @@ sap.ui.define([
                     that.getView().setModel(oPrestamosModel, "prestamos");
 
                     // Leemos datos globales
-                    var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+                    //var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 
                     var oModel = that.getView().getModel();
 
@@ -121,7 +121,7 @@ sap.ui.define([
                         });
 
                     }
-
+/*
                     if ( oGlobalModel != undefined){
 
                         oGlobalModel.setProperty("/userData", {
@@ -132,7 +132,7 @@ sap.ui.define([
                             "Correo": empleadoInfo.CORREO
                         });
                     }
-
+*/
 
 
                 },

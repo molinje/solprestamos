@@ -162,7 +162,8 @@
                             id="inputDocumento"
                             value="{calamView>/numeroDocumento}"
                             width="100%"
-                            placeholder="Ingrese número de documento"/>
+                            placeholder="Ingrese número de documento"
+                            valueHelpRequest="onDocumentoValueHelp"/>
                          <Label text="Nombre" labelFor="CodeudorNombre" />
                         <Input 
                             id="CodeudorNombre"  

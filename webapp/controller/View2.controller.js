@@ -3,8 +3,9 @@ sap.ui.define([
 	'sap/ui/model/json/JSONModel',
 	"sap/m/MessageBox",
 	"sap/m/MessageToast",
+	"sap/ui/core/Fragment",
 	"prestamos/ccb/org/solprestamos/util/BackendService"
-], (Controller, JSONModel, MessageBox, MessageToast, BackendService) => {
+], (Controller, JSONModel, MessageBox, MessageToast, Fragment, BackendService) => {
 	"use strict";
 
 	return Controller.extend("prestamos.ccb.org.solprestamos.controller.View2", {
@@ -505,6 +506,76 @@ sap.ui.define([
 					);
 				});
 
+		},
+
+		/**
+		 * Abre el value help para buscar un colaborador por número de documento
+		 */
+		onDocumentoValueHelp: function () {
+			var oViewModel = this.getView().getModel("calamView");
+			var sDocumento = oViewModel.getProperty("/numeroDocumento");
+
+			if (!sDocumento || sDocumento.trim() === "") {
+				MessageBox.warning("Ingrese un número de documento para buscar.");
+				return;
+			}
+
+			var that = this;
+			this.getView().setBusy(true);
+
+			this._oBackendService.getColaborador(sDocumento.trim())
+				.then(function (oResponse) {
+					that.getView().setBusy(false);
+					var oItem = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
+					that._openColaboradorDialog(oItem);
+				})
+				.catch(function () {
+					that.getView().setBusy(false);
+					MessageBox.error("No se encontró colaborador con ese número de documento.", {
+						title: "Sin resultados"
+					});
+				});
+		},
+
+		/**
+		 * Carga y abre el diálogo de confirmación del colaborador
+		 * @private
+		 */
+		_openColaboradorDialog: function (oItem) {
+			var oView = this.getView();
+			var that = this;
+
+			if (!this._oColaboradorDialog) {
+				Fragment.load({
+					id: oView.getId(),
+					name: "prestamos.ccb.org.solprestamos.view.ColaboradorDialog",
+					controller: this
+				}).then(function (oDialog) {
+					that._oColaboradorDialog = oDialog;
+					oView.addDependent(oDialog);
+					oDialog.setModel(new JSONModel(oItem), "dlgColaborador");
+					oDialog.open();
+				});
+			} else {
+				this._oColaboradorDialog.setModel(new JSONModel(oItem), "dlgColaborador");
+				this._oColaboradorDialog.open();
+			}
+		},
+
+		/**
+		 * Confirma la selección y mapea ENAME al campo CodeudorNombre
+		 */
+		onColaboradorSeleccionar: function () {
+			var oData = this._oColaboradorDialog.getModel("dlgColaborador").getData();
+			this.getView().getModel("calamView").setProperty("/nombreCodeudor", oData.ENAME);
+			this._oColaboradorDialog.close();
+		},
+
+		/**
+		 * Cancela el diálogo de colaborador
+		 */
+		onColaboradorCancelar: function () {
+			this._oColaboradorDialog.close();
 		},
 
 		onNavBack: function () {

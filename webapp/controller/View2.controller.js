@@ -45,6 +45,7 @@ sap.ui.define([
 				// Otros campos
 				tieneCodeudor: -1,
 				numeroDocumento: "",
+				docBusqueda: "",
 				nombreCodeudor: "",
 				cedulaCodeudor: "",
 				direccionCodeudor: "",
@@ -506,6 +507,84 @@ sap.ui.define([
 					);
 				});
 
+		},
+
+		/**
+		 * Abre el diálogo de búsqueda de colaborador (value help del campo inputBuscarColaborador)
+		 */
+		onColaboradorValueHelp: function () {
+			var oView = this.getView();
+
+			if (!this._oSearchDialog) {
+				Fragment.load({
+					id: oView.getId() + "-colSearch",
+					name: "prestamos.ccb.org.solprestamos.view.ColaboradorSearchDialog",
+					controller: this
+				}).then((oDialog) => {
+					this._oSearchDialog = oDialog;
+					oView.addDependent(oDialog);
+					this._resetSearchDialog();
+					oDialog.open();
+				});
+			} else {
+				this._resetSearchDialog();
+				this._oSearchDialog.open();
+			}
+		},
+
+		/** @private */
+		_resetSearchDialog: function () {
+			this._oSearchDialog.setModel(new JSONModel({
+				docInput: "",
+				results: [],
+				busy: false
+			}), "dlgSearch");
+		},
+
+		/**
+		 * Ejecuta la búsqueda del colaborador desde el diálogo
+		 */
+		onSearchColaborador: function () {
+			var oModel = this._oSearchDialog.getModel("dlgSearch");
+			var sDoc = oModel.getProperty("/docInput");
+
+			if (!sDoc || sDoc.trim() === "") {
+				MessageToast.show("Ingrese un número de documento.");
+				return;
+			}
+
+			var that = this;
+			oModel.setProperty("/busy", true);
+			oModel.setProperty("/results", []);
+
+			this._oBackendService.getColaborador(sDoc.trim())
+				.then(function (oResponse) {
+					oModel.setProperty("/busy", false);
+					var oItem = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
+					oModel.setProperty("/results", [oItem]);
+				})
+				.catch(function () {
+					oModel.setProperty("/busy", false);
+					MessageToast.show("No se encontró colaborador con ese número de documento.");
+				});
+		},
+
+		/**
+		 * Selecciona el colaborador de la tabla: mapea ENAME a los campos destino y cierra el diálogo
+		 */
+		onColaboradorItemPress: function (oEvent) {
+			var oItem = oEvent.getSource().getBindingContext("dlgSearch").getObject();
+			var oViewModel = this.getView().getModel("calamView");
+			oViewModel.setProperty("/docBusqueda", oItem.ENAME);
+			oViewModel.setProperty("/nombreCodeudor", oItem.ENAME);
+			this._oSearchDialog.close();
+		},
+
+		/**
+		 * Cierra el diálogo de búsqueda sin seleccionar
+		 */
+		onCancelColaboradorSearch: function () {
+			this._oSearchDialog.close();
 		},
 
 		/**

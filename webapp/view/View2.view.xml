@@ -173,8 +173,15 @@
                                 press="onDocumentoValueHelp"
                                 tooltip="Buscar colaborador"/>
                         </HBox>
+                        <Label text="Colaborador" labelFor="inputBuscarColaborador"/>
+                        <Input
+                            id="inputBuscarColaborador"
+                            value="{calamView>/docBusqueda}"
+                            width="100%"
+                            placeholder="Presione el icono para buscar colaborador"
+                            valueHelpRequest="onColaboradorValueHelp"/>
                          <Label text="Nombre" labelFor="CodeudorNombre" />
-                        <Input 
+                        <Input
                             id="CodeudorNombre"  
                             value="{calamView>/nombreCodeudor}"                         
                             editable="true"

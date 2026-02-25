@@ -1,0 +1,64 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Dialog
+        id="colaboradorSearchDlg"
+        title="Búsqueda de Colaborador"
+        contentWidth="540px"
+        busyIndicatorDelay="0">
+        <content>
+            <VBox class="sapUiSmallMargin">
+                <HBox alignItems="Center" class="sapUiSmallMarginBottom">
+                    <Input
+                        id="dlgDocInput"
+                        value="{dlgSearch>/docInput}"
+                        placeholder="Número de documento"
+                        submit="onSearchColaborador">
+                        <layoutData>
+                            <FlexItemData growFactor="1"/>
+                        </layoutData>
+                    </Input>
+                    <Button
+                        text="Buscar"
+                        type="Emphasized"
+                        press="onSearchColaborador"
+                        class="sapUiTinyMarginBegin"/>
+                </HBox>
+                <Table
+                    id="dlgResultsTable"
+                    busy="{dlgSearch>/busy}"
+                    busyIndicatorDelay="0"
+                    noDataText="Ingrese un número de documento y presione Buscar"
+                    items="{path: 'dlgSearch>/results'}">
+                    <columns>
+                        <Column width="35%">
+                            <Text text="Cédula"/>
+                        </Column>
+                        <Column width="20%">
+                            <Text text="No. Emp."/>
+                        </Column>
+                        <Column>
+                            <Text text="Nombre"/>
+                        </Column>
+                    </columns>
+                    <items>
+                        <ColumnListItem
+                            type="Active"
+                            press="onColaboradorItemPress">
+                            <cells>
+                                <Text text="{dlgSearch>PERID}"/>
+                                <Text text="{dlgSearch>PERNR}"/>
+                                <Text text="{dlgSearch>ENAME}"/>
+                            </cells>
+                        </ColumnListItem>
+                    </items>
+                </Table>
+            </VBox>
+        </content>
+        <endButton>
+            <Button
+                text="Cancelar"
+                press="onCancelColaboradorSearch"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

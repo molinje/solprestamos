@@ -23,7 +23,8 @@ sap.ui.define([
          * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
          */
         getColaborador: function (sIdentificacionNacional) {
-            return this._executeGet(this._colaboradoresUrl, { Identificacion_Nacional: sIdentificacionNacional });
+            var sId = String(sIdentificacionNacional).trim();
+            return this._executeGet(this._colaboradoresUrl, { Identificacion_Nacional: "'" + sId + "'" });
         },
 
         /**

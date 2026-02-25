@@ -158,12 +158,21 @@
                         </RadioButtonGroup>
                         
                         <Label text="Número de Documento" labelFor="inputDocumento" />
-                        <Input
-                            id="inputDocumento"
-                            value="{calamView>/numeroDocumento}"
-                            width="100%"
-                            placeholder="Ingrese número de documento"
-                            valueHelpRequest="onDocumentoValueHelp"/>
+                        <HBox width="100%" alignItems="Center">
+                            <Input
+                                id="inputDocumento"
+                                value="{calamView>/numeroDocumento}"
+                                placeholder="Ingrese número de documento"
+                                submit="onDocumentoValueHelp">
+                                <layoutData>
+                                    <FlexItemData growFactor="1"/>
+                                </layoutData>
+                            </Input>
+                            <Button
+                                icon="sap-icon://search"
+                                press="onDocumentoValueHelp"
+                                tooltip="Buscar colaborador"/>
+                        </HBox>
                          <Label text="Nombre" labelFor="CodeudorNombre" />
                         <Input 
                             id="CodeudorNombre"  

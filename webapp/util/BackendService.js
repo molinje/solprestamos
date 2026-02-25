@@ -24,7 +24,8 @@ sap.ui.define([
          * @returns {Promise} Promise que resuelve con el JSON de respuesta
          * @private
          */
-        _executePost: function (sUrl, oData) {
+        //_executePost: function (sUrl, oData) {
+            /*
             return fetch(sUrl, {
                 method: "GET",
                 headers: {
@@ -51,6 +52,50 @@ sap.ui.define([
                         });
                     });
                 }
+            });
+            */
+           _executePost: function (sUrl, oData) {
+             return new Promise(function (resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", sUrl, true);
+
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.setRequestHeader("Accept", "application/json");
+
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            var oResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+                            resolve(oResponse);
+                        } catch (e) {
+                            resolve({ data: xhr.responseText, rawResponse: true });
+                        }
+                    } else if (xhr.status === 401) {
+                        reject({
+                            error: "Authentication failed",
+                            status: xhr.status,
+                            statusText: xhr.statusText,
+                            message: "El token de acceso es inválido o ha expirado"
+                        });
+                    } else {
+                        reject({
+                            error: "Service request failed",
+                            status: xhr.status,
+                            statusText: xhr.statusText,
+                            response: xhr.responseText
+                        });
+                    }
+                };
+
+                xhr.onerror = function () {
+                    reject({
+                        error: "Network error",
+                        status: xhr.status,
+                        message: "Error de red al conectar con el servicio"
+                    });
+                };
+
+                xhr.send(JSON.stringify(oData));
             });
         }
     });

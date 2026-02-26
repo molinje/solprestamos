@@ -13,14 +13,15 @@ sap.ui.define([
 			// Inicialización del controlador View2
 			// Controller Calamidad
 
-
+           var gt_codeudores = {};
+		   var that = this;
 
 			this._oBackendService = new BackendService();
 
 			this._oBackendService.getColaborador('6332')
 				.then(function (oResponse) {
 
-					var oItem = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
+					gt_codeudores = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
 
 				})
 				.catch(function () {
@@ -69,9 +70,9 @@ sap.ui.define([
 				solicitudEnabled: true
 			});
 
-			if (oItem != undefined) {
+			if (gt_codeudores != undefined) {
 
-				oViewModel.setProperty("/Codeudores", oItem);
+				oViewModel.setProperty("/Codeudores", gt_codeudores);
 			}
 			this.getView().setModel(oViewModel, "calamView");
 

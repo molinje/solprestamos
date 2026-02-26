@@ -687,6 +687,11 @@ sap.ui.define([
 		  
 		},
 
+		onCloseIdentifCodeudorVHelp: function () {
+			// cerrar la ayuda de busqueda del codeudor
+			this.getView().getDependent("IdentifCodeudorVHelp").close();
+		},
+
 		onNavBack: function () {
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("RouteViewini");

@@ -36,11 +36,11 @@ sap.ui.define([
                     var gt_codeudores = {};
                    
 
-                    gt_codeudores = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
 
                     if (oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item != undefined) {
                         gt_codeudores = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
-                        return gt_codeudores;
+                        //return gt_codeudores;
+                        return Promise.resolve(gt_codeudores);
                     }
                 },
                 error: function (error) {
@@ -52,7 +52,7 @@ sap.ui.define([
             });
 
 
-            //return Promise.resolve({});
+            
         },
 
         /**

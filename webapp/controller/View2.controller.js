@@ -678,13 +678,18 @@ sap.ui.define([
 		},
 
 		onIdentificacionValueHelp: function () {
-			//alert("Funcionalidad de búsqueda de identificación no implementada aún.");
-			//MessageBox.information("Funcionalidad de búsqueda de identificación no implementada aún.");
-	        // sap.ui.xmlfragment("Id of the fragment", "path of the fragment", "controller")
+			var sIdentificacion = String(this.byId("inputIdentificacion").getValue()).trim();
+			var oColaborador = this._oBackendService.Get_colaborador(sIdentificacion);
+
+            var oViewModel = this.getView().getModel("calamView");
+			if ( oColaborador != undefined) {
+								
+				oViewModel.setProperty("/Codeudores", oColaborador);
+			}
+
 			this.dialog = sap.ui.xmlfragment(this.getView().getId(), "prestamos.ccb.org.solprestamos.view.IdentifCodeudorVHelp", this);
 			this.getView().addDependent(this.dialog);
 			this.dialog.open();
-		  
 		},
 
 		onCloseIdentifCodeudorVHelp: function () {

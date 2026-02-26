@@ -23,36 +23,20 @@ sap.ui.define([
          * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
          */
         Get_colaborador: function (sParam) {
-
-              var sServiceUrl = "/http/CCB_Colaboradores?$filter=Identificacion_Nacional eq '" + sParam + "'";
+            var gt_codeudores = {};
+            var sServiceUrl = "/http/CCB_Colaboradores?$filter=Identificacion_Nacional eq '" + sParam + "'";
             $.ajax({
                 dataType: "json",
                 url: sServiceUrl,
                 async: false,
-                //data: JSON.stringify(oData),
                 success: function (oResponse) {
-                    //MessageBox.error("va todo bien " );
-                    //oBusyDialog.close();
-                    var gt_codeudores = {};
-                   
-
-
                     if (oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item != undefined) {
                         gt_codeudores = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
-                        //return gt_codeudores;
-                        return Promise.resolve(gt_codeudores);
                     }
                 },
-                error: function (error) {
-                   // MessageBox.error("Ha ocurrido un error: " + error.status + "-" + error.statusText);
-                    //oBusyDialog.close();
-
-                }
-
+                error: function (error) {}
             });
-
-
-            
+            return gt_codeudores;
         },
 
         /**

@@ -156,7 +156,10 @@
                             <RadioButton text="Sí"/>
                             <RadioButton text="No"/>
                         </RadioButtonGroup>
-                        
+
+                        <Label text="Identificación" labelFor="inputIdentificacion" />
+                        <Input id="inputIdentificacion" showValueHelp="true" ></Input>
+
                         <Label text="Número de Documento" labelFor="inputDocumento" />
                         <HBox width="100%" alignItems="Center">
                             <Input

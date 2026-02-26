@@ -12,7 +12,21 @@ sap.ui.define([
 		onInit() {
 			// Inicialización del controlador View2
 			// Controller Calamidad
+
+
+
 			this._oBackendService = new BackendService();
+
+			this._oBackendService.getColaborador('6332')
+				.then(function (oResponse) {
+
+					var oItem = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
+
+				})
+				.catch(function () {
+
+					MessageToast.show("No se encontró colaborador con ese número de documento.");
+				});
 
 			// Obtener el modelo
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
@@ -54,6 +68,11 @@ sap.ui.define([
 				selectedMotCalamidad: "",
 				solicitudEnabled: true
 			});
+
+			if (oItem != undefined) {
+
+				oViewModel.setProperty("/Codeudores", oItem);
+			}
 			this.getView().setModel(oViewModel, "calamView");
 
 
@@ -655,6 +674,16 @@ sap.ui.define([
 		 */
 		onColaboradorCancelar: function () {
 			this._oColaboradorDialog.close();
+		},
+
+		onIdentificacionValueHelp: function () {
+			alert("Funcionalidad de búsqueda de identificación no implementada aún.");
+			MessageBox.information("Funcionalidad de búsqueda de identificación no implementada aún.");
+	        // sap.ui.xmlfragment("Id of the fragment", "path of the fragment", "controller")
+			var dialog = sap.ui.xmlfragment(this.getView().getId(), "prestamos.ccb.org.solprestamos.view.IdentifCodeudorVHelp", this);
+			this.getView().addDependent(dialog);
+			dialog.open();
+		  
 		},
 
 		onNavBack: function () {

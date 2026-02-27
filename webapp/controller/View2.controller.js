@@ -507,7 +507,9 @@ sap.ui.define([
 			});
 			*/
 
-			that._oBackendService.guardarPrestamo(dataService)
+            
+			//that._oBackendService.guardarPrestamo(dataService)
+			that._oBackendService.guardarSolPrestamo(dataService)
 				.then(function (oResponse) {
 					oViewModel.setProperty("/solicitudEnabled", true);
 					MessageBox.success("Solicitud de Préstamo Calamidad creada exitosamente", {

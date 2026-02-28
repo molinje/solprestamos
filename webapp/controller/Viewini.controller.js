@@ -16,7 +16,7 @@ sap.ui.define([
 
             //this.getView().getModel().setProperty("/EmpleadoInfo", "");
 
-            // Obtener el modelo
+            // Obtener el modelo global para almacenar datos del usuario y otros datos globales
             var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 
 
@@ -70,6 +70,10 @@ sap.ui.define([
         */
         _loadDatafromEmployee: function () {
 
+
+             // Obtener el modelo global para almacenar datos del usuario y otros datos globales
+            var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+
             var that = this;
 
             var oBusyDialog = new sap.m.BusyDialog({
@@ -86,7 +90,8 @@ sap.ui.define([
                 success: function (oResponse) {
                     //MessageBox.error("va todo bien " );
                     oBusyDialog.close();
-
+                    // empleadoInfo colocamos aqui la información basica del empleado, como nombre, correo, salario, etc. 
+                    // y en listaPrestamos la información de los prestamos a los cuales tiene derecho
                     var empleadoInfo = oResponse["n0:ZMFCOHCM_INFO_INIResponse"].E_INFO.item;
                     var listaPrestamos = empleadoInfo.LIST_PREST.item;
 
@@ -121,8 +126,7 @@ sap.ui.define([
                         });
 
                     }
-/*
-                    if ( oGlobalModel != undefined){
+                    if (oGlobalModel != undefined) {
 
                         oGlobalModel.setProperty("/userData", {
                             "PERNR": empleadoInfo.PERNR,
@@ -132,7 +136,6 @@ sap.ui.define([
                             "Correo": empleadoInfo.CORREO
                         });
                     }
-*/
 
 
                 },

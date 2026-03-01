@@ -473,8 +473,9 @@ sap.ui.define([
 
 			}
 
-			if (oData.nombreCodeudor == "" || oData.cedulaCodeudor == "" ||
-				oData.direccionCodeudor == "" || oData.telefonoCodeudor == "") {
+			if (oData.nombreCodeudor == "" || oData.cedulaCodeudor == "" 
+				//oData.direccionCodeudor == "" || oData.telefonoCodeudor == ""
+						) {
 
 				MessageBox.error(
 					"Complete los datos del codeudor"

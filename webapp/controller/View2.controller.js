@@ -740,6 +740,8 @@ sap.ui.define([
 				oViewModel.setProperty("/numeroEmpleadoCodeudor", "");
 				oViewModel.setProperty("/cedulaCodeudor", "");	
 			}
+			// Verificar si se puede activar el paso del codeudor dependiendo de los campos que se hayan llenado
+			this.onStepCodeudorActivate(); 
 		},
 
 		onNavBack: function () {

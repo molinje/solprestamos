@@ -172,7 +172,7 @@
                         <Input
                             id="CodeudorNombre"
                             value="{calamView>/nombreCodeudor}"
-                            editable="true"
+                            editable="false"
                             width="100%"
                             visible="{calamView>/mostrarCCB}" />
 
@@ -180,14 +180,14 @@
                         <Input
                             id="CodeudorumEmpleado"
                             value="{calamView>/numeroEmpleadoCodeudor}"
-                            editable="true"
+                            editable="false"
                             width="100%"
                             visible="{calamView>/mostrarCCB}" />
                             <Label text="Cédula" labelFor="CodeudorCedula" visible="{calamView>/mostrarCCB}" />
                         <Input
                             id="CodeudorCedula"
                             value="{calamView>/cedulaCodeudor}"
-                            editable="true"
+                            editable="false"
                             width="100%"
                             visible="{calamView>/mostrarCCB}" />
 

@@ -149,68 +149,79 @@
                         <form:SimpleForm
 										editable="true"
 										layout="ResponsiveGridLayout">
-                        <Label text="¿Tiene codeudor?" class="sapUiSmallMarginBottom"/>
+                        <Label text="¿Codeudor es trabajador de la CCB?" class="sapUiSmallMarginBottom"/>
                         <RadioButtonGroup
                             id="rbGroupCodeudor"
-                            selectedIndex="{calamView>/tieneCodeudor}">
+                            selectedIndex="{calamView>/tieneCodeudor}"
+                            select="onCodeudorTypeSelect">
                             <RadioButton text="Sí"/>
                             <RadioButton text="No"/>
                         </RadioButtonGroup>
 
-                        <Label text="Identificación" labelFor="inputIdentificacion" />
-                        <Input id="inputIdentificacion" showValueHelp="true" valueHelpRequest="onIdentificacionValueHelp"></Input>
+                        <Label text="Identificación" labelFor="inputIdentificacion"  visible="{calamView>/mostrarCCB}"/>
+                        <Input id="inputIdentificacion" 
+                               showValueHelp="true" 
+                               valueHelpRequest="onIdentificacionValueHelp"
+                               placeholder="Presione el icono para buscar colaborador"
+                               visible="{calamView>/mostrarCCB}">
+                        </Input>
 
-                        <Label text="Número de Documento" labelFor="inputDocumento" />
-                        <HBox width="100%" alignItems="Center">
-                            <Input
-                                id="inputDocumento"
-                                value="{calamView>/numeroDocumento}"
-                                placeholder="Ingrese número de documento"
-                                submit="onDocumentoValueHelp">
-                                <layoutData>
-                                    <FlexItemData growFactor="1"/>
-                                </layoutData>
-                            </Input>
-                            <Button
-                                icon="sap-icon://search"
-                                press="onDocumentoValueHelp"
-                                tooltip="Buscar colaborador"/>
-                        </HBox>
-                        <Label text="Colaborador" labelFor="inputBuscarColaborador"/>
+                        
+
+                        <Label text="Nombre" labelFor="CodeudorNombre" visible="{calamView>/mostrarCCB}" />
                         <Input
-                            id="inputBuscarColaborador"
-                            value="{calamView>/docBusqueda}"
+                            id="CodeudorNombre"
+                            value="{calamView>/nombreCodeudor}"
+                            editable="true"
                             width="100%"
-                            placeholder="Presione el icono para buscar colaborador"
-                            valueHelpRequest="onColaboradorValueHelp"/>
-                         <Label text="Nombre" labelFor="CodeudorNombre" />
+                            visible="{calamView>/mostrarCCB}" />
+
+                          <Label text="Núm. de empleado" labelFor="CodeudorNumEmpleado" visible="{calamView>/mostrarCCB}" />
                         <Input
-                            id="CodeudorNombre"  
-                            value="{calamView>/nombreCodeudor}"                         
+                            id="CodeudorumEmpleado"
+                            value="{calamView>/numeroEmpleadoCodeudor}"
                             editable="true"
                             width="100%"
-                            />
-                            <Label text="Cédula" labelFor="CodeudorCedula" />
-                        <Input 
-                            id="CodeudorCedula"  
-                            value="{calamView>/cedulaCodeudor}"                         
+                            visible="{calamView>/mostrarCCB}" />
+                            <Label text="Cédula" labelFor="CodeudorCedula" visible="{calamView>/mostrarCCB}" />
+                        <Input
+                            id="CodeudorCedula"
+                            value="{calamView>/cedulaCodeudor}"
                             editable="true"
                             width="100%"
-                            />      
-                            <Label text="Dirección" labelFor="CodeudorDireccion" />
-                        <Input 
-                            id="CodeudorDireccion"  
-                            value="{calamView>/direccionCodeudor}"                         
+                            visible="{calamView>/mostrarCCB}" />
+
+
+                              <Label text="Nombre" labelFor="CodeudorNombreEx" visible="{calamView>/mostrarExterno}" />
+                        <Input
+                            id="CodeudorNombreEx"
+                            value="{calamView>/nombreCodeudor}"
                             editable="true"
                             width="100%"
-                            />
-                        <Label text="Teléfono" labelFor="CodeudorTelefono" />
-                        <Input 
-                            id="CodeudorTelefono"  
-                            value="{calamView>/telefonoCodeudor}"                         
+                            visible="{calamView>/mostrarExterno}" />
+
+                              <Label text="Cédula" labelFor="CodeudorCedulaEx" visible="{calamView>/mostrarExterno}" />
+                        <Input
+                            id="CodeudorCedulaEx"
+                            value="{calamView>/cedulaCodeudor}"
                             editable="true"
                             width="100%"
-                            />                     
+                            visible="{calamView>/mostrarExterno}" />
+
+                            <Label text="Dirección" labelFor="CodeudorDireccionEx" visible="{calamView>/mostrarExterno}" />
+                        <Input
+                            id="CodeudorDireccionEx"
+                            value="{calamView>/direccionCodeudor}"
+                            editable="true"
+                            width="100%"
+                            visible="{calamView>/mostrarExterno}" />
+                        <Label text="Teléfono" labelFor="CodeudorTelefonoEx" visible="{calamView>/mostrarExterno}" />
+                        <Input
+                            id="CodeudorTelefonoEx"
+                            value="{calamView>/telefonoCodeudor}"
+                            editable="true"
+                            width="100%"
+                            visible="{calamView>/mostrarExterno}" />
                         </form:SimpleForm>
                         	
                     </VBox>

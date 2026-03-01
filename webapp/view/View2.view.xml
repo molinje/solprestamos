@@ -158,11 +158,11 @@
                             <RadioButton text="No"/>
                         </RadioButtonGroup>
 
-                        <Label text="Identificación" labelFor="inputIdentificacion"  visible="{calamView>/mostrarCCB}"/>
+                        <Label text="Busqueda colaborador" labelFor="inputIdentificacion"  visible="{calamView>/mostrarCCB}"/>
                         <Input id="inputIdentificacion" 
                                showValueHelp="true" 
                                valueHelpRequest="onIdentificacionValueHelp"
-                               placeholder="Presione el icono para buscar colaborador"
+                               placeholder="Busque por nombre o identificación"
                                visible="{calamView>/mostrarCCB}">
                         </Input>
 

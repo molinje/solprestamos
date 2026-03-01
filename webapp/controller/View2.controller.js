@@ -703,6 +703,19 @@ sap.ui.define([
 			// index 0 = "Sí" (empleado CCB), index 1 = "No" (externo)
 			oViewModel.setProperty("/mostrarCCB", iIndex === 0);
 			oViewModel.setProperty("/mostrarExterno", iIndex === 1);
+
+			if (iIndex === 0) {
+				// Si es empleado CCB, limpiar campos del codeudor externo
+				oViewModel.setProperty("/nombreCodeudor", "");
+				oViewModel.setProperty("/cedulaCodeudor", "");
+				oViewModel.setProperty("/direccionCodeudor", "");
+				oViewModel.setProperty("/telefonoCodeudor", "");
+				} else {
+				// Si es externo, limpiar campos del codeudor CCB
+				oViewModel.setProperty("/nombreCodeudor", "");	
+				oViewModel.setProperty("/numeroEmpleadoCodeudor", "");
+				oViewModel.setProperty("/cedulaCodeudor", "");	
+			}
 		},
 
 		onNavBack: function () {

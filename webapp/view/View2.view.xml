@@ -210,7 +210,7 @@
                             editable="true"
                             width="100%"
                             visible="{calamView>/mostrarExterno}"
-                            liveChange="onStepCodeudorActivate" />
+                            change="onStepCodeudorActivate" />
 
                             <Label text="Dirección" labelFor="CodeudorDireccionEx" visible="{calamView>/mostrarExterno}" />
                         <Input
@@ -218,14 +218,16 @@
                             value="{calamView>/direccionCodeudor}"
                             editable="true"
                             width="100%"
-                            visible="{calamView>/mostrarExterno}" />
+                            visible="{calamView>/mostrarExterno}"
+                            change="onStepCodeudorActivate" />
                         <Label text="Teléfono" labelFor="CodeudorTelefonoEx" visible="{calamView>/mostrarExterno}" />
                         <Input
                             id="CodeudorTelefonoEx"
                             value="{calamView>/telefonoCodeudor}"
                             editable="true"
                             width="100%"
-                            visible="{calamView>/mostrarExterno}" />
+                            visible="{calamView>/mostrarExterno}"
+                            change="onStepCodeudorActivate" />
                         </form:SimpleForm>
                         	
                     </VBox>

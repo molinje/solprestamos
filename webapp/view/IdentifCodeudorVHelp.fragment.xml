@@ -1,7 +1,10 @@
 <core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
     <Dialog title="Seleccione un codeudor" class="sapUiPopupWithPadding" contentWidth="65%">
         <content>
-        <Table items="{ path: 'calamView>/Codeudores'}">
+        <Table id="codeudorTable" items="{ path: 'calamView>/Codeudores'}"
+               growing="true"
+               growingThreshold="10"
+               growingScrollToLoad="true">
             <columns>
                 <Column>
                     <Text text="Identificación" />
@@ -11,7 +14,7 @@
                 </Column>
             </columns>
             <items>
-                <ColumnListItem>
+                <ColumnListItem type="Active" press="onCodeudorSelect">
                     <cells>
                         <Text text="{calamView>PERID}" />
                         <Text text="{calamView>ENAME}" />

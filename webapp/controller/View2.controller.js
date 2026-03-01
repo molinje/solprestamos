@@ -386,6 +386,10 @@ sap.ui.define([
  */
 		onCrearSolicitud: function () {
 
+			// vamos a leer los datos del modelo global para obtener la información del usuario actual
+			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+            var oUserData = oGlobalModel.getProperty("/userData");
+
 			var dataSolic = {
 
 				DARBT: 0,
@@ -399,6 +403,18 @@ sap.ui.define([
 				ZVALSO: "",
 				ZNUCUCA: ""
 			};
+
+			if (oUserData && oUserData.PERNR != undefined) {
+
+				dataSolic.PERNR = oUserData.PERNR;
+
+			} else {
+
+				MessageBox.error(
+					"No se identifico numero de personal para el usuario actual"
+				);
+				return;
+			}
 			var that = this;
 			var oViewModel = this.getView().getModel("calamView");
 			var oData = oViewModel.getData();
@@ -448,7 +464,6 @@ sap.ui.define([
 				dataSolic.ZNUCEX = oData.cedulaCodeudor;
 				dataSolic.ZDIREX = oData.direccionCodeudor;
 				dataSolic.ZTELEX = oData.telefonoCodeudor;
-				dataSolic.PERNR = "00205382";
 
 			}
 
@@ -689,9 +704,33 @@ sap.ui.define([
 				oViewModel.setProperty("/Codeudores", oColaborador);
 			}
 
-			this.dialog = sap.ui.xmlfragment(this.getView().getId(), "prestamos.ccb.org.solprestamos.view.IdentifCodeudorVHelp", this);
-			this.getView().addDependent(this.dialog);
+            // Abrir el diálogo de ayuda de búsqueda del codeudor
+			if ( this.dialog == undefined) {
+				// Cargar o declarar  el fragment solo la primera vez que se abre, luego se reutiliza la instancia ya creada	
+				this.dialog = sap.ui.xmlfragment(this.getView().getId(), "prestamos.ccb.org.solprestamos.view.IdentifCodeudorVHelp", this);
+				this.getView().addDependent(this.dialog);
+			}
+
+		
 			this.dialog.open();
+		},
+
+		onCodeudorSelect: function (oEvent) {
+			
+			// Obtener el item seleccionado
+			var documento = oEvent.getSource().getBindingContext().getProperty("PERID");
+            /*
+			var oItem = oEvent.getSource().getBindingContext("calamView").getObject();	
+			var oViewModel = this.getView().getModel("calamView");
+			// Mapear los campos del codeudor al modelo de la vista
+			oViewModel.setProperty("/nombreCodeudor", oItem.ENAME);
+			oViewModel.setProperty("/cedulaCodeudor", oItem.PERID);	
+			// Aquí podrías mapear otros campos si están disponibles en el modelo, por ejemplo:
+			// oViewModel.setProperty("/direccionCodeudor", oItem.DIRECCION);
+			// oViewModel.setProperty("/telefonoCodeudor", oItem.TELEFONO);
+			// Cerrar el diálogo después de seleccionar
+			this.dialog.close();
+			*/
 		},
 
 		onCloseIdentifCodeudorVHelp: function () {

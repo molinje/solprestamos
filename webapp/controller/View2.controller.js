@@ -517,42 +517,28 @@ sap.ui.define([
 
 				}
 			};
-			/*
-			var sServiceUrl = "/http/CCB_Guardar_Prestamos";
-			$.ajax({
-				dataType: "json",
-				url: sServiceUrl,
-				async: false,
-				data: JSON.stringify(dataService),
-				success: function (oResponse) {
-					//MessageBox.error("va todo bien " );
-
-					if (oResponse = !undefined) {
-
-						MessageBox.success("Solicitud de Préstamo Calamidad creada exitosamente");
-
-					}
-
-
-
-				},
-				error: function (error) {
-					MessageBox.error("Ha ocurrido un error: " + error.status + "-" + error.statusText);
-
-
-
-
-				}
-
-			});
-			*/
+			
 
 
 			//that._oBackendService.guardarPrestamo(dataService)
 			that._oBackendService.guardarSolPrestamo(dataService)
 				.then(function (oResponse) {
 					oViewModel.setProperty("/solicitudEnabled", true);
-					MessageBox.success("Solicitud de Préstamo Calamidad creada exitosamente", {
+
+					var message_success = "";
+                   // validamos si el servicio nos retorno un mensaje de éxito para mostrarlo, 
+				   // de lo contrario mostramos un mensaje genérico de éxito
+                   if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
+
+						message_success = oResponse['n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse'].EV_MESSAGE;
+
+				   } else {
+
+					message_success = "Solicitud de Préstamo Calamidad creada exitosamente.";
+
+				   }
+
+					MessageBox.success( message_success, {
 						details: "Monto: " + that._formatCurrency(oData.valorPrestamo, oData.moneda) +
 							"\nCuotas: " + oData.numeroCuotas +
 							"\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda),

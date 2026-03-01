@@ -201,7 +201,7 @@
                             editable="true"
                             width="100%"
                             visible="{calamView>/mostrarExterno}" 
-                            liveChange="onStepCodeudorActivate"/>
+                            change="onStepCodeudorActivate"/>
 
                               <Label text="Cédula" labelFor="CodeudorCedulaEx" visible="{calamView>/mostrarExterno}" />
                         <Input

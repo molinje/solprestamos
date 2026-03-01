@@ -18,6 +18,8 @@ sap.ui.define([
 
 			this._oBackendService = new BackendService();
 
+			this._wizard = this.byId("wizardCalam");
+
 			this._oBackendService.getColaborador('6332')
 				.then(function (oResponse) {
 
@@ -383,6 +385,25 @@ sap.ui.define([
 				maxFractionDigits: 0
 			});
 			return oFormat.format(fValue, sCurrency);
+		},
+
+		onStepCodeudorActivate: function () {
+			var oViewModel = this.getView().getModel("calamView");
+			// Verificar si los campos de Nombre codeudor y cedula codeudor ya tienen valores, si es así mostrar el paso del codeudor, de lo contrario ocultarlo
+			var sNombreCodeudor = oViewModel.getProperty("/nombreCodeudor");
+			var sCedulaCodeudor = oViewModel.getProperty("/cedulaCodeudor");
+			if ((sNombreCodeudor && sNombreCodeudor.trim() !== "") && (sCedulaCodeudor && sCedulaCodeudor.trim() !== "")) {
+				// Si ya tienen valores, marcar el paso como validado
+				this._wizard.validateStep(this.byId("step2Codeudor"));
+				MessageToast.show("Datos del codeudor cargados, puede continuar con este paso");
+
+
+			} else {
+				this._wizard.invalidateStep(this.byId("step2Codeudor"));
+				MessageToast.show("Complete los datos del codeudor para activar este paso");
+				//this._wizard.discardProgress(this.byId("step2Codeudor"));
+				
+			}
 		},
 
 		/**

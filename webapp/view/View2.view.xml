@@ -142,9 +142,10 @@
                 
                 <!-- Paso 2: Información del Solicitante -->
                 <WizardStep
-                    id="step2"
+                    id="step2Codeudor"
                     title="Datos codeudor"
-                    validated="true">
+                    validated="false"
+                    activate="onStepCodeudorActivate">
                     <VBox class="sapUiSmallMargin">
                         <form:SimpleForm
 										editable="true"
@@ -174,7 +175,8 @@
                             value="{calamView>/nombreCodeudor}"
                             editable="false"
                             width="100%"
-                            visible="{calamView>/mostrarCCB}" />
+                            visible="{calamView>/mostrarCCB}"
+                            liveChange="onStepCodeudorActivate"/>
 
                           <Label text="Núm. de empleado" labelFor="CodeudorNumEmpleado" visible="{calamView>/mostrarCCB}" />
                         <Input
@@ -198,7 +200,8 @@
                             value="{calamView>/nombreCodeudor}"
                             editable="true"
                             width="100%"
-                            visible="{calamView>/mostrarExterno}" />
+                            visible="{calamView>/mostrarExterno}" 
+                            liveChange="onStepCodeudorActivate"/>
 
                               <Label text="Cédula" labelFor="CodeudorCedulaEx" visible="{calamView>/mostrarExterno}" />
                         <Input
@@ -206,7 +209,8 @@
                             value="{calamView>/cedulaCodeudor}"
                             editable="true"
                             width="100%"
-                            visible="{calamView>/mostrarExterno}" />
+                            visible="{calamView>/mostrarExterno}"
+                            liveChange="onStepCodeudorActivate" />
 
                             <Label text="Dirección" labelFor="CodeudorDireccionEx" visible="{calamView>/mostrarExterno}" />
                         <Input

@@ -395,12 +395,12 @@ sap.ui.define([
 			if ((sNombreCodeudor && sNombreCodeudor.trim() !== "") && (sCedulaCodeudor && sCedulaCodeudor.trim() !== "")) {
 				// Si ya tienen valores, marcar el paso como validado
 				this._wizard.validateStep(this.byId("step2Codeudor"));
-				MessageToast.show("Datos del codeudor cargados, puede continuar con este paso");
+				//MessageToast.show("Datos del codeudor cargados, puede continuar con este paso");
 
 
 			} else {
 				this._wizard.invalidateStep(this.byId("step2Codeudor"));
-				MessageToast.show("Complete los datos del codeudor para activar este paso");
+				//MessageToast.show("Complete los datos del codeudor para activar este paso");
 				//this._wizard.discardProgress(this.byId("step2Codeudor"));
 				
 			}
@@ -704,6 +704,9 @@ sap.ui.define([
 				oViewModel.setProperty("/nombreCodeudor", nombre);
 				oViewModel.setProperty("/numeroEmpleadoCodeudor", numeroEmpleado);
 				oViewModel.setProperty("/cedulaCodeudor", documento);
+				// Marcar el paso del codeudor como validado
+				this._wizard.validateStep(this.byId("step2Codeudor"));
+				MessageToast.show("Codeudor seleccionado: " + nombre);
 			}
 			this.dialog.close();			
 		},

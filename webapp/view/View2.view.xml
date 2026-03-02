@@ -131,7 +131,7 @@
                       </form:SimpleForm>
                         <!-- Botón de Siguiente (reemplaza el botón por defecto del Wizard) -->
                       <Button
-                          text="Siguiente"
+                          text="{i18n>WizarCalamidadStep1ButtTitle}"
                           type="Emphasized"
                           icon="sap-icon://navigation-right-arrow"
                           iconFirst="false"
@@ -145,6 +145,7 @@
                     id="step2Codeudor"
                     title="Datos codeudor"
                     validated="false"
+                    
                     activate="onStepCodeudorActivate">
                     <VBox class="sapUiSmallMargin">
                         <form:SimpleForm

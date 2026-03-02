@@ -291,6 +291,8 @@ sap.ui.define([
 
             } else if (sSelectedPrestamo === "02") {
                 // Prestamo Movilidad   
+                 oRouter.navTo("Routeelectric");  // Movilidad Electrica
+                
 
             } else if (sSelectedPrestamo === "03") {
 

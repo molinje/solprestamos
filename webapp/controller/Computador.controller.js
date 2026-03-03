@@ -370,7 +370,7 @@ sap.ui.define([
      * Completa el wizard
      */
     onWizardComplete: function() {
-      this._validateForm();
+      //this._validateForm();
     },
 
     /**

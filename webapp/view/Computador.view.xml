@@ -150,7 +150,7 @@
                 <WizardStep
                     id="stepComput02"
                     title="Primas y Bonificaciones"
-                    validated="false">
+                    validated="true">
                     <VBox class="sapUiSmallMargin">
                         <form:SimpleForm
                             editable="true"
@@ -182,7 +182,7 @@
                 <WizardStep
                     id="stepComput03"
                     title="Soportes"
-                    validated="false">
+                    validated="true">
                     <VBox class="sapUiSmallMargin">
                         <Label text="Adjuntar Documentos" class="sapUiSmallMarginBottom"/>
                         <UploadCollection

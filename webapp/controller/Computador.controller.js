@@ -362,7 +362,7 @@ sap.ui.define([
         cuotasValueStateText: "",
         destinoValueState: "None",
         destinoValueStateText: "",
-        solicitudEnabled: false
+        solicitudEnabled: true
       });
     },
 

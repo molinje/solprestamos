@@ -8,18 +8,32 @@ sap.ui.define([
         _guardarPrestamosUrl: "/http/CCB_Guardar_Prestamos",
         _colaboradoresUrl: "/http/CCB_Colaboradores",
 
+        _getAppBase: function () {
+            return sap.ui.require.toUrl("prestamos/ccb/org/solprestamos");
+        },
+
         /**
          * Guarda la solicitud de préstamo en el backend
          * @param {object} oData - JSON con los datos del préstamo a guardar
          * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
          */
         guardarPrestamo: function (oData) {
-            return this._executePost(this._guardarPrestamosUrl, oData);
+            //return this._executePost(this._guardarPrestamosUrl, oData);
+            //return this._executePost(this._getAppBase() + this._guardarPrestamosUrl, oData);
+             return this._executePost(this._getAppBase() + this._guardarPrestamosUrl, oData);
         },
 
         guardarSolPrestamo: function (oData) {
-            var sToken = this.Get_tokenfromservice(this._guardarPrestamosUrl);
-            return this._executePostService(this._guardarPrestamosUrl, oData, sToken);
+            // var sToken = this.Get_tokenfromservice(this._guardarPrestamosUrl);
+            // return this._executePostService(this._guardarPrestamosUrl, oData, sToken);
+
+            //var sUrl = this._getAppBase() + this._guardarPrestamosUrl;
+            //var sToken = this.Get_tokenfromservice(sUrl);
+            //return this._executePostService(sUrl, oData, sToken);
+
+            var sUrl = this._getAppBase() + this._guardarPrestamosUrl;
+            var sToken = this.Get_tokenfromservice(sUrl);
+            return this._executePostService(sUrl, oData, sToken);
 
             /*
             
@@ -65,7 +79,8 @@ sap.ui.define([
 
         Get_colaborador: function (sParam) {
             var gt_codeudores = {};
-            var sServiceUrl = "/http/CCB_Colaboradores?$filter=Identificacion_Nacional eq '" + sParam + "'";
+            //var sServiceUrl = "/http/CCB_Colaboradores?$filter=Identificacion_Nacional eq '" + sParam + "'";
+             var sServiceUrl = this._getAppBase() + "/http/CCB_Colaboradores?$filter=Identificacion_Nacional eq '" + sParam + "'";
             $.ajax({
                 dataType: "json",
                 url: sServiceUrl,
@@ -75,7 +90,7 @@ sap.ui.define([
                         gt_codeudores = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
                     }
                 },
-                error: function (error) {}
+                error: function (error) { }
             });
             return gt_codeudores;
         },
@@ -87,7 +102,8 @@ sap.ui.define([
          */
         getColaborador: function (sIdentificacionNacional) {
             var sId = String(sIdentificacionNacional).trim();
-            return this._executeGet(this._colaboradoresUrl, { Identificacion_Nacional: "'" + sId + "'" });
+            //return this._executeGet(this._colaboradoresUrl, { Identificacion_Nacional: "'" + sId + "'" });
+            return this._executeGet(this._getAppBase() + this._colaboradoresUrl, { Identificacion_Nacional: "'" + sId + "'" });
         },
 
         /**
@@ -99,37 +115,37 @@ sap.ui.define([
          * @private
          */
         //_executePost: function (sUrl, oData) {
-            /*
-            return fetch(sUrl, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify(oData)
-            }).then(function (oResponse) {
-                if (oResponse.ok) {
-                    return oResponse.text().then(function (sText) {
-                        try {
-                            return sText ? JSON.parse(sText) : {};
-                        } catch (e) {
-                            return { data: sText, rawResponse: true };
-                        }
+        /*
+        return fetch(sUrl, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(oData)
+        }).then(function (oResponse) {
+            if (oResponse.ok) {
+                return oResponse.text().then(function (sText) {
+                    try {
+                        return sText ? JSON.parse(sText) : {};
+                    } catch (e) {
+                        return { data: sText, rawResponse: true };
+                    }
+                });
+            } else {
+                return oResponse.text().then(function (sText) {
+                    return Promise.reject({
+                        error: "Service request failed",
+                        status: oResponse.status,
+                        statusText: oResponse.statusText,
+                        response: sText
                     });
-                } else {
-                    return oResponse.text().then(function (sText) {
-                        return Promise.reject({
-                            error: "Service request failed",
-                            status: oResponse.status,
-                            statusText: oResponse.statusText,
-                            response: sText
-                        });
-                    });
-                }
-            });
-            */
-           _executePost: function (sUrl, oData) {
-             return new Promise(function (resolve, reject) {
+                });
+            }
+        });
+        */
+        _executePost: function (sUrl, oData) {
+            return new Promise(function (resolve, reject) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", sUrl, true);
 

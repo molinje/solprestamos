@@ -49,7 +49,8 @@ sap.ui.define([
             var that = this;
             var oGlobalDataModel = this.getModel("globalData");
 
-            var sServiceUrl = "/http/CCB_bd_erp";
+            var sAppBase = sap.ui.require.toUrl("prestamos/ccb/org/solprestamos");
+            var sServiceUrl = sAppBase + "/http/CCB_bd_erp";
             $.ajax({
                 dataType: "json",
                 url: sServiceUrl,

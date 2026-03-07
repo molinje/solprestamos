@@ -1,0 +1,55 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:u="sap.ui.unified">
+
+    <Dialog
+        id="adjuntosDialog"
+        title="Agregar Documento"
+        contentWidth="420px"
+        draggable="true">
+
+        <content>
+            <VBox class="sapUiSmallMargin sapUiSmallMarginBottom">
+                <Label text="Archivo *" required="true" class="sapUiSmallMarginBottom"/>
+                <u:FileUploader
+                    id="fileUploaderDialog"
+                    name="adjuntoUpload"
+                    uploadUrl=""
+                    tooltip="Seleccione un archivo"
+                    buttonText="Seleccionar archivo"
+                    width="100%"
+                    fileType=""
+                    change="onArchivoSeleccionado"
+                    valueState="{adjuntoDlg>/rutaValueState}"
+                    valueStateText="{adjuntoDlg>/rutaValueStateText}"/>
+
+                <Label text="Tipo de Documento *" required="true" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                <Select
+                    id="selectTipoDocDialog"
+                    width="100%"
+                    selectedKey="{adjuntoDlg>/tipoArchivo}"
+                    forceSelection="false"
+                    valueState="{adjuntoDlg>/tipoValueState}"
+                    valueStateText="{adjuntoDlg>/tipoValueStateText}">
+                    <core:Item key="" text="-- Seleccione --"/>
+                    <core:Item key="1" text="Soporte Calamidad"/>
+                    <core:Item key="2" text="Certificado Médico"/>
+                    <core:Item key="3" text="Denuncia"/>
+                </Select>
+            </VBox>
+        </content>
+
+        <buttons>
+            <Button
+                text="Cancelar"
+                press="onCancelarAdjunto"/>
+            <Button
+                text="Aceptar"
+                type="Emphasized"
+                press="onAceptarAdjunto"/>
+        </buttons>
+
+    </Dialog>
+
+</core:FragmentDefinition>

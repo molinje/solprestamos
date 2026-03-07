@@ -73,7 +73,8 @@ sap.ui.define([
 				telefonoCodeudor: "",
 				fecha: "",
 				selectedMotCalamidad: "",
-				solicitudEnabled: true
+				solicitudEnabled: true,
+			adjuntos: []
 			});
 
 			if (gt_codeudores != undefined) {
@@ -729,6 +730,113 @@ sap.ui.define([
 			}
 			// Verificar si se puede activar el paso del codeudor dependiendo de los campos que se hayan llenado
 			this.onStepCodeudorActivate(); 
+		},
+
+		/**
+		 * Abre el diálogo para agregar un documento adjunto
+		 */
+		onAgregarDocumento: function () {
+			var oView = this.getView();
+			var that = this;
+
+			if (!this._oAdjuntosDialog) {
+				Fragment.load({
+					id: oView.getId(),
+					name: "prestamos.ccb.org.solprestamos.view.AdjuntosDialog",
+					controller: this
+				}).then(function (oDialog) {
+					that._oAdjuntosDialog = oDialog;
+					oView.addDependent(oDialog);
+					that._resetAdjuntosDialog();
+					oDialog.open();
+				});
+			} else {
+				this._resetAdjuntosDialog();
+				this._oAdjuntosDialog.open();
+			}
+		},
+
+		/**
+		 * Reinicia el modelo del diálogo de adjuntos
+		 * @private
+		 */
+		_resetAdjuntosDialog: function () {
+			var oDialogModel = new JSONModel({
+				rutaArchivo: "",
+				nombreArchivo: "",
+				tipoArchivo: "",
+				rutaValueState: "None",
+				rutaValueStateText: "",
+				tipoValueState: "None",
+				tipoValueStateText: ""
+			});
+			this._oAdjuntosDialog.setModel(oDialogModel, "adjuntoDlg");
+
+			var oFileUploader = sap.ui.core.Fragment.byId(this.getView().getId(), "fileUploaderDialog");
+			if (oFileUploader) {
+				oFileUploader.clear();
+			}
+		},
+
+		/**
+		 * Captura el archivo seleccionado en el FileUploader del diálogo
+		 */
+		onArchivoSeleccionado: function (oEvent) {
+			var sFileName = oEvent.getParameter("newValue");
+			var oDialogModel = this._oAdjuntosDialog.getModel("adjuntoDlg");
+			oDialogModel.setProperty("/nombreArchivo", sFileName);
+			oDialogModel.setProperty("/rutaArchivo", sFileName);
+			if (sFileName) {
+				oDialogModel.setProperty("/rutaValueState", "None");
+				oDialogModel.setProperty("/rutaValueStateText", "");
+			}
+		},
+
+		/**
+		 * Acepta el diálogo y agrega el documento a la tabla
+		 */
+		onAceptarAdjunto: function () {
+			var oDialogModel = this._oAdjuntosDialog.getModel("adjuntoDlg");
+			var sNombreArchivo = oDialogModel.getProperty("/nombreArchivo");
+			var sTipoArchivo = oDialogModel.getProperty("/tipoArchivo");
+			var bValid = true;
+
+			if (!sNombreArchivo || sNombreArchivo.trim() === "") {
+				oDialogModel.setProperty("/rutaValueState", "Error");
+				oDialogModel.setProperty("/rutaValueStateText", "Debe seleccionar un archivo");
+				bValid = false;
+			}
+
+			if (!sTipoArchivo || sTipoArchivo === "") {
+				oDialogModel.setProperty("/tipoValueState", "Error");
+				oDialogModel.setProperty("/tipoValueStateText", "Debe seleccionar el tipo de documento");
+				bValid = false;
+			}
+
+			if (!bValid) {
+				return;
+			}
+
+			var mTipos = { "1": "Soporte Calamidad", "2": "Certificado Médico", "3": "Denuncia" };
+
+			var oViewModel = this.getView().getModel("calamView");
+			var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
+
+			aAdjuntos.push({
+				nombreArchivo: sNombreArchivo,
+				tipoArchivo: sTipoArchivo,
+				tipoArchivoText: mTipos[sTipoArchivo] || sTipoArchivo
+			});
+
+			oViewModel.setProperty("/adjuntos", aAdjuntos);
+			this._oAdjuntosDialog.close();
+		},
+
+		/**
+		 * Cancela y cierra el diálogo de adjuntos
+		 */
+		onCancelarAdjunto: function () {
+			this._oAdjuntosDialog.close();
 		},
 
 		onNavBack: function () {

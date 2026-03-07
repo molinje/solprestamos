@@ -766,7 +766,9 @@ sap.ui.define([
 				nombreArchivo: "",
 				tipoArchivo: "",
 				tipoValueState: "None",
-				tipoValueStateText: ""
+				tipoValueStateText: "",
+				isReadingFile: false,
+				base64Content: null
 			});
 			this._oAdjuntosDialog.setModel(oDialogModel, "adjuntoDlg");
 
@@ -782,13 +784,32 @@ sap.ui.define([
 		 * Captura el archivo seleccionado en el FileUploader del diálogo
 		 */
 		onArchivoSeleccionado: function (oEvent) {
-			var sFileName = oEvent.getParameter("newValue") || oEvent.getSource().getValue();
+			var oFileUploader = oEvent.getSource();
+			var sFileName = oEvent.getParameter("newValue") || oFileUploader.getValue();
 			var oDialogModel = this._oAdjuntosDialog.getModel("adjuntoDlg");
 			oDialogModel.setProperty("/nombreArchivo", sFileName);
 			oDialogModel.setProperty("/rutaArchivo", sFileName);
+			oDialogModel.setProperty("/base64Content", null);
+
 			if (sFileName) {
-				oEvent.getSource().setValueState("None");
-				oEvent.getSource().setValueStateText("");
+				oFileUploader.setValueState("None");
+				oFileUploader.setValueStateText("");
+
+				var oDomRef = oFileUploader.getDomRef("fu");
+				var oFile = oDomRef && oDomRef.files && oDomRef.files[0];
+				if (oFile) {
+					oDialogModel.setProperty("/isReadingFile", true);
+					var oReader = new FileReader();
+					oReader.onload = function (e) {
+						var sBase64 = e.target.result.split(",")[1];
+						oDialogModel.setProperty("/base64Content", sBase64);
+						oDialogModel.setProperty("/isReadingFile", false);
+					};
+					oReader.onerror = function () {
+						oDialogModel.setProperty("/isReadingFile", false);
+					};
+					oReader.readAsDataURL(oFile);
+				}
 			}
 		},
 
@@ -828,7 +849,8 @@ sap.ui.define([
 			aAdjuntos.push({
 				nombreArchivo: sNombreArchivo,
 				tipoArchivo: sTipoArchivo,
-				tipoArchivoText: mTipos[sTipoArchivo] || sTipoArchivo
+				tipoArchivoText: mTipos[sTipoArchivo] || sTipoArchivo,
+				base64Content: oDialogModel.getProperty("/base64Content") || null
 			});
 
 			oViewModel.setProperty("/adjuntos", aAdjuntos);

@@ -17,7 +17,7 @@
 			name="myFileUpload"
 			uploadUrl="upload/"
 			tooltip="Upload your file to the local server"
-			uploadComplete="onArchivoSeleccionado"/>
+			change="onArchivoSeleccionado"/>
                
 
                 <Label text="Tipo de Documento *" required="true" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
@@ -43,7 +43,8 @@
             <Button
                 text="Aceptar"
                 type="Emphasized"
-                press="onAceptarAdjunto"/>
+                press="onAceptarAdjunto"
+                enabled="{= !${adjuntoDlg>/isReadingFile} }"/>
         </buttons>
 
     </Dialog>

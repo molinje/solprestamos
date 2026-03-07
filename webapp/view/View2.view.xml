@@ -2,6 +2,7 @@
   controllerName="prestamos.ccb.org.solprestamos.controller.View2"
   xmlns:mvc="sap.ui.core.mvc"
   xmlns:core="sap.ui.core"
+  xmlns:u="sap.ui.unified"
   xmlns:layout="sap.ui.layout"
   xmlns:form="sap.ui.layout.form"
   displayBlock="true"
@@ -268,12 +269,13 @@
                     validated="true">
                     <VBox class="sapUiSmallMargin">
                         <Label text="Adjuntar Documentos" class="sapUiSmallMarginBottom"/>
-                        <UploadCollection
-                            id="uploadCollection"
-                            uploadUrl="/upload"
-                            multiple="true"
-                            uploadComplete="onUploadComplete">
-                        </UploadCollection>
+                        <u:FileUploader
+			                id="fileUploader"
+			                name="myFileUpload"
+			                uploadUrl="upload/"
+			                tooltip="Cargar documento"
+			                uploadComplete="handleUploadComplete"/>
+
                         
                         <Button
                             id="btnCrearSolicitud"

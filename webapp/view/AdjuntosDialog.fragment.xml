@@ -15,14 +15,12 @@
                 <u:FileUploader
                     id="fileUploaderDialog"
                     name="adjuntoUpload"
-                    uploadUrl=""
+                    uploadUrl="upload/"
                     tooltip="Seleccione un archivo"
                     buttonText="Seleccionar archivo"
                     width="100%"
                     fileType=""
-                    change="onArchivoSeleccionado"
-                    valueState="{adjuntoDlg>/rutaValueState}"
-                    valueStateText="{adjuntoDlg>/rutaValueStateText}"/>
+                    change="onArchivoSeleccionado"/>
 
                 <Label text="Tipo de Documento *" required="true" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
                 <Select

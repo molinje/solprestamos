@@ -765,16 +765,16 @@ sap.ui.define([
 				rutaArchivo: "",
 				nombreArchivo: "",
 				tipoArchivo: "",
-				rutaValueState: "None",
-				rutaValueStateText: "",
 				tipoValueState: "None",
 				tipoValueStateText: ""
 			});
 			this._oAdjuntosDialog.setModel(oDialogModel, "adjuntoDlg");
 
-			var oFileUploader = sap.ui.core.Fragment.byId(this.getView().getId(), "fileUploaderDialog");
+			var oFileUploader = this.byId("fileUploaderDialog");
 			if (oFileUploader) {
 				oFileUploader.clear();
+				oFileUploader.setValueState("None");
+				oFileUploader.setValueStateText("");
 			}
 		},
 
@@ -782,13 +782,13 @@ sap.ui.define([
 		 * Captura el archivo seleccionado en el FileUploader del diálogo
 		 */
 		onArchivoSeleccionado: function (oEvent) {
-			var sFileName = oEvent.getParameter("newValue");
+			var sFileName = oEvent.getParameter("newValue") || oEvent.getSource().getValue();
 			var oDialogModel = this._oAdjuntosDialog.getModel("adjuntoDlg");
 			oDialogModel.setProperty("/nombreArchivo", sFileName);
 			oDialogModel.setProperty("/rutaArchivo", sFileName);
 			if (sFileName) {
-				oDialogModel.setProperty("/rutaValueState", "None");
-				oDialogModel.setProperty("/rutaValueStateText", "");
+				oEvent.getSource().setValueState("None");
+				oEvent.getSource().setValueStateText("");
 			}
 		},
 
@@ -797,13 +797,16 @@ sap.ui.define([
 		 */
 		onAceptarAdjunto: function () {
 			var oDialogModel = this._oAdjuntosDialog.getModel("adjuntoDlg");
-			var sNombreArchivo = oDialogModel.getProperty("/nombreArchivo");
+			var oFileUploader = this.byId("fileUploaderDialog");
+			var sNombreArchivo = oDialogModel.getProperty("/nombreArchivo") || (oFileUploader && oFileUploader.getValue());
 			var sTipoArchivo = oDialogModel.getProperty("/tipoArchivo");
 			var bValid = true;
 
 			if (!sNombreArchivo || sNombreArchivo.trim() === "") {
-				oDialogModel.setProperty("/rutaValueState", "Error");
-				oDialogModel.setProperty("/rutaValueStateText", "Debe seleccionar un archivo");
+				if (oFileUploader) {
+					oFileUploader.setValueState("Error");
+					oFileUploader.setValueStateText("Debe seleccionar un archivo");
+				}
 				bValid = false;
 			}
 

@@ -13,14 +13,12 @@
             <VBox class="sapUiSmallMargin sapUiSmallMarginBottom">
                 <Label text="Archivo *" required="true" class="sapUiSmallMarginBottom"/>
                 <u:FileUploader
-                    id="fileUploaderDialog"
-                    name="adjuntoUpload"
-                    uploadUrl="upload/"
-                    tooltip="Seleccione un archivo"
-                    buttonText="Seleccionar archivo"
-                    width="100%"
-                    fileType=""
-                    change="onArchivoSeleccionado"/>
+			id="fileUploader"
+			name="myFileUpload"
+			uploadUrl="upload/"
+			tooltip="Upload your file to the local server"
+			uploadComplete="handleUploadComplete"/>
+               
 
                 <Label text="Tipo de Documento *" required="true" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
                 <Select

@@ -864,6 +864,31 @@ sap.ui.define([
 			this._oAdjuntosDialog.close();
 		},
 
+		/**
+		 * Guarda los adjuntos asociados a una solicitud de préstamo
+		 * @param {string} id_prestamo - ID de la solicitud de préstamo (UUID)
+		 */
+		Guardar_adjuntosFrom_idSol: function (id_prestamo) {
+			var oViewModel = this.getView().getModel("calamView");
+			var aAdjuntos = oViewModel.getProperty("/adjuntos");
+
+			var oPayload = {
+				"UUID": id_prestamo,
+				"BIN_SOPORTE_CALAMIDAD": "",
+				"BIN_FACTURA_COMPRA": ""
+			};
+
+			aAdjuntos.forEach(function (oAdjunto) {
+				if (oAdjunto.tipoArchivo === "1") {
+					oPayload.BIN_SOPORTE_CALAMIDAD = oAdjunto.base64Content || "";
+				} else if (oAdjunto.tipoArchivo === "2") {
+					oPayload.BIN_FACTURA_COMPRA = oAdjunto.base64Content || "";
+				}
+			});
+
+			return oPayload;
+		},
+
 		onNavBack: function () {
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("RouteViewini");

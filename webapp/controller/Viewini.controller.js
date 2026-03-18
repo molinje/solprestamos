@@ -82,7 +82,8 @@ sap.ui.define([
             oBusyDialog.open();
 
             var sAppBase = sap.ui.require.toUrl("prestamos/ccb/org/solprestamos");
-            var sServiceUrl = sAppBase + "/http/CCB_Prestamos?$filter=Correo eq 'carlos.prieto.merchan@ccb.org.co'";
+            //var sServiceUrl = sAppBase + "/http/CCB_Prestamos?$filter=Correo eq 'carlos.prieto.merchan@ccb.org.co'";
+            var sServiceUrl = "/http/CCB_Prestamos?$filter=Correo eq 'carlos.prieto.merchan@ccb.org.co'";
             $.ajax({
                 dataType: "json",
                 url: sServiceUrl,

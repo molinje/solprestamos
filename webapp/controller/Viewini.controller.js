@@ -2,8 +2,7 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     'sap/ui/model/json/JSONModel',
     "sap/m/MessageBox",
-    "sap/ui/core/BusyIndicator",
-    //"prestamos/ccb/org/solprestamos/util/IntegrationService"
+    "sap/ui/core/BusyIndicator"
 
 ], (Controller, JSONModel, MessageBox, BusyIndicator) => {
     "use strict";
@@ -55,7 +54,7 @@ sap.ui.define([
             };
 
 
-            //this._integrationService = new IntegrationService();
+        
 
             // set explored app's demo model on this sample
             var oModel = new JSONModel(oData);
@@ -189,42 +188,7 @@ sap.ui.define([
 
 
         },
-        /*
-        _loadDataFromService: function (userId) {
-            var that = this;
-
-            // Mostrar indicador de carga
-            BusyIndicator.show(0);
-
-            // Ejecutar el GET con el userId en el body
-            this._integrationService.getPruebaConsulta(userId)
-                .then(function (data) {
-                    // Procesar la respuesta del servicio
-                    console.log("Datos recibidos del servicio:", data);
-
-                    // Aquí puedes procesar los datos según tu necesidad
-                    // Por ejemplo, actualizar el modelo con los datos recibidos
-                    // var oModel = that.getView().getModel();
-                    // oModel.setProperty("/serviceData", data);
-
-                    BusyIndicator.hide();
-                    MessageBox.success("Datos cargados correctamente del servicio");
-                })
-                .catch(function (error) {
-                    BusyIndicator.hide();
-                    console.error("Error al cargar datos del servicio:", error);
-
-                    var errorMessage = "Error al conectar con el servicio";
-                    if (error.message) {
-                        errorMessage = error.message;
-                    } else if (error.response) {
-                        errorMessage = "Error: " + error.statusText;
-                    }
-
-                    MessageBox.error(errorMessage);
-                });
-        },
-       */
+       
         _onObjectMatched: function () {
             //       // Limpiar selección al volver a la vista principal
             var oModel = this.getView().getModel();
@@ -242,36 +206,7 @@ sap.ui.define([
             oRouter.navTo("RouteView3");
         },
 
-        /**
-     * Ejemplo de cómo ejecutar el servicio antes de navegar
-     * @private
-     */
-    /*
-        _executeServiceBeforeNavigation: function () {
-            var that = this;
-
-            BusyIndicator.show(0);
-
-            this._integrationService.getPruebaConsulta("00201663")
-                .then(function (data) {
-                    BusyIndicator.hide();
-
-                    // Procesar datos y navegar
-                    console.log("Servicio ejecutado exitosamente:", data);
-
-                    // Continuar con la navegación
-                    that._performNavigation();
-                })
-                .catch(function (error) {
-                    BusyIndicator.hide();
-                    console.error("Error en el servicio:", error);
-
-                    MessageBox.error("Error al validar la información. Por favor intente nuevamente.", {
-                        title: "Error de Servicio"
-                    });
-                });
-        },
-        */
+      
 
         onNavigate: function () {
             var oModel = this.getView().getModel();

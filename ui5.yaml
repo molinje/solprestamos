@@ -8,6 +8,7 @@ server:
       afterMiddleware: compression
       configuration:
         ignoreCertErrors: false # If set to true, certificate errors will be ignored. E.g. self-signed certificates will be accepted
+        debug: true
         ui5:
           path:
             - /resources

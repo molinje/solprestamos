@@ -17,7 +17,6 @@ server:
           - path: /http
             url: https://ccb-is-dev-5v6vds1v.it-cpi034-rt.cfapps.us10-002.hana.ondemand.com
             destination: dest_int_s
-            destinationRefreshToken: true 
     - name: fiori-tools-appreload
       afterMiddleware: compression
       configuration:

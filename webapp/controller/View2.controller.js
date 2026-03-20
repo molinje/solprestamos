@@ -423,6 +423,7 @@ sap.ui.define([
 
 			// vamos a leer los datos del modelo global para obtener la información del usuario actual
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+			var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
 			var oUserData = oGlobalModel.getProperty("/userData");
 
 			var dataSolic = {

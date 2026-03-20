@@ -20,16 +20,6 @@ sap.ui.define([
 
 			this._wizard = this.byId("wizardCalam");
 
-			this._oBackendService.getColaborador('6332')
-				.then(function (oResponse) {
-
-					gt_codeudores = oResponse["n0:ZCOHCMFM_0045COLABORADORResponse"].ET_COLABORADORES.item;
-
-				})
-				.catch(function () {
-
-					MessageToast.show("No se encontró colaborador con ese número de documento.");
-				});
 
 			// Obtener el modelo
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
@@ -437,16 +427,21 @@ sap.ui.define([
 
 			var dataSolic = {
 
+                SUBTY: oPrestamoSeleccionado.PrestamoId, // Tipo de préstamo (se puede mapear desde el préstamo seleccionado)
 				DARBT: 0,
 				PERNR: "",
+				ENDDA: "99991231",
 				DBTCU: "COP",
+				ZINCEX: "",
 				ZCODEX: "",
 				ZNUCEX: "",
 				ZDIREX: "",
 				ZTELEX: "",
 				ZMOCA: "",
 				ZVALSO: "",
-				ZNUCUCA: ""
+				ZNUCUCA: "",
+				NUM_COUTAS: 0,
+				DATBW: new Date().toISOString().slice(0, 10).replace(/-/g, "")
 			};
 
 			if (oUserData && oUserData.PERNR != undefined) {
@@ -462,9 +457,21 @@ sap.ui.define([
 			}
 			var that = this;
 			var oViewModel = this.getView().getModel("calamView");
+			var iIndexCod = oViewModel.getProperty("/tieneCodeudor");
 			var oData = oViewModel.getData();
 
 			console.log("Solicitud de Préstamo Calamidad:", oData);
+            
+			if (iIndexCod == 0) {
+
+				dataSolic.ZINCEX = "X";
+
+				dataSolic.ZCODEX = oData.nombreCodeudor;
+				dataSolic.ZNUCEX = oData.cedulaCodeudor;
+				dataSolic.ZDIREX = oData.direccionCodeudor;
+				dataSolic.ZTELEX = oData.telefonoCodeudor;
+
+			}
 
 			if (oData.valorPrestamo >= 0) {
 
@@ -483,6 +490,7 @@ sap.ui.define([
 			if (oData.numeroCuotas >= 0) {
 
 				dataSolic.ZNUCUCA = oData.numeroCuotas;
+				dataSolic.NUM_COUTAS = oData.numeroCuotas;
 
 			} else {
 

@@ -62,7 +62,8 @@ sap.ui.define([
 			var oViewModel = this.getView().getModel("movelectricView");
 
 			if (oPrestamoSeleccionado && oPrestamoSeleccionado.MontoMaximo) {
-				oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo));
+				//oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo));
+				oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, "")));
 			}
 		},
 

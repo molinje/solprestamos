@@ -175,7 +175,7 @@ sap.ui.define([
 			var oViewModel = this.getView().getModel("calamView");
 
 			if (oPrestamoSeleccionado && oPrestamoSeleccionado.MontoMaximo) {
-				oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo));
+				oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, "")));
 			}
 		},
 

@@ -34,13 +34,13 @@ sap.ui.define([
 			// Obtener el modelo
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 
-			// Modelo de datos para la vista 
+			// Modelo de datos para la vista
 			var oViewModel = new JSONModel({
 				// Configuración de moneda
 				moneda: "COP",              // Código de moneda (Peso Colombiano)
 
 				// Valores monetarios
-				montoMaximo: 3000000,       // Monto máximo a solicitar
+				montoMaximo: 0,             // Monto máximo a solicitar (se carga desde globalData al navegar)
 				valorSolicitado: 0,         // Valor que ingresa el usuario
 				valorPrestamo: 0,           // Valor calculado del préstamo
 				valorCuota: 0,              // Valor de cada cuota
@@ -82,6 +82,10 @@ sap.ui.define([
 				oViewModel.setProperty("/Codeudores", gt_codeudores);
 			}
 			this.getView().setModel(oViewModel, "calamView");
+
+			// Suscribirse al evento de ruta: se dispara cada vez que se navega a esta vista
+			var oRouter = this.getOwnerComponent().getRouter();
+			oRouter.getRoute("RouteView2").attachPatternMatched(this._onRouteMatched, this);
 
 
 			if (oGlobalModel.oData.gt_motcalamidad != undefined) {
@@ -158,6 +162,21 @@ sap.ui.define([
 			var oModel = new JSONModel(oData);
 			this.getView().setModel(oModel);
 
+		},
+
+		/**
+		 * Se ejecuta cada vez que el router navega a RouteView2.
+		 * Lee el préstamo seleccionado desde globalData (guardado en Viewini).
+		 * @private
+		 */
+		_onRouteMatched: function () {
+			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+			var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
+			var oViewModel = this.getView().getModel("calamView");
+
+			if (oPrestamoSeleccionado && oPrestamoSeleccionado.MontoMaximo) {
+				oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo));
+			}
 		},
 
 		/**

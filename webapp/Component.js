@@ -31,11 +31,12 @@ sap.ui.define([
 
             // Crear modelo global para datos del servicio
             var oGlobalDataModel = new JSONModel({
-                userData: null,        // Datos del usuario actual
+                userData: null,             // Datos del usuario actual
+                prestamoSeleccionado: null, // Préstamo elegido en Viewini
                 gt_motcalamidad: null,
-                consulData: null,      // Datos de la consulta
-                isLoading: false,      // Indicador de carga
-                lastUpdate: null       // Última actualización
+                consulData: null,           // Datos de la consulta
+                isLoading: false,           // Indicador de carga
+                lastUpdate: null            // Última actualización
             });
             this.setModel(oGlobalDataModel, "globalData");
 

@@ -100,7 +100,8 @@ sap.ui.define([
                         return {
                             PrestamoId: prestamo.TIPO,
                             Name: prestamo.TEXTO,
-                            MontoMaximo: prestamo.MONTO_MAXIMO
+                            MontoMaximo: prestamo.MONTO_MAXIMO,
+                            Cuotas: prestamo.CUOTAS
                         };
                     });
 
@@ -217,19 +218,27 @@ sap.ui.define([
                 return;
             }
 
-            //this._executeServiceBeforeNavigation();
+            // Buscar el objeto completo del préstamo seleccionado en el modelo "prestamos"
+            var oPrestamosModel = this.getView().getModel("prestamos");
+            var aCollection = oPrestamosModel ? oPrestamosModel.getProperty("/PrestamoCollection") : [];
+            var oPrestamoSeleccionado = aCollection.find(function (p) {
+                return p.PrestamoId === sSelectedPrestamo;
+            });
+
+            // Guardar en globalData para que todas las vistas destino lo lean
+            var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+            oGlobalModel.setProperty("/prestamoSeleccionado", oPrestamoSeleccionado || null);
 
             var oRouter = this.getOwnerComponent().getRouter();
 
             // Navegar según el tipo de préstamo seleccionado
             if (sSelectedPrestamo === "01") {
-                // Prestamo Computador   
+                // Prestamo Computador
                 oRouter.navTo("RouteComputador");
 
             } else if (sSelectedPrestamo === "02") {
-                // Prestamo Movilidad   
-                 oRouter.navTo("Routeelectric");  // Movilidad Electrica
-                
+                // Prestamo Movilidad
+                oRouter.navTo("Routeelectric");  // Movilidad Electrica
 
             } else if (sSelectedPrestamo === "03") {
 
@@ -238,11 +247,10 @@ sap.ui.define([
             } else if (sSelectedPrestamo === "04") {
 
                 oRouter.navTo("RouteView2"); // calamidad
-                //oRouter.navTo("Routeelectric");
 
             } else if (sSelectedPrestamo === "05") {
 
-                oRouter.navTo("RouteView3"); // Prestamos Educativo    
+                oRouter.navTo("RouteView3"); // Prestamos Educativo
             }
         }
 

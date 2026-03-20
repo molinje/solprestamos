@@ -45,17 +45,23 @@ sap.ui.define([
       });
       this.getView().setModel(oViewModel, "compuView");
 
-      // Cargar monto máximo desde globalData/userData (tipo "01" = Computador)
+      // Suscribirse al evento de ruta: se dispara cada vez que se navega a esta vista
+      var oRouter = this.getOwnerComponent().getRouter();
+      oRouter.getRoute("RouteComputador").attachPatternMatched(this._onRouteMatched, this);
+    },
+
+    /**
+     * Se ejecuta cada vez que el router navega a RouteComputador.
+     * Lee el préstamo seleccionado desde globalData (guardado en Viewini).
+     * @private
+     */
+    _onRouteMatched: function () {
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
-      var oUserData = oGlobalModel.getProperty("/userData");
-      if (oUserData && oUserData.LIST_PREST && oUserData.LIST_PREST.item) {
-        var aPrestamosList = Array.isArray(oUserData.LIST_PREST.item)
-          ? oUserData.LIST_PREST.item
-          : [oUserData.LIST_PREST.item];
-        var oPrestamo = aPrestamosList.find(function (item) { return item.TIPO === "01"; });
-        if (oPrestamo && oPrestamo.MONTO_MAXIMO) {
-          oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamo.MONTO_MAXIMO));
-        }
+      var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
+      var oViewModel = this.getView().getModel("compuView");
+
+      if (oPrestamoSeleccionado && oPrestamoSeleccionado.MontoMaximo) {
+        oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo));
       }
     },
 

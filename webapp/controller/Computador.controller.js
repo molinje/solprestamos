@@ -302,22 +302,28 @@ sap.ui.define([
      */
     onCrearSolicitud: function () {
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+      var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
       var oUserData = oGlobalModel.getProperty("/userData");
 
       var dataSolic = {
+        SUBTY: "",
         DARBT: 0,
         PERNR: "",
+        ENDDA: "9999-12-31",
         DBTCU: "COP",
-        ZCODEX: "",
-        ZNUCEX: "",
-        ZDIREX: "",
-        ZTELEX: "",
         ZMOCA: "",
         ZVALSO: "",
         ZNUCUCA: "",
+        NUM_COUTAS: 0,
         ZDESTINO: "",
-        ZDESCPRIMAS: ""
+        ZDESCPRIMAS: "",
+        DATBW: new Date().toISOString().slice(0, 10)
       };
+
+      if (oPrestamoSeleccionado.PrestamoId) {
+				// tiene valor
+				dataSolic.SUBTY = oPrestamoSeleccionado.PrestamoId;
+			}
 
       if (oUserData && oUserData.PERNR != undefined) {
         dataSolic.PERNR = oUserData.PERNR;
@@ -340,6 +346,7 @@ sap.ui.define([
 
       if (oData.numeroCuotas > 0) {
         dataSolic.ZNUCUCA = oData.numeroCuotas;
+        dataSolic.NUM_COUTAS = oData.numeroCuotas;
       } else {
         MessageBox.error("Por favor registre el número de cuotas");
         return;

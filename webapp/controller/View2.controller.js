@@ -64,7 +64,7 @@ sap.ui.define([
 				fecha: "",
 				selectedMotCalamidad: "",
 				solicitudEnabled: true,
-			adjuntos: []
+				adjuntos: []
 			});
 
 			if (gt_codeudores != undefined) {
@@ -412,7 +412,7 @@ sap.ui.define([
 				this._wizard.invalidateStep(this.byId("step2Codeudor"));
 				//MessageToast.show("Complete los datos del codeudor para activar este paso");
 				//this._wizard.discardProgress(this.byId("step2Codeudor"));
-				
+
 			}
 		},
 
@@ -428,7 +428,7 @@ sap.ui.define([
 
 			var dataSolic = {
 
-                SUBTY: oPrestamoSeleccionado.PrestamoId, // Tipo de préstamo (se puede mapear desde el préstamo seleccionado)
+				SUBTY: "",
 				DARBT: 0,
 				PERNR: "",
 				ENDDA: "9999-12-31",
@@ -444,6 +444,11 @@ sap.ui.define([
 				NUM_COUTAS: 0,
 				DATBW: new Date().toISOString().slice(0, 10)
 			};
+
+			if (oPrestamoSeleccionado.PrestamoId) {
+				// tiene valor
+				dataSolic.SUBTY = oPrestamoSeleccionado.PrestamoId;
+			}
 
 			if (oUserData && oUserData.PERNR != undefined) {
 
@@ -462,7 +467,7 @@ sap.ui.define([
 			var oData = oViewModel.getData();
 
 			console.log("Solicitud de Préstamo Calamidad:", oData);
-            
+
 			if (iIndexCod == 1) {
 
 				dataSolic.ZINCEX = "X";
@@ -502,9 +507,9 @@ sap.ui.define([
 
 			}
 
-			if (oData.nombreCodeudor == "" || oData.cedulaCodeudor == "" 
+			if (oData.nombreCodeudor == "" || oData.cedulaCodeudor == ""
 				//oData.direccionCodeudor == "" || oData.telefonoCodeudor == ""
-						) {
+			) {
 
 				MessageBox.error(
 					"Complete los datos del codeudor"
@@ -547,7 +552,7 @@ sap.ui.define([
 
 				}
 			};
-			
+
 
 
 			//that._oBackendService.guardarPrestamo(dataService)
@@ -556,19 +561,19 @@ sap.ui.define([
 					oViewModel.setProperty("/solicitudEnabled", true);
 
 					var message_success = "";
-                   // validamos si el servicio nos retorno un mensaje de éxito para mostrarlo, 
-				   // de lo contrario mostramos un mensaje genérico de éxito
-                   if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
+					// validamos si el servicio nos retorno un mensaje de éxito para mostrarlo, 
+					// de lo contrario mostramos un mensaje genérico de éxito
+					if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
 
 						message_success = oResponse['n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse'].EV_MESSAGE;
 
-				   } else {
+					} else {
 
-					message_success = "Solicitud de Préstamo Calamidad creada exitosamente.";
+						message_success = "Solicitud de Préstamo Calamidad creada exitosamente.";
 
-				   }
+					}
 
-					MessageBox.success( message_success, {
+					MessageBox.success(message_success, {
 						details: "Monto: " + that._formatCurrency(oData.valorPrestamo, oData.moneda) +
 							"\nCuotas: " + oData.numeroCuotas +
 							"\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda),
@@ -724,7 +729,7 @@ sap.ui.define([
 				this._wizard.validateStep(this.byId("step2Codeudor"));
 				MessageToast.show("Codeudor seleccionado: " + nombre);
 			}
-			this.dialog.close();			
+			this.dialog.close();
 		},
 
 		onCloseIdentifCodeudorVHelp: function () {
@@ -750,14 +755,14 @@ sap.ui.define([
 				oViewModel.setProperty("/cedulaCodeudor", "");
 				oViewModel.setProperty("/direccionCodeudor", "");
 				oViewModel.setProperty("/telefonoCodeudor", "");
-				} else {
+			} else {
 				// Si es externo, limpiar campos del codeudor CCB
-				oViewModel.setProperty("/nombreCodeudor", "");	
+				oViewModel.setProperty("/nombreCodeudor", "");
 				oViewModel.setProperty("/numeroEmpleadoCodeudor", "");
-				oViewModel.setProperty("/cedulaCodeudor", "");	
+				oViewModel.setProperty("/cedulaCodeudor", "");
 			}
 			// Verificar si se puede activar el paso del codeudor dependiendo de los campos que se hayan llenado
-			this.onStepCodeudorActivate(); 
+			this.onStepCodeudorActivate();
 		},
 
 		/**

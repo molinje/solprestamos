@@ -431,7 +431,7 @@ sap.ui.define([
                 SUBTY: oPrestamoSeleccionado.PrestamoId, // Tipo de préstamo (se puede mapear desde el préstamo seleccionado)
 				DARBT: 0,
 				PERNR: "",
-				ENDDA: "99991231",
+				//ENDDA: "99991231",
 				DBTCU: "COP",
 				ZINCEX: "",
 				ZCODEX: "",
@@ -442,7 +442,7 @@ sap.ui.define([
 				ZVALSO: "",
 				ZNUCUCA: "",
 				NUM_COUTAS: 0,
-				DATBW: new Date().toISOString().slice(0, 10).replace(/-/g, "")
+				//DATBW: new Date().toISOString().slice(0, 10).replace(/-/g, "")
 			};
 
 			if (oUserData && oUserData.PERNR != undefined) {
@@ -463,7 +463,7 @@ sap.ui.define([
 
 			console.log("Solicitud de Préstamo Calamidad:", oData);
             
-			if (iIndexCod == 0) {
+			if (iIndexCod == 1) {
 
 				dataSolic.ZINCEX = "X";
 

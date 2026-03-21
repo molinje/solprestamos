@@ -56,22 +56,25 @@ solprestamos/
     │   ├── electric.controller.js   # Préstamo Movilidad Eléctrica
     │   └── Melectrica.controller.js # Movilidad eléctrica (variante)
     │
-    ├── view/                # Vistas XML
+    ├── view/                # Vistas XML y fragments de diálogos
     │   ├── App.view.xml
     │   ├── Viewini.view.xml
     │   ├── View2.view.xml
     │   ├── View3.view.xml
     │   ├── Computador.view.xml
     │   ├── electric.view.xml
-    │   └── Melectrica.view.xml
+    │   ├── Melectrica.view.xml
+    │   ├── AdjuntosDialog.fragment.xml          # Diálogo carga de documentos adjuntos
+    │   ├── ColaboradorDialog.fragment.xml        # Diálogo datos del codeudor
+    │   ├── ColaboradorSearchDialog.fragment.xml  # Búsqueda de codeudor
+    │   └── IdentifCodeudorVHelp.fragment.xml     # Value Help identificación codeudor
     │
     ├── model/
     │   ├── models.js        # Factory de Device Model
     │   └── data.json        # Datos estáticos locales (listas de referencia)
     │
     ├── util/
-    │   ├── IntegrationService.js  # Servicio central de comunicación backend
-    │   └── OAuthService.js        # Gestión de token OAuth 2.0
+    │   └── BackendService.js      # Servicio central de comunicación backend (HTTP + CSRF token)
     │
     ├── i18n/
     │   └── i18n.properties  # Textos en español
@@ -254,14 +257,13 @@ sap.ui.core.format.NumberFormat.getCurrencyInstance({
 
 ---
 
-## Autenticación OAuth 2.0
+## Autenticación y comunicación backend
 
-Gestionada por `util/OAuthService.js`:
-- **Grant type**: `client_credentials`
-- **Token URL**: `/oauth/token`
-- **Credenciales**: Codificadas en Base64 (Basic Auth)
-- **Cache de token**: En memoria con margen de 60 segundos antes del vencimiento
-- **Renovación**: Automática al detectar token próximo a vencer o inválido
+Gestionada por `util/BackendService.js`:
+- **CSRF token**: Se obtiene con GET + header `X-CSRF-Token: Fetch` antes de cada POST
+- **Métodos principales**: `guardarPrestamo()`, `guardarSolPrestamo()`, `Get_colaborador()`, `Get_tokenfromservice()`
+- **Wrappers internos**: `_executePost()`, `_executeGet()`, `_executePostService()` — basados en XHR con Promises
+- **Destino**: `dest_int_s` configurado en `ui5.yaml` (dev) y `xs-app.json` (producción con XSUAA)
 
 ---
 

@@ -562,6 +562,8 @@ sap.ui.define([
 						// Extraer el número de solicitud del mensaje (ej: 'Registro guardado correctamente 8000000026')
 						var oMatch = message_success.match(/(\d+)$/);
 						var sIdSolicitud = oMatch ? oMatch[1] : "";
+						var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
+						//that._oBackendService.guardarAdjuntosCalamidad(adjuntosPayload);
 
 					} else {
 

@@ -449,13 +449,23 @@ sap.ui.define([
 
 			if (iIndexCod == 1) {
 
-				dataSolic.ZINCEX = "X";
 
-				dataSolic.ZCODEX = oData.nombreCodeudor;
-				dataSolic.ZNUCEX = oData.cedulaCodeudor;
-				dataSolic.ZDIREX = oData.direccionCodeudor;
-				dataSolic.ZTELEX = oData.telefonoCodeudor;
+				if (oData.nombreCodeudor == "" || oData.cedulaCodeudor == "" || oData.direccionCodeudor == "" || oData.telefonoCodeudor == "") {
 
+					MessageBox.error(
+						"Por favor complete todos los datos del codeudor externo para continuar"
+					);
+					return;
+
+				} else {
+					dataSolic.ZINCEX = "X";
+
+					dataSolic.ZCODEX = oData.nombreCodeudor;
+					dataSolic.ZNUCEX = oData.cedulaCodeudor;
+					dataSolic.ZDIREX = oData.direccionCodeudor;
+					dataSolic.ZTELEX = oData.telefonoCodeudor;
+
+				}
 			}
 
 			// Se selecciono codeudor interno  
@@ -505,25 +515,7 @@ sap.ui.define([
 
 			}
 
-			if (oData.nombreCodeudor == "" || oData.cedulaCodeudor == ""
-				//oData.direccionCodeudor == "" || oData.telefonoCodeudor == ""
-			) {
 
-				MessageBox.error(
-					"Complete los datos del codeudor"
-				);
-				return;
-
-
-
-			} else {
-
-				dataSolic.ZCODEX = oData.nombreCodeudor;
-				dataSolic.ZNUCEX = oData.cedulaCodeudor;
-				dataSolic.ZDIREX = oData.direccionCodeudor;
-				dataSolic.ZTELEX = oData.telefonoCodeudor;
-
-			}
 
 			if (oData.selectedMotCalamidad != "") {
 

@@ -563,7 +563,26 @@ sap.ui.define([
 						var oMatch = message_success.match(/(\d+)$/);
 						var sIdSolicitud = oMatch ? oMatch[1] : "";
 						var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
-						//that._oBackendService.guardarAdjuntosCalamidad(adjuntosPayload);
+
+						if (adjuntosPayload.BIN_SOPORTE_CALAMIDAD.length > 0) {
+							var oAdjuntosServiceData = {
+								"n0:ZCOHCMFM_GUARDAR_PROCPASIT45": {
+									"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+									"PDF_DOCUMENTOS": {
+										"item": [
+											{
+												"UUID": sIdSolicitud,
+												"BIN_SOPORTE_CALAMIDAD": adjuntosPayload.BIN_SOPORTE_CALAMIDAD
+											}
+										]
+									}
+								}
+							}
+						}
+
+						if (oAdjuntosServiceData != undefined) {
+						that._oBackendService.guardarPDFsToSolPrestamo(adjuntosPayload);
+						}
 
 					} else {
 

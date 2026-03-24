@@ -6,6 +6,7 @@ sap.ui.define([
     return BaseObject.extend("prestamos.ccb.org.solprestamos.util.BackendService", {
 
         _guardarPrestamosUrl: "/http/CCB_Guardar_Prestamos",
+        _guardarDFsUrl: "/http/CCB_Guardar_Documentos",
         _colaboradoresUrl: "/http/CCB_Colaboradores",
 
         _getAppBase: function () {
@@ -35,16 +36,20 @@ sap.ui.define([
             var sToken = this.Get_tokenfromservice(sUrl);
             return this._executePostService(sUrl, oData, sToken);
 
-            /*
-            
-            this._executePostService("/http/CCB_Guardar_Prestamos", oData, sToken)
-                .then(function (oResponse) {
-                    // éxito
-                })
-             .catch(function (oError) {
-                    // error
-                });
-            */
+        },
+
+
+        guardarPDFsToSolPrestamo: function (oData) {
+            // var sToken = this.Get_tokenfromservice(this._guardarPrestamosUrl);
+            // return this._executePostService(this._guardarPrestamosUrl, oData, sToken);
+
+            //var sUrl = this._getAppBase() + this._guardarPrestamosUrl;
+            //var sToken = this.Get_tokenfromservice(sUrl);
+            //return this._executePostService(sUrl, oData, sToken);
+
+            var sUrl = this._getAppBase() + this._guardarDFsUrl;
+            var sToken = this.Get_tokenfromservice(sUrl);
+            return this._executePostService(sUrl, oData, sToken);
 
         },
 

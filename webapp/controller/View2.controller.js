@@ -415,6 +415,8 @@ sap.ui.define([
 				ZNUCEX: "",
 				ZDIREX: "",
 				ZTELEX: "",
+				ZINCIN: "",
+				ZNUEXT: "",
 				ZMOCA: "",
 				ZVALSO: "",
 				ZNUCUCA: "",
@@ -453,6 +455,25 @@ sap.ui.define([
 				dataSolic.ZNUCEX = oData.cedulaCodeudor;
 				dataSolic.ZDIREX = oData.direccionCodeudor;
 				dataSolic.ZTELEX = oData.telefonoCodeudor;
+
+			}
+
+			// Se selecciono codeudor interno  
+			if (iIndexCod == 0) {
+
+				if (oData.numeroEmpleadoCodeudor == "" || oData.numeroEmpleadoCodeudor == undefined) {
+
+					MessageBox.error(
+						"Por favor seleccione un codeudor  para continuar"
+					);
+					return;
+
+				} else {
+					dataSolic.ZINCIN = "X";
+
+					dataSolic.ZNUEXT = oData.numeroEmpleadoCodeudor;
+
+				}
 
 			}
 

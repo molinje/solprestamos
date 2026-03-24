@@ -581,7 +581,7 @@ sap.ui.define([
 						}
 
 						if (oAdjuntosServiceData != undefined) {
-						that._oBackendService.guardarPDFsToSolPrestamo(adjuntosPayload);
+						that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
 						}
 
 					} else {

@@ -39,7 +39,6 @@ sap.ui.define([
 				// Configuración de cuotas
 				selectedCuotas: "",         // Cuotas seleccionadas
 				numeroCuotas: 0,            // Número de cuotas (numérico)
-				tasaInteres: 0.015,         // Tasa de interés mensual (1.5%)
 
 				// Estados de validación para los campos obligatorios
 				cuotasValueState: "None",           // Estado de validación de cuotas
@@ -340,16 +339,14 @@ sap.ui.define([
 		},
 
 		/**
-		 * Calcula el valor del préstamo y la cuota mensual
+		 * Calcula el valor de la cuota mensual dividiendo el monto total entre el número de cuotas (sin intereses)
 		 * @private
 		 */
 		_calcularValorPrestamo: function () {
 			var oViewModel = this.getView().getModel("calamView");
 
-			// Obtener valores del modelo
 			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado") || 0;
 			var iNumeroCuotas = oViewModel.getProperty("/numeroCuotas") || 0;
-			var fTasaInteres = oViewModel.getProperty("/tasaInteres") || 0;
 
 			if (fValorSolicitado <= 0 || iNumeroCuotas <= 0) {
 				oViewModel.setProperty("/valorPrestamo", 0);
@@ -357,32 +354,12 @@ sap.ui.define([
 				return;
 			}
 
-			// Cálculo con intereses (sistema francés)
-			var fValorPrestamo = fValorSolicitado;
-			var fValorCuota;
+			var fValorCuota = Math.round(fValorSolicitado / iNumeroCuotas);
 
-			if (fTasaInteres > 0) {
-				// Fórmula de cuota con interés compuesto
-				var numerador = fTasaInteres * Math.pow(1 + fTasaInteres, iNumeroCuotas);
-				var denominador = Math.pow(1 + fTasaInteres, iNumeroCuotas) - 1;
-				fValorCuota = fValorPrestamo * (numerador / denominador);
-			} else {
-				// Sin intereses
-				fValorCuota = fValorPrestamo / iNumeroCuotas;
-			}
-
-			// Redondear a entero
-			fValorPrestamo = Math.round(fValorPrestamo);
-			fValorCuota = Math.round(fValorCuota);
-
-			// Actualizar el modelo
-			oViewModel.setProperty("/valorPrestamo", fValorPrestamo);
+			oViewModel.setProperty("/valorPrestamo", Math.round(fValorSolicitado));
 			oViewModel.setProperty("/valorCuota", fValorCuota);
 
-			// Mostrar mensaje informativo
-			MessageToast.show(
-				"Cuota mensual: " + this._formatCurrency(fValorCuota, "COP")
-			);
+			MessageToast.show("Cuota mensual: " + this._formatCurrency(fValorCuota, "COP"));
 		},
 
 		/**

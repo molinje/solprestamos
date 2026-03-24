@@ -27,7 +27,6 @@ sap.ui.define([
 				// Configuración de cuotas
 				selectedCuotas: "",
 				numeroCuotas: 0,
-				tasaInteres: 0.015,
 
 				// Estados de validación
 				cuotasValueState: "None",
@@ -115,7 +114,7 @@ sap.ui.define([
 		},
 
 		/**
-		 * Calcula el valor del préstamo y la cuota mensual (sistema francés)
+		 * Calcula el valor de la cuota mensual dividiendo el monto total entre el número de cuotas (sin intereses)
 		 * @private
 		 */
 		_calcularValorPrestamo: function () {
@@ -123,7 +122,6 @@ sap.ui.define([
 
 			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado") || 0;
 			var iNumeroCuotas = oViewModel.getProperty("/numeroCuotas") || 0;
-			var fTasaInteres = oViewModel.getProperty("/tasaInteres") || 0;
 
 			if (fValorSolicitado <= 0 || iNumeroCuotas <= 0) {
 				oViewModel.setProperty("/valorPrestamo", 0);
@@ -133,24 +131,11 @@ sap.ui.define([
 				return;
 			}
 
-			var fValorPrestamo = fValorSolicitado;
-			var fValorCuota;
+			var fValorCuota = Math.round(fValorSolicitado / iNumeroCuotas);
 
-			if (fTasaInteres > 0) {
-				// Fórmula francesa de amortización
-				var numerador = fTasaInteres * Math.pow(1 + fTasaInteres, iNumeroCuotas);
-				var denominador = Math.pow(1 + fTasaInteres, iNumeroCuotas) - 1;
-				fValorCuota = fValorPrestamo * (numerador / denominador);
-			} else {
-				fValorCuota = fValorPrestamo / iNumeroCuotas;
-			}
-
-			fValorPrestamo = Math.round(fValorPrestamo);
-			fValorCuota = Math.round(fValorCuota);
-
-			oViewModel.setProperty("/valorPrestamo", fValorPrestamo);
+			oViewModel.setProperty("/valorPrestamo", Math.round(fValorSolicitado));
 			oViewModel.setProperty("/valorCuota", fValorCuota);
-			oViewModel.setProperty("/ValorPrestamoMelectric", fValorPrestamo);
+			oViewModel.setProperty("/ValorPrestamoMelectric", Math.round(fValorSolicitado));
 			oViewModel.setProperty("/ValorCuotaMelectric", fValorCuota);
 
 			MessageToast.show("Cuota mensual: " + this._formatCurrency(fValorCuota, "COP"));

@@ -30,8 +30,7 @@
                     valueStateText="{adjuntoDlg>/tipoValueStateText}">
                     <core:Item key="" text="-- Seleccione --"/>
                     <core:Item key="1" text="Soporte Calamidad"/>
-                    <core:Item key="2" text="Factura de Compra"/>
-                    <core:Item key="3" text="Denuncia"/>
+                    <core:Item key="2" text="Otro"/>
                 </Select>
             </VBox>
         </content>

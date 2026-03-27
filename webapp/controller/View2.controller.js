@@ -891,7 +891,7 @@ sap.ui.define([
 				return;
 			}
 
-			var mTipos = { "1": "Soporte Calamidad", "2": "Certificado Médico", "3": "Denuncia" };
+			var mTipos = { "1": "Soporte Calamidad", "2": "Certificado Médico", "3": "Factura de Compra" };
 
 			var oViewModel = this.getView().getModel("calamView");
 			var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
@@ -924,15 +924,19 @@ sap.ui.define([
 
 			var oPayload = {
 				"UUID": id_prestamo,
+				"FILE_NAME_SOPORTE_CALAMIDAD": "",
 				"BIN_SOPORTE_CALAMIDAD": "",
+				"FILE_NAME_FACTURA_COMPRA": "",
 				"BIN_FACTURA_COMPRA": ""
 			};
 
 			aAdjuntos.forEach(function (oAdjunto) {
 				if (oAdjunto.tipoArchivo === "1") {
 					oPayload.BIN_SOPORTE_CALAMIDAD = oAdjunto.base64Content || "";
+					oPayload.FILE_NAME_SOPORTE_CALAMIDAD = oAdjunto.nombreArchivo || "";
 				} else if (oAdjunto.tipoArchivo === "2") {
 					oPayload.BIN_FACTURA_COMPRA = oAdjunto.base64Content || "";
+					oPayload.FILE_NAME_FACTURA_COMPRA = oAdjunto.nombreArchivo || "";
 				}
 			});
 

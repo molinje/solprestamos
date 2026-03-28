@@ -572,7 +572,9 @@ sap.ui.define([
 										"item": [
 											{
 												"UUID": sIdSolicitud,
-												"BIN_SOPORTE_CALAMIDAD": adjuntosPayload.BIN_SOPORTE_CALAMIDAD
+												"BIN_SOPORTE_CALAMIDAD": adjuntosPayload.BIN_SOPORTE_CALAMIDAD,
+												"FILE_NAME_SOPORTE_CALAMIDAD": adjuntosPayload.FILE_NAME_SOPORTE_CALAMIDAD
+											
 											}
 										]
 									}

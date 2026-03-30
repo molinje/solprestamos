@@ -491,8 +491,10 @@ sap.ui.define([
 
 				// Como es moneda COP y el servicio espera el valor sin decimales ni formato, 
 				// se divide entre 100 para eliminar los dos ceros finales
-				dataSolic.DARBT = oData.valorPrestamo / 100;
-				dataSolic.ZVALSO = oData.valorPrestamo / 100;
+				//dataSolic.DARBT = oData.valorPrestamo / 100;
+				//dataSolic.ZVALSO = oData.valorPrestamo / 100;
+				dataSolic.DARBT = oData.valorPrestamo;
+				dataSolic.ZVALSO = oData.valorPrestamo;
 
 			} else {
 

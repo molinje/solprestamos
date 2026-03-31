@@ -493,8 +493,8 @@ sap.ui.define([
 				// se divide entre 100 para eliminar los dos ceros finales
 				//dataSolic.DARBT = oData.valorPrestamo / 100;
 				//dataSolic.ZVALSO = oData.valorPrestamo / 100;
-				dataSolic.DARBT = parseFloat(oData.valorPrestamo).toFixed(2);
-				dataSolic.ZVALSO = parseFloat(oData.valorPrestamo).toFixed(2);
+				dataSolic.DARBT = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
+				dataSolic.ZVALSO = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
 
 			} else {
 

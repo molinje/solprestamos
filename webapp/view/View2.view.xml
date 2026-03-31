@@ -57,26 +57,33 @@
                         </Select>
                         
                         <Label text="Valor solicitado" labelFor="inputValor" class="sapUiSmallMarginTop" required="true" />
-                        <Input
-                             id="inputValor"
-                            value="{
-                                parts: [
-                                    {path: 'calamView>/valorSolicitado'},
-                                    {path: 'calamView>/moneda'}
-                                ],
-                                type: 'sap.ui.model.type.Currency',
-                                formatOptions: {
-                                    showMeasure: true,
-                                    currencyCode: true,
-                                    maxFractionDigits: 0
-                                }
-                            }"
-                            change="onValorSolicitadoChange"
-                            width="100%"
-                            textAlign="End"
-                            valueState="{calamView>/valorValueState}"
-                            valueStateText="{calamView>/valorValueStateText}"
-                            placeholder="Ingrese el valor del préstamo"/>
+                        <HBox width="100%" alignItems="Center">
+                            <Input
+                                id="inputValor"
+                                value="{
+                                    parts: [
+                                        {path: 'calamView>/valorSolicitado'},
+                                        {path: 'calamView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: false,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
+                                change="onValorSolicitadoChange"
+                                width="100%"
+                                textAlign="End"
+                                valueState="{calamView>/valorValueState}"
+                                valueStateText="{calamView>/valorValueStateText}"
+                                placeholder="Ingrese el valor del préstamo"/>
+                            <Input
+                                value="{calamView>/moneda}"
+                                editable="false"
+                                width="5rem"
+                                textAlign="Center"
+                                class="sapUiSmallMarginBegin"/>
+                        </HBox>
                          <Label text="Valor prestamo" labelFor="ValorPrestamo" class="sapUiSmallMarginTop" />
                         <Input
                              id="ValorPrestamo"

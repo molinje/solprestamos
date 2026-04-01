@@ -982,10 +982,10 @@ sap.ui.define([
 
 			var dataPrima = {
 
-				"EMPLEADO": employeenumber,
-				"VALOR_PRESTAMO": fValorSolicitado,
-				"CANTIDAD_PRIMAS": "1",
-				"TIPO_PRESTAMO": idPrestamo,
+				EMPLEADO: employeenumber,
+				VALOR_PRESTAMO: fValorSolicitado,
+				CANTIDAD_PRIMAS: "1",
+				TIPO_PRESTAMO: idPrestamo,
 
 			};
 

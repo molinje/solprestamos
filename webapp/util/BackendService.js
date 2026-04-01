@@ -65,7 +65,7 @@ sap.ui.define([
          * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
          */
         get_Primas: function (oData) {
-            var sUrl = this._getAppBase() + this._consultPrimasUrl;
+            var sUrl = this._consultPrimasUrl;
             return new Promise(function (resolve, reject) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("GET", sUrl, true);

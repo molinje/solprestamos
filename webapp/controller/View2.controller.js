@@ -23,7 +23,7 @@ sap.ui.define([
 
 			// Obtener el modelo
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
-			if (oGlobalModel != undefined) {
+			if (oGlobalModel) {
 				var oUserData = oGlobalModel.getProperty("/userData");
 				var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
 			}
@@ -967,6 +967,11 @@ sap.ui.define([
 		 */
 		onAddPrimas: function () {
 			// lógica de adición de registros a implementar
+
+		   var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+			if (oGlobalModel) {
+				var oUserData = oGlobalModel.getProperty("/userData");
+			}
 
 			var oViewModel = this.getView().getModel("calamView");
 

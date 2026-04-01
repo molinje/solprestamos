@@ -972,7 +972,7 @@ sap.ui.define([
 
 			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
 			var employeenumber = oViewModel.getProperty("/employeeNumber");
-			var idPrestamo = oViewModel.getProperty("/prestamoSeleccionado").PrestamoId;
+			var idPrestamo = oViewModel.getProperty("/idPrestamo");
 
 
 			var dataPrima = {

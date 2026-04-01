@@ -62,6 +62,7 @@ sap.ui.define([
 				telefonoCodeudor: "",
 				fecha: "",
 				selectedMotCalamidad: "",
+				SelectedPrimas: "NO_APLICA",
 				solicitudEnabled: true,
 				adjuntos: []
 			});
@@ -71,6 +72,10 @@ sap.ui.define([
 				oViewModel.setProperty("/Codeudores", gt_codeudores);
 			}
 			this.getView().setModel(oViewModel, "calamView");
+
+			// Modelo para la colección de primas a descontar
+			var oPrimasModel = new JSONModel({ items: [] });
+			this.getView().setModel(oPrimasModel, "listprimas");
 
 			// Suscribirse al evento de ruta: se dispara cada vez que se navega a esta vista
 			var oRouter = this.getOwnerComponent().getRouter();
@@ -945,6 +950,22 @@ sap.ui.define([
 			});
 
 			return oPayload;
+		},
+
+		/**
+		 * Agrega un registro a la colección listprimas (lógica pendiente de implementar)
+		 */
+		onAddPrimas: function () {
+			// lógica de adición de registros a implementar
+		},
+
+		/**
+		 * Evento cuando cambia la selección de Primas y Bonificaciones
+		 */
+		onChangePrimas: function (oEvent) {
+			var sSelectedKey = oEvent.getParameter("selectedItem").getKey();
+			var oViewModel = this.getView().getModel("calamView");
+			oViewModel.setProperty("/SelectedPrimas", sSelectedKey);
 		},
 
 		onNavBack: function () {

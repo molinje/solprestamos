@@ -8,6 +8,7 @@ sap.ui.define([
         _guardarPrestamosUrl: "/http/CCB_Guardar_Prestamos",
         _guardarDFsUrl: "/http/CCB_Guardar_Documentos",
         _colaboradoresUrl: "/http/CCB_Colaboradores",
+        _consultPrimasUrl: "/http/CCB_Consult_Prima",
 
         _getAppBase: function () {
             return sap.ui.require.toUrl("prestamos/ccb/org/solprestamos");
@@ -58,6 +59,57 @@ sap.ui.define([
          * @param {string} sParam - Parámetro de búsqueda
          * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
          */
+        /**
+         * Consulta las primas del empleado enviando un JSON en el body de la petición GET
+         * @param {object} oData - JSON con los parámetros de consulta a enviar en el body
+         * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
+         */
+        get_Primas: function (oData) {
+            var sUrl = this._getAppBase() + this._consultPrimasUrl;
+            return new Promise(function (resolve, reject) {
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", sUrl, true);
+
+                xhr.setRequestHeader("Content-Type", "application/json");
+                xhr.setRequestHeader("Accept", "application/json");
+
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        try {
+                            var oResponse = xhr.responseText ? JSON.parse(xhr.responseText) : {};
+                            resolve(oResponse);
+                        } catch (e) {
+                            resolve({ data: xhr.responseText, rawResponse: true });
+                        }
+                    } else if (xhr.status === 401) {
+                        reject({
+                            error: "Authentication failed",
+                            status: xhr.status,
+                            statusText: xhr.statusText,
+                            message: "El token de acceso es inválido o ha expirado"
+                        });
+                    } else {
+                        reject({
+                            error: "Service request failed",
+                            status: xhr.status,
+                            statusText: xhr.statusText,
+                            response: xhr.responseText
+                        });
+                    }
+                };
+
+                xhr.onerror = function () {
+                    reject({
+                        error: "Network error",
+                        status: xhr.status,
+                        message: "Error de red al conectar con el servicio"
+                    });
+                };
+
+                xhr.send(JSON.stringify(oData));
+            });
+        },
+
         /**
          * Lee el CSRF Token desde un servicio OData mediante una petición GET
          * @param {string} sUrl - URL del servicio desde donde se obtiene el token

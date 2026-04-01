@@ -23,9 +23,17 @@ sap.ui.define([
 
 			// Obtener el modelo
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+			if (oGlobalModel != undefined) {
+				var oUserData = oGlobalModel.getProperty("/userData");
+				var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
+			}
 
 			// Modelo de datos para la vista
 			var oViewModel = new JSONModel({
+
+				// Datos del usuario
+				employeeNumber: oUserData ? oUserData.PERNR : "",
+				idPrestamo: oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : "",
 				// Configuración de moneda
 				moneda: "COP",              // Código de moneda (Peso Colombiano)
 
@@ -63,8 +71,10 @@ sap.ui.define([
 				fecha: "",
 				selectedMotCalamidad: "",
 				SelectedPrimas: "NO_APLICA",
+				primasADescontar: [],
 				solicitudEnabled: true,
-				adjuntos: []
+				adjuntos: [],
+				
 			});
 
 			if (gt_codeudores != undefined) {
@@ -581,7 +591,7 @@ sap.ui.define([
 												"UUID": sIdSolicitud,
 												"BIN_SOPORTE_CALAMIDAD": adjuntosPayload.BIN_SOPORTE_CALAMIDAD,
 												"FILE_NAME_SOPORTE_CALAMIDAD": adjuntosPayload.FILE_NAME_SOPORTE_CALAMIDAD
-											
+
 											}
 										]
 									}
@@ -590,7 +600,7 @@ sap.ui.define([
 						}
 
 						if (oAdjuntosServiceData != undefined) {
-						that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
+							that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
 						}
 
 					} else {
@@ -957,6 +967,38 @@ sap.ui.define([
 		 */
 		onAddPrimas: function () {
 			// lógica de adición de registros a implementar
+
+			var oViewModel = this.getView().getModel("calamView");
+
+			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
+			var employeenumber = oViewModel.getProperty("/employeeNumber");
+			var idPrestamo = oViewModel.getProperty("/prestamoSeleccionado").PrestamoId;
+
+
+			var dataPrima = {
+
+				"EMPLEADO": employeenumber,
+				"VALOR_PRESTAMO": fValorSolicitado,
+				"CANTIDAD_PRIMAS": "1",
+				"TIPO_PRESTAMO": idPrestamo,
+
+			};
+
+			var that = this;
+			this._oBackendService.get_Primas(dataPrima)
+				.then(function (oResponse) {
+					var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]
+						.RESPONSE_INFO_PRIMA.item;
+					that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
+					that.getView().getModel("listprimas").setProperty("/items", aItems);
+					
+				})
+				.catch(function (oError) {
+					MessageBox.error(
+						"Error al consultar primas: " + (oError.message || oError.statusText || "Error desconocido"),
+						{ title: "Error" }
+					);
+				});
 		},
 
 		/**

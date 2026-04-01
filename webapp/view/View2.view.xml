@@ -307,8 +307,8 @@
                             <items>
                                 <ColumnListItem>
                                     <cells>
-                                        <Text text="{listprimas>fechaInicio}"/>
-                                        <Text text="{listprimas>valorComprometido}"/>
+                                        <Text text="{listprimas>FECHA_PRIMA}"/>
+                                        <Text text="{listprimas>VALOR_PRIMA}"/>
                                     </cells>
                                 </ColumnListItem>
                             </items>

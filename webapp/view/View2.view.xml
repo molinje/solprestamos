@@ -258,7 +258,7 @@
                                     id="selectPrimas"
                                     selectedKey="{calamView>/SelectedPrimas}"
                                     change=".onChangePrimas"
-                                    width="100%">
+                                    width="50%">
                                     <items>
                                         <core:Item key="NO_APLICA" text="No Aplica"/>
                                         <core:Item key="DESCONTAR_PRIMAS" text="Descontar Primas"/>
@@ -269,7 +269,8 @@
                                 id="tablaPrimas"
                                 items="{listprimas>/items}"
                                 visible="{= ${calamView>/SelectedPrimas} === 'DESCONTAR_PRIMAS' }"
-                                headerToolbar="true">
+                                headerToolbar="true"
+                                width="50%">
                                 <headerToolbar>
                                     <Toolbar>
                                         <Title text="Primas a Descontar"/>

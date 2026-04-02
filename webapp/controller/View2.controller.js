@@ -1100,6 +1100,20 @@ sap.ui.define([
 								if (!Array.isArray(aItems)) {
 									aItems = [aItems];
 								}
+
+								var fTotalPrimas = 0;
+								var iIdx = 0;
+								while (iIdx < aItems.length) {
+									var fValorPrima = parseFloat(aItems[iIdx].VALOR_PRIMA) || 0;
+									var iValorEntero = Math.trunc(fValorPrima * 100);
+									aItems[iIdx].VALOR_PRIMA = String(iValorEntero);
+									aItems[iIdx].MONEDA_PRIMA = moneda;
+									fTotalPrimas = fTotalPrimas + fValorPrima;
+									iIdx = iIdx + 1;
+								}
+
+
+
 								that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
 								that.getView().getModel("listprimas").setProperty("/items", aItems);
 
@@ -1129,12 +1143,12 @@ sap.ui.define([
 
 
 
-           /*
-			if (aPrimas.length > 0) {
-				aPrimas.pop();
-				oViewModelPrimas.setProperty("/items", aPrimas);
-			}
-		*/
+			/*
+			 if (aPrimas.length > 0) {
+				 aPrimas.pop();
+				 oViewModelPrimas.setProperty("/items", aPrimas);
+			 }
+		 */
 		},
 
 		/**

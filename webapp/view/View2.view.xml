@@ -252,80 +252,69 @@
 										editable="true"
 										layout="ResponsiveGridLayout">
 
-                       <Label text="Primas y Bonificaciones" labelFor="selectPrimas" />
-                        <Select
-                            id="selectPrimas"
-                            selectedKey="{calamView>/SelectedPrimas}"
-                            change=".onChangePrimas"
-                            width="100%">
-                            <items>
-                                <core:Item key="NO_APLICA" text="No Aplica"/>
-                                <core:Item key="DESCONTAR_PRIMAS" text="Descontar Primas"/>
-                            </items>
-                        </Select>                
-                        <Label text="Fecha" labelFor="datePicker" class="sapUiSmallMarginBottom"/>
-                        <DatePicker
-                            id="datePicker"
-                            value="{calamView>/fecha}"
-                            width="100%"
-                            placeholder="Seleccione una fecha"/>
-                        
-                        <Label text="Valor Comprometido" labelFor="inputValorComp" />
-                        <Input
-                            id="inputValorComp"
-                            value="{calamView>/valorComprometido}"
-                            type="Number"
-                            width="100%"
-                            placeholder="Ingrese el valor comprometido"/>
+                            <Label text="Primas y Bonificaciones" labelFor="selectPrimas" />
+                                <Select
+                                    id="selectPrimas"
+                                    selectedKey="{calamView>/SelectedPrimas}"
+                                    change=".onChangePrimas"
+                                    width="100%">
+                                    <items>
+                                        <core:Item key="NO_APLICA" text="No Aplica"/>
+                                        <core:Item key="DESCONTAR_PRIMAS" text="Descontar Primas"/>
+                                    </items>
+                                </Select>  
+
+                            <Table
+                                id="tablaPrimas"
+                                items="{listprimas>/items}"
+                                visible="{= ${calamView>/SelectedPrimas} === 'DESCONTAR_PRIMAS' }"
+                                headerToolbar="true">
+                                <headerToolbar>
+                                    <Toolbar>
+                                        <Title text="Primas a Descontar"/>
+                                        <ToolbarSpacer/>
+                                        <Button
+                                            icon="sap-icon://add"
+                                            press=".onAddPrimas"
+                                            tooltip="Agregar prima"/>
+                                        <Button
+                                            icon="sap-icon://less"
+                                            press=".onReducePrimas"
+                                            tooltip="Eliminar última prima"/>
+                                    </Toolbar>
+                                </headerToolbar>
+                                <columns>
+                                    <Column>
+                                        <Text text="Fecha Inicio"/>
+                                    </Column>
+                                    <Column>
+                                        <Text text="Valor Comprometido"/>
+                                    </Column>
+                                </columns>
+                                <items>
+                                    <ColumnListItem>
+                                        <cells>
+                                            <Text text="{listprimas>FECHA_PRIMA}"/>
+                                            <ObjectNumber
+                                                number="{
+                                                    parts: [
+                                                        {path: 'listprimas>VALOR_PRIMA'},
+                                                        {path: 'listprimas>MONEDA_PRIMA'}
+                                                    ],
+                                                    type: 'sap.ui.model.type.Currency',
+                                                    formatOptions: { showMeasure: true }
+                                                }"
+                                                />
+                                        </cells>
+                                    </ColumnListItem>
+                                </items>
+                            </Table>              
+                     
 
 
-                            </form:SimpleForm>
+                        </form:SimpleForm>
 
-                        <Table
-                            id="tablaPrimas"
-                            items="{listprimas>/items}"
-                            visible="{= ${calamView>/SelectedPrimas} === 'DESCONTAR_PRIMAS' }"
-                            headerToolbar="true">
-                            <headerToolbar>
-                                <Toolbar>
-                                    <Title text="Primas a Descontar"/>
-                                    <ToolbarSpacer/>
-                                    <Button
-                                        icon="sap-icon://add"
-                                        press=".onAddPrimas"
-                                        tooltip="Agregar prima"/>
-                                    <Button
-                                        icon="sap-icon://less"
-                                        press=".onReducePrimas"
-                                        tooltip="Eliminar última prima"/>
-                                </Toolbar>
-                            </headerToolbar>
-                            <columns>
-                                <Column>
-                                    <Text text="Fecha Inicio"/>
-                                </Column>
-                                <Column>
-                                    <Text text="Valor Comprometido"/>
-                                </Column>
-                            </columns>
-                            <items>
-                                <ColumnListItem>
-                                    <cells>
-                                        <Text text="{listprimas>FECHA_PRIMA}"/>
-                                        <ObjectNumber
-                                            number="{
-                                                parts: [
-                                                    {path: 'listprimas>VALOR_PRIMA'},
-                                                    {path: 'listprimas>MONEDA_PRIMA'}
-                                                ],
-                                                type: 'sap.ui.model.type.Currency',
-                                                formatOptions: { showMeasure: true }
-                                            }"
-                                            unit="{listprimas>MONEDA_PRIMA}"/>
-                                    </cells>
-                                </ColumnListItem>
-                            </items>
-                        </Table>
+                      
                     </VBox>
                 </WizardStep>
 

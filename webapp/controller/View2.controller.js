@@ -43,6 +43,7 @@ sap.ui.define([
 				valorPrestamo: 0,           // Valor calculado del préstamo
 				valorCuota: 0,              // Valor de cada cuota
 				valorComprometido: 0,       // Valor comprometido
+				valorTotalPrimas: 0,         // Valor total de primas a descontar
 
 				// Configuración de cuotas
 				selectedCuotas: "",         // Cuotas seleccionadas
@@ -979,6 +980,7 @@ sap.ui.define([
 			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
 			var employeenumber = oViewModel.getProperty("/employeeNumber");
 			var idPrestamo = oViewModel.getProperty("/idPrestamo");
+			var moneda = oViewModel.getProperty("/moneda");
 
 			var oViewModelPrimas = that.getView().getModel("listprimas");
 			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
@@ -1010,6 +1012,21 @@ sap.ui.define([
 						if (!Array.isArray(aItems)) {
 							aItems = [aItems];
 						}
+
+
+
+						var fTotalPrimas = 0;
+						var iIdx = 0;
+						while (iIdx < aItems.length) {
+							var fValorPrima = parseFloat(aItems[iIdx].VALOR_PRIMA) || 0;
+							var iValorEntero = Math.trunc(fValorPrima * 100);
+							aItems[iIdx].VALOR_PRIMA = String(iValorEntero);
+							aItems[iIdx].MONEDA_PRIMA = moneda;
+							fTotalPrimas = fTotalPrimas + fValorPrima;
+							iIdx = iIdx + 1;
+						}
+						that.getView().getModel("calamView").setProperty("/valorTotalPrimas", fTotalPrimas);
+
 						that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
 						that.getView().getModel("listprimas").setProperty("/items", aItems);
 
@@ -1076,6 +1093,8 @@ sap.ui.define([
 								MessageToast.show("No se encontraron primas para los datos ingresados");
 								return;
 							} else {
+
+
 
 								// El servicio puede retornar un solo objeto o un array, normalizamos a array para simplificar la lógica	
 								if (!Array.isArray(aItems)) {

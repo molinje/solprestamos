@@ -134,7 +134,52 @@
                                 <core:Item key="SI" text="Descontar Primas"/>
                             </Select>
                         </form:SimpleForm>
-                        
+
+                        <Table
+                            id="tablaPrimasCompu"
+                            items="{listprimasCompu>/items}"
+                            visible="{= ${compuView>/descuentoPrimas} === 'SI' }"
+                            headerToolbar="true">
+                            <headerToolbar>
+                                <Toolbar>
+                                    <Title text="Primas a Descontar"/>
+                                    <ToolbarSpacer/>
+                                    <Button
+                                        icon="sap-icon://add"
+                                        press=".onAddPrimas"
+                                        tooltip="Agregar prima"/>
+                                    <Button
+                                        icon="sap-icon://less"
+                                        press=".onReducePrimas"
+                                        tooltip="Eliminar última prima"/>
+                                </Toolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column>
+                                    <Text text="Fecha Inicio"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Valor Prima"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{listprimasCompu>FECHA_PRIMA}"/>
+                                        <ObjectNumber
+                                            number="{
+                                                parts: [
+                                                    {path: 'listprimasCompu>VALOR_PRIMA'},
+                                                    {path: 'listprimasCompu>MONEDA_PRIMA'}
+                                                ],
+                                                type: 'sap.ui.model.type.Currency',
+                                                formatOptions: { showMeasure: true }
+                                            }"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+
                         <!-- Botón de Siguiente -->
                         <Button
                             text="Siguiente"

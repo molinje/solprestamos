@@ -74,7 +74,7 @@ sap.ui.define([
 				primasADescontar: [],
 				solicitudEnabled: true,
 				adjuntos: [],
-				
+
 			});
 
 			if (gt_codeudores != undefined) {
@@ -968,7 +968,7 @@ sap.ui.define([
 		onAddPrimas: function () {
 			// lógica de adición de registros a implementar
 
-		   var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 			if (oGlobalModel) {
 				var oUserData = oGlobalModel.getProperty("/userData");
 			}
@@ -992,21 +992,35 @@ sap.ui.define([
 				.then(function (oResponse) {
 					var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]
 						.RESPONSE_INFO_PRIMA.item;
-					that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
-					that.getView().getModel("listprimas").setProperty("/items", aItems);
-					var oViewModelPrimas = that.getView().getModel("listprimas");
-					var aPrimas = oViewModelPrimas.getProperty("/items") || [];
+					if (!aItems) {
+						MessageToast.show("No se encontraron primas para los datos ingresados");
+						return;
+					} else {
 
-					var aTimes = aItems.length;
+						// El servicio puede retornar un solo objeto o un array, normalizamos a array para simplificar la lógica	
+						if (!Array.isArray(aItems)) {
+							aItems = [aItems];
+						}
+						that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
+						that.getView().getModel("listprimas").setProperty("/items", aItems);
+						/*
+						var oViewModelPrimas = that.getView().getModel("listprimas");
+						var aPrimas = oViewModelPrimas.getProperty("/items") || [];
+
+						var aTimes = aItems.length;
 						var iRegistroActual = 0;
 						while (iRegistroActual < aTimes) {
 							aPrimas.push(aItems[iRegistroActual]);
 							iRegistroActual = iRegistroActual + 1;
 						}
-						
-					oViewModelPrimas.setProperty("/items", aPrimas);
-					MessageToast.show("Prima agregada correctamente");
-					
+
+						oViewModelPrimas.setProperty("/items", aPrimas);
+						MessageToast.show("Prima agregada correctamente");
+						*/
+
+					}
+
+
 				})
 				.catch(function (oError) {
 					MessageBox.error(

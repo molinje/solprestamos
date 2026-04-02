@@ -993,6 +993,7 @@ sap.ui.define([
 				"VALOR_PRESTAMO": String(fValorSolicitado),
 				"CANTIDAD_PRIMAS": String(NoPrimas),
 				"TIPO_PRESTAMO": idPrestamo,
+				"PORCENTAJE": "50"
 			};
 
 
@@ -1064,6 +1065,7 @@ sap.ui.define([
 						"VALOR_PRESTAMO": String(fValorSolicitado),
 						"CANTIDAD_PRIMAS": String(NoPrimas),
 						"TIPO_PRESTAMO": idPrestamo,
+						"PORCENTAJE": "50"
 					};
 
 					this._oBackendService.Add_PrimaService(dataPrima)

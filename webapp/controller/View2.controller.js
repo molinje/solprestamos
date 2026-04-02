@@ -967,6 +967,7 @@ sap.ui.define([
 		 */
 		onAddPrimas: function () {
 			// lógica de adición de registros a implementar
+			var that = this;
 
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 			if (oGlobalModel) {
@@ -994,7 +995,7 @@ sap.ui.define([
 				"TIPO_PRESTAMO": idPrestamo,
 			};
 
-			var that = this;
+			
 			this._oBackendService.Add_PrimaService(dataPrima)
 				.then(function (oResponse) {
 					var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]

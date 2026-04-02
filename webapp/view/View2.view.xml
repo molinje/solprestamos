@@ -251,26 +251,26 @@
                        <form:SimpleForm
 										editable="true"
 										layout="ResponsiveGridLayout">
-                             <VBox class="sapUiSmallMargin">            
+                                       
 
                             <Label text="Primas y Bonificaciones" labelFor="selectPrimas" />
                                 <Select
                                     id="selectPrimas"
                                     selectedKey="{calamView>/SelectedPrimas}"
-                                    change=".onChangePrimas"
-                                    width="50%">
+                                    change=".onChangePrimas">
                                     <items>
                                         <core:Item key="NO_APLICA" text="No Aplica"/>
                                         <core:Item key="DESCONTAR_PRIMAS" text="Descontar Primas"/>
                                     </items>
                                 </Select>  
 
-                            <Table
+                        </form:SimpleForm>
+
+                         <Table
                                 id="tablaPrimas"
                                 items="{listprimas>/items}"
                                 visible="{= ${calamView>/SelectedPrimas} === 'DESCONTAR_PRIMAS' }"
-                                headerToolbar="true"
-                                width="50%">
+                                headerToolbar="true">
                                 <headerToolbar>
                                     <Toolbar>
                                         <Title text="Primas a Descontar"/>
@@ -310,11 +310,7 @@
                                         </cells>
                                     </ColumnListItem>
                                 </items>
-                            </Table>              
-                     
-                          </VBox>
-
-                        </form:SimpleForm>
+                            </Table>           
 
                       
                     </VBox>

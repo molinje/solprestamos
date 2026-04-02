@@ -979,11 +979,18 @@ sap.ui.define([
 			var employeenumber = oViewModel.getProperty("/employeeNumber");
 			var idPrestamo = oViewModel.getProperty("/idPrestamo");
 
+			var oViewModelPrimas = that.getView().getModel("listprimas");
+			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
+
+			var aTimes = aPrimas.length;
+
+			var NoPrimas = aTimes + 1;
+
 
 			var dataPrima = {
 				"EMPLEADO": employeenumber,
 				"VALOR_PRESTAMO": String(fValorSolicitado),
-				"CANTIDAD_PRIMAS": "2",
+				"CANTIDAD_PRIMAS": String(NoPrimas),
 				"TIPO_PRESTAMO": idPrestamo,
 			};
 
@@ -1003,18 +1010,9 @@ sap.ui.define([
 						}
 						that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
 						that.getView().getModel("listprimas").setProperty("/items", aItems);
+
+
 						/*
-						var oViewModelPrimas = that.getView().getModel("listprimas");
-						var aPrimas = oViewModelPrimas.getProperty("/items") || [];
-
-						var aTimes = aItems.length;
-						var iRegistroActual = 0;
-						while (iRegistroActual < aTimes) {
-							aPrimas.push(aItems[iRegistroActual]);
-							iRegistroActual = iRegistroActual + 1;
-						}
-
-						oViewModelPrimas.setProperty("/items", aPrimas);
 						MessageToast.show("Prima agregada correctamente");
 						*/
 

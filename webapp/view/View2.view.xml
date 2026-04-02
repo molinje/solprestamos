@@ -251,6 +251,7 @@
                        <form:SimpleForm
 										editable="true"
 										layout="ResponsiveGridLayout">
+                             <VBox class="sapUiSmallMargin">            
 
                             <Label text="Primas y Bonificaciones" labelFor="selectPrimas" />
                                 <Select
@@ -310,7 +311,7 @@
                                 </items>
                             </Table>              
                      
-
+                          </VBox>
 
                         </form:SimpleForm>
 

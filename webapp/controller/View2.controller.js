@@ -995,7 +995,7 @@ sap.ui.define([
 				"TIPO_PRESTAMO": idPrestamo,
 			};
 
-			
+
 			this._oBackendService.Add_PrimaService(dataPrima)
 				.then(function (oResponse) {
 					var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]
@@ -1033,12 +1033,87 @@ sap.ui.define([
 		 * Elimina el último registro de la tabla de primas
 		 */
 		onReducePrimas: function () {
+
+			var that = this;
+
+			var oViewModel = this.getView().getModel("calamView");
+
+			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
+			var employeenumber = oViewModel.getProperty("/employeeNumber");
+			var idPrestamo = oViewModel.getProperty("/idPrestamo");
+
 			var oViewModelPrimas = this.getView().getModel("listprimas");
 			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
+
+			var aTimes = aPrimas.length;
+
+			if (aTimes > 0) {
+
+				if (aTimes === 1) {
+					oViewModelPrimas.setProperty("/items", []);
+					return;
+				} else if (aTimes > 1) {
+
+					// calculamos de nuevo la cantidad de primas a descontar restando 1 a la cantidad actual, 
+					// para enviar ese valor al servicio y que retorne la nueva lista de primas actualizada sin la última prima que se quiere eliminar	
+
+					var NoPrimas = aTimes - 1;
+
+					var dataPrima = {
+						"EMPLEADO": employeenumber,
+						"VALOR_PRESTAMO": String(fValorSolicitado),
+						"CANTIDAD_PRIMAS": String(NoPrimas),
+						"TIPO_PRESTAMO": idPrestamo,
+					};
+
+					this._oBackendService.Add_PrimaService(dataPrima)
+						.then(function (oResponse) {
+							var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]
+								.RESPONSE_INFO_PRIMA.item;
+							if (!aItems) {
+								MessageToast.show("No se encontraron primas para los datos ingresados");
+								return;
+							} else {
+
+								// El servicio puede retornar un solo objeto o un array, normalizamos a array para simplificar la lógica	
+								if (!Array.isArray(aItems)) {
+									aItems = [aItems];
+								}
+								that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
+								that.getView().getModel("listprimas").setProperty("/items", aItems);
+
+
+								/*
+								MessageToast.show("Prima agregada correctamente");
+								*/
+
+							}
+
+
+						})
+						.catch(function (oError) {
+							MessageBox.error(
+								"Error al consultar primas: " + (oError.message || oError.statusText || "Error desconocido"),
+								{ title: "Error" }
+							);
+						});
+
+
+					return;
+				}
+
+
+			}
+
+
+
+
+           /*
 			if (aPrimas.length > 0) {
 				aPrimas.pop();
 				oViewModelPrimas.setProperty("/items", aPrimas);
 			}
+		*/
 		},
 
 		/**

@@ -988,7 +988,7 @@ sap.ui.define([
 			};
 
 			var that = this;
-			this._oBackendService.get_Primas(dataPrima)
+			this._oBackendService.Add_PrimaService(dataPrima)
 				.then(function (oResponse) {
 					var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]
 						.RESPONSE_INFO_PRIMA.item;

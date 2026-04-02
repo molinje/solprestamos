@@ -994,6 +994,13 @@ sap.ui.define([
 						.RESPONSE_INFO_PRIMA.item;
 					that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
 					that.getView().getModel("listprimas").setProperty("/items", aItems);
+					var oViewModelPrimas = that.getView().getModel("listprimas");
+					var aPrimas = oViewModelPrimas.getProperty("/items") || [];
+
+					aPrimas.push(...aItems); // Agrega todas las primas al arreglo existente
+						
+					oViewModelPrimas.setProperty("/items", aPrimas);
+					MessageToast.show("Prima agregada correctamente");
 					
 				})
 				.catch(function (oError) {

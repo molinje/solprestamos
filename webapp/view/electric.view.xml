@@ -120,12 +120,57 @@
                         </Select>
 
                         <Label text="Descuento en Primas" labelFor="selectDescuentoPrimasMelectric"/>
-                        <Select selectedKey="{/DescuentoPrimasCompu}" width="100%" id="selectDescuentoPrimasMelectric">
+                        <Select selectedKey="{movelectricView>/descuentoPrimas}" width="100%" id="selectDescuentoPrimasMelectric">
                             <core:Item key="NO" text="No Aplica"/>
                             <core:Item key="SI" text="Descontar Primas"/>
                         </Select>
 
                         </form:SimpleForm>
+
+                        <Table
+                            id="tablaPrimasElectric"
+                            items="{listprimasElectric>/items}"
+                            visible="{= ${movelectricView>/descuentoPrimas} === 'SI' }"
+                            headerToolbar="true">
+                            <headerToolbar>
+                                <Toolbar>
+                                    <Title text="Primas a Descontar"/>
+                                    <ToolbarSpacer/>
+                                    <Button
+                                        icon="sap-icon://add"
+                                        press=".onAddPrimas"
+                                        tooltip="Agregar prima"/>
+                                    <Button
+                                        icon="sap-icon://less"
+                                        press=".onReducePrimas"
+                                        tooltip="Eliminar última prima"/>
+                                </Toolbar>
+                            </headerToolbar>
+                            <columns>
+                                <Column>
+                                    <Text text="Fecha Inicio"/>
+                                </Column>
+                                <Column>
+                                    <Text text="Valor Prima"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{listprimasElectric>FECHA_PRIMA}"/>
+                                        <ObjectNumber
+                                            number="{
+                                                parts: [
+                                                    {path: 'listprimasElectric>VALOR_PRIMA'},
+                                                    {path: 'listprimasElectric>MONEDA_PRIMA'}
+                                                ],
+                                                type: 'sap.ui.model.type.Currency',
+                                                formatOptions: { showMeasure: true }
+                                            }"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
 
                         <!-- Botón de Siguiente -->
                         <Button

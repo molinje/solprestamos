@@ -982,8 +982,8 @@ sap.ui.define([
 
 			var dataPrima = {
 				"EMPLEADO": employeenumber,
-				"VALOR_PRESTAMO": fValorSolicitado,
-				"CANTIDAD_PRIMAS": "1",
+				"VALOR_PRESTAMO": String(fValorSolicitado),
+				"CANTIDAD_PRIMAS": "2",
 				"TIPO_PRESTAMO": idPrestamo,
 			};
 

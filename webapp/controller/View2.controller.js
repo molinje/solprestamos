@@ -997,7 +997,12 @@ sap.ui.define([
 					var oViewModelPrimas = that.getView().getModel("listprimas");
 					var aPrimas = oViewModelPrimas.getProperty("/items") || [];
 
-					aPrimas.push(...aItems); // Agrega todas las primas al arreglo existente
+					var aTimes = aItems.length;
+						var iRegistroActual = 0;
+						while (iRegistroActual < aTimes) {
+							aPrimas.push(aItems[iRegistroActual]);
+							iRegistroActual = iRegistroActual + 1;
+						}
 						
 					oViewModelPrimas.setProperty("/items", aPrimas);
 					MessageToast.show("Prima agregada correctamente");

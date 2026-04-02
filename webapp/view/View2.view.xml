@@ -292,7 +292,7 @@
                                     <ToolbarSpacer/>
                                     <Button
                                         icon="sap-icon://add"
-                                        press=".getPrimasTest"
+                                        press=".onAddPrimas"
                                         tooltip="Agregar prima"/>
                                 </Toolbar>
                             </headerToolbar>

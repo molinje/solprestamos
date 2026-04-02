@@ -1030,6 +1030,18 @@ sap.ui.define([
 		},
 
 		/**
+		 * Elimina el último registro de la tabla de primas
+		 */
+		onReducePrimas: function () {
+			var oViewModelPrimas = this.getView().getModel("listprimas");
+			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
+			if (aPrimas.length > 0) {
+				aPrimas.pop();
+				oViewModelPrimas.setProperty("/items", aPrimas);
+			}
+		},
+
+		/**
 		 * Evento cuando cambia la selección de Primas y Bonificaciones
 		 */
 		onChangePrimas: function (oEvent) {

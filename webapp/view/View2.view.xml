@@ -294,6 +294,10 @@
                                         icon="sap-icon://add"
                                         press=".onAddPrimas"
                                         tooltip="Agregar prima"/>
+                                    <Button
+                                        icon="sap-icon://less"
+                                        press=".onReducePrimas"
+                                        tooltip="Eliminar última prima"/>
                                 </Toolbar>
                             </headerToolbar>
                             <columns>

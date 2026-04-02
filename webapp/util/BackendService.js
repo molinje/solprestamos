@@ -40,6 +40,21 @@ sap.ui.define([
         },
 
 
+          Add_PrimaService: function (oData) {
+            // var sToken = this.Get_tokenfromservice(this._guardarPrestamosUrl);
+            // return this._executePostService(this._guardarPrestamosUrl, oData, sToken);
+
+            //var sUrl = this._getAppBase() + this._guardarPrestamosUrl;
+            //var sToken = this.Get_tokenfromservice(sUrl);
+            //return this._executePostService(sUrl, oData, sToken);
+
+            var sUrl = this._getAppBase() + this._consultPrimasUrl;
+            var sToken = this.Get_tokenfromservice(sUrl);
+            return this._executePostService(sUrl, oData, sToken);
+
+        },
+
+
         guardarPDFsToSolPrestamo: function (oData) {
             // var sToken = this.Get_tokenfromservice(this._guardarPrestamosUrl);
             // return this._executePostService(this._guardarPrestamosUrl, oData, sToken);

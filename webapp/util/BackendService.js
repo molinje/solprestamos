@@ -9,6 +9,7 @@ sap.ui.define([
         _guardarDFsUrl: "/http/CCB_Guardar_Documentos",
         _colaboradoresUrl: "/http/CCB_Colaboradores",
         _consultPrimasUrl: "/http/CCB_Consult_Prima",
+        _getMemorandoUrl: "/http/CCB_Consult_Memorando",
 
         _getAppBase: function () {
             return sap.ui.require.toUrl("prestamos/ccb/org/solprestamos");
@@ -176,6 +177,12 @@ sap.ui.define([
             var sId = String(sIdentificacionNacional).trim();
             //return this._executeGet(this._colaboradoresUrl, { Identificacion_Nacional: "'" + sId + "'" });
             return this._executeGet(this._getAppBase() + this._colaboradoresUrl, { Identificacion_Nacional: "'" + sId + "'" });
+        },
+
+         get_Memorando: function (IdSolicitud) {
+            var sId = String(IdSolicitud).trim();
+            
+            return this._executeGet(this._getMemorandoUrl, { uuid: "'" + sId + "'" });
         },
 
         /**

@@ -104,6 +104,7 @@ sap.ui.define([
         oViewModel.setProperty("/programasPregrado", aProgramas);
       }
       // Limpiar selección previa y sugerencias del input
+      this._aUltimosFiltrados = [];
       this.byId("selectProgPregado").removeAllSuggestionItems();
       oViewModel.setProperty("/programaBusqueda", "");
       oViewModel.setProperty("/programaTitulo", "");
@@ -114,58 +115,79 @@ sap.ui.define([
 
     /**
      * Filtra programasPregrado mientras el usuario escribe en el buscador.
-     * Crea los items manualmente para evitar desfases de índice con binding dinámico.
-     * Busca coincidencias en TITULO, NAME1 y NAME2 (case-insensitive, contiene).
+     *
+     * IMPORTANTE: cuando el usuario navega con flechas, UI5 copia el texto del item
+     * resaltado al input y vuelve a disparar 'suggest'. En ese caso NO debemos
+     * reconstruir la lista (hacerlo resetea la navegación al primer item).
+     * Detectamos esto comprobando si el query coincide exactamente con el texto
+     * de algún item ya presente en el popup.
      */
     onSuggestPrograma: function (oEvent) {
       var sQuery = oEvent.getParameter("suggestValue");
       var oInput = oEvent.getSource();
+
+      // Si el query coincide con un item existente => usuario navegando, no escribiendo
+      var bNavegando = oInput.getSuggestionItems().some(function (oItem) {
+        return oItem.getText() === sQuery;
+      });
+      if (bNavegando) { return; }
+
+      oInput.removeAllSuggestionItems();
+      this._aUltimosFiltrados = [];
+
+      if (!sQuery || sQuery.trim() === "") { return; }
+
       var oViewModel = this.getView().getModel("educaView");
       var aProgramas = oViewModel.getProperty("/programasPregrado") || [];
-
-      // Limpiar items anteriores antes de agregar los nuevos
-      oInput.removeAllSuggestionItems();
-
-      if (!sQuery || sQuery.trim() === "") {
-        return;
-      }
-
       var sQueryLower = sQuery.trim().toLowerCase();
-      aProgramas
-        .filter(function (oP) {
-          return (oP.TITULO && oP.TITULO.toLowerCase().indexOf(sQueryLower) !== -1) ||
-                 (oP.NAME1  && oP.NAME1.toLowerCase().indexOf(sQueryLower)  !== -1) ||
-                 (oP.NAME2  && oP.NAME2.toLowerCase().indexOf(sQueryLower)  !== -1);
-        })
-        .forEach(function (oP) {
-          oInput.addSuggestionItem(new ListItem({
-            key: oP.NIT,
-            text: oP.TITULO,
-            additionalText: oP.NAME1
-          }));
-        });
+
+      this._aUltimosFiltrados = aProgramas.filter(function (oP) {
+        return (oP.TITULO && oP.TITULO.toLowerCase().indexOf(sQueryLower) !== -1) ||
+               (oP.NAME1  && oP.NAME1.toLowerCase().indexOf(sQueryLower)  !== -1) ||
+               (oP.NAME2  && oP.NAME2.toLowerCase().indexOf(sQueryLower)  !== -1);
+      });
+
+      this._aUltimosFiltrados.forEach(function (oP) {
+        oInput.addSuggestionItem(new ListItem({
+          key: oP.NIT,
+          text: oP.TITULO,
+          additionalText: oP.NAME1
+        }));
+      });
     },
 
     /**
      * Rellena los inputs de solo lectura con los datos del programa seleccionado.
+     * Busca primero por TITULO+NAME1 (más específico) y cae en TITULO solo como fallback.
+     * No depende de getKey() que puede ser inconsistente con items creados dinámicamente.
      */
     onProgramaSeleccionado: function (oEvent) {
       var oItem = oEvent.getParameter("selectedItem");
       if (!oItem) { return; }
 
-      var sNIT = oItem.getKey();
-      var oViewModel = this.getView().getModel("educaView");
-      var aProgramas = oViewModel.getProperty("/programasPregrado") || [];
+      var sTitulo      = oItem.getText();
+      var sUniversidad = oItem.getAdditionalText ? oItem.getAdditionalText() : "";
 
-      var oPrograma = aProgramas.find(function (oP) { return oP.NIT === sNIT; });
+      // Buscar en el último conjunto filtrado (scope reducido = más rápido y exacto)
+      var aCandidatos = this._aUltimosFiltrados && this._aUltimosFiltrados.length
+        ? this._aUltimosFiltrados
+        : (this.getView().getModel("educaView").getProperty("/programasPregrado") || []);
+
+      var oPrograma = aCandidatos.find(function (oP) {
+        return oP.TITULO === sTitulo && oP.NAME1 === sUniversidad;
+      });
+      // Fallback: solo por TITULO
+      if (!oPrograma) {
+        oPrograma = aCandidatos.find(function (oP) { return oP.TITULO === sTitulo; });
+      }
       if (!oPrograma) { return; }
 
-      oViewModel.setProperty("/programaNIT",        oPrograma.NIT);
-      oViewModel.setProperty("/programaTitulo",     oPrograma.TITULO);
+      var oViewModel = this.getView().getModel("educaView");
+      oViewModel.setProperty("/programaNIT",         oPrograma.NIT);
+      oViewModel.setProperty("/programaTitulo",      oPrograma.TITULO);
       oViewModel.setProperty("/programaUniversidad", oPrograma.NAME1);
-      oViewModel.setProperty("/programaCarrera",    oPrograma.NAME2);
-      // Mostrar en el input de búsqueda el texto seleccionado
-      oViewModel.setProperty("/programaBusqueda",   oPrograma.TITULO + " — " + oPrograma.NAME1);
+      oViewModel.setProperty("/programaCarrera",     oPrograma.NAME2);
+      oViewModel.setProperty("/programaBusqueda",    oPrograma.TITULO + " — " + oPrograma.NAME1);
     },
 
     /**

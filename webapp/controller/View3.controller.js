@@ -2,13 +2,17 @@ sap.ui.define([
   "sap/ui/core/mvc/Controller",
   "sap/ui/model/json/JSONModel",
   "sap/m/MessageBox",
-  "sap/m/MessageToast"
-], function (Controller, JSONModel, MessageBox, MessageToast) {
+  "sap/m/MessageToast",
+  "sap/ui/core/ListItem"
+], function (Controller, JSONModel, MessageBox, MessageToast, ListItem) {
   "use strict";
 
   return Controller.extend("prestamos.ccb.org.solprestamos.controller.View3", {
     onInit: function () {
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+      var programasPregrado = oGlobalModel ? oGlobalModel.getProperty("/gt_pregrado") : [];
+
+
       var oUserData = oGlobalModel ? oGlobalModel.getProperty("/userData") : null;
       var oPrestamoSeleccionado = oGlobalModel ? oGlobalModel.getProperty("/prestamoSeleccionado") : null;
 
@@ -24,6 +28,9 @@ sap.ui.define([
         valorPrestamo: 0,
         ValorPagar: 0,
         ValorCuota: 0,
+
+        // Configuración de moneda
+				moneda: "COP",              // Código de moneda (Peso Colombiano)
 
         // Cuotas
         NCuotas: "",
@@ -47,10 +54,29 @@ sap.ui.define([
         tieneCodeudor: -1,
         numeroDocumento: "",
         solicitudEnabled: true,
-        adjuntos: []
+        adjuntos: [],
+        programasPregrado: programasPregrado,
+
+        // Buscador de programa pregrado
+        programasFiltrados: [],
+        programaBusqueda: "",
+        programaTitulo: "",
+        programaUniversidad: "",
+        programaCarrera: "",
+        programaNIT: ""
       });
 
       this.getView().setModel(oViewModel, "educaView");
+
+      // Enlazar aggregation de sugerencias al array filtrado del modelo
+      this.byId("selectProgPregado").bindAggregation("suggestionItems", {
+        path: "educaView>/programasFiltrados",
+        template: new ListItem({
+          key: "{educaView>NIT}",
+          text: "{educaView>TITULO}",
+          additionalText: "{educaView>NAME1}"
+        })
+      });
 
       // Suscribirse al evento de ruta
       var oRouter = this.getOwnerComponent().getRouter();
@@ -82,6 +108,65 @@ sap.ui.define([
       oViewModel.setProperty("/valorValueStateText", "");
       oViewModel.setProperty("/cuotasValueState", "None");
       oViewModel.setProperty("/cuotasValueStateText", "");
+
+      // Refrescar programasPregrado desde globalData (por si cargó después del onInit)
+      var aProgramas = oGlobalModel.getProperty("/gt_pregrado");
+      if (aProgramas) {
+        oViewModel.setProperty("/programasPregrado", aProgramas);
+      }
+      // Limpiar selección previa
+      oViewModel.setProperty("/programasFiltrados", []);
+      oViewModel.setProperty("/programaBusqueda", "");
+      oViewModel.setProperty("/programaTitulo", "");
+      oViewModel.setProperty("/programaUniversidad", "");
+      oViewModel.setProperty("/programaCarrera", "");
+      oViewModel.setProperty("/programaNIT", "");
+    },
+
+    /**
+     * Filtra programasPregrado mientras el usuario escribe en el buscador.
+     * Busca coincidencias en TITULO, NAME1 y NAME2 (case-insensitive, contiene).
+     */
+    onSuggestPrograma: function (oEvent) {
+      var sQuery = oEvent.getParameter("suggestValue");
+      var oViewModel = this.getView().getModel("educaView");
+      var aProgramas = oViewModel.getProperty("/programasPregrado") || [];
+
+      if (!sQuery || sQuery.trim() === "") {
+        oViewModel.setProperty("/programasFiltrados", []);
+        return;
+      }
+
+      var sQueryLower = sQuery.trim().toLowerCase();
+      var aFiltrados = aProgramas.filter(function (oP) {
+        return (oP.TITULO && oP.TITULO.toLowerCase().indexOf(sQueryLower) !== -1) ||
+               (oP.NAME1  && oP.NAME1.toLowerCase().indexOf(sQueryLower)  !== -1) ||
+               (oP.NAME2  && oP.NAME2.toLowerCase().indexOf(sQueryLower)  !== -1);
+      });
+
+      oViewModel.setProperty("/programasFiltrados", aFiltrados);
+    },
+
+    /**
+     * Rellena los inputs de solo lectura con los datos del programa seleccionado.
+     */
+    onProgramaSeleccionado: function (oEvent) {
+      var oItem = oEvent.getParameter("selectedItem");
+      if (!oItem) { return; }
+
+      var sNIT = oItem.getKey();
+      var oViewModel = this.getView().getModel("educaView");
+      var aProgramas = oViewModel.getProperty("/programasPregrado") || [];
+
+      var oPrograma = aProgramas.find(function (oP) { return oP.NIT === sNIT; });
+      if (!oPrograma) { return; }
+
+      oViewModel.setProperty("/programaNIT",        oPrograma.NIT);
+      oViewModel.setProperty("/programaTitulo",     oPrograma.TITULO);
+      oViewModel.setProperty("/programaUniversidad", oPrograma.NAME1);
+      oViewModel.setProperty("/programaCarrera",    oPrograma.NAME2);
+      // Mostrar en el input de búsqueda el texto seleccionado
+      oViewModel.setProperty("/programaBusqueda",   oPrograma.TITULO + " — " + oPrograma.NAME1);
     },
 
     /**

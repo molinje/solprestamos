@@ -22,13 +22,13 @@
                     <VBox class="sapUiSmallMargin">
                       
                         <Label text="Tipo de Educación"/>
-									<Select selectedKey="{/tipoEducacion}" width="100%">
+									<Select selectedKey="{educaView>/tipoEducacion}" width="100%">
 										<core:Item key="PRE" text="Pregrado"/>
 										<core:Item key="POS" text="Postgrado"/>
 						</Select>
 
                          <Label text="Nivel"/>
-									<Select selectedKey="{/Nivel}" width="100%">
+									<Select selectedKey="{educaView>/Nivel}" width="100%">
 										<core:Item key="01" text="1"/>
                                         <core:Item key="02" text="2"/>
                                         <core:Item key="03" text="3"/>
@@ -42,78 +42,86 @@
                                          <core:Item key="11" text="11"/>
                                         <core:Item key="12" text="12"/>
 
-						</Select>       
+						</Select>
 
                          <Label text="Periodicidad"/>
-									<Select selectedKey="{/Periodicidad}" width="100%">
+									<Select selectedKey="{educaView>/Periodicidad}" width="100%">
 										<core:Item key="01" text="Anual"/>
                                         <core:Item key="02" text="Cuatrimestral"/>
                                         <core:Item key="03" text="Semestral"/>
-                                      
-						</Select> 
+
+						</Select>
                           <Label text="Valor Solicitado" labelFor="inputValorSolicitado" />
                         <Input
                             id="inputValorSolicitado"
                             value="{educaView>/valorSolicitado}"
                             type="Number"
                             width="100%"
-                            placeholder="Ingrese el valor solicitado"/>
-                       <Label text="Valor Prestamo" labelFor="inputValorPrestamo" /> 
+                            placeholder="Ingrese el valor solicitado"
+                            change="onValorSolicitadoChange"
+                            valueState="{educaView>/valorValueState}"
+                            valueStateText="{educaView>/valorValueStateText}"/>
+                       <Label text="Valor Préstamo" labelFor="inputValorPrestamo" />
                           <Input
                             id="inputValorPrestamo"
                             value="{educaView>/valorPrestamo}"
                             type="Number"
                             width="100%"
                             editable="false"
-                            /> 
-                          <Label text="Valor a pagar" labelFor="inputValorValorPagar" /> 
+                            />
+                          <Label text="Valor a pagar" labelFor="inputValorValorPagar" />
                           <Input
                             id="inputValorValorPagar"
                             value="{educaView>/ValorPagar}"
                             type="Number"
                             width="100%"
                             editable="false"
-                            /> 
+                            />
 
                          <Label text="N. Cuotas"/>
-									<Select selectedKey="{/NCuotas}" width="100%">
+									<Select
+                                        selectedKey="{educaView>/NCuotas}"
+                                        width="100%"
+                                        change="onCuotasChange"
+                                        valueState="{educaView>/cuotasValueState}"
+                                        valueStateText="{educaView>/cuotasValueStateText}">
 										<core:Item key="05" text="5"/>
                                         <core:Item key="10" text="10"/>
-                                      
+
 						</Select>
-                         <Label text="Valor cuota" labelFor="inputValorValorCuota" /> 
+                         <Label text="Valor cuota" labelFor="inputValorValorCuota" />
                           <Input
                             id="inputValorValorCuota"
                             value="{educaView>/ValorCuota}"
                             type="Number"
                             width="100%"
                             editable="false"
-                            /> 
+                            />
 
                              <Label text="Origen Universidad"/>
-									<Select selectedKey="{/OrigenU}" width="100%">
+									<Select selectedKey="{educaView>/OrigenU}" width="100%">
 										<core:Item key="01" text="Colombia"/>
                                         <core:Item key="02" text="Ecuador"/>
                                         <core:Item key="03" text="Perú"/>
                                         <core:Item key="04" text="Brasil"/>
                                         <core:Item key="05" text="España"/>
-                                        <core:Item key="06" text="EE.UU."/>                                    
+                                        <core:Item key="06" text="EE.UU."/>
 						</Select>
 
                          <Label text="Descuento en Primas"/>
-									<Select selectedKey="{/DescuentoPrimas}" width="100%">
+									<Select selectedKey="{educaView>/DescuentoPrimas}" width="100%">
 										<core:Item key="NO" text="No Aplica"/>
                                         <core:Item key="SI" text="Descontar Primas"/>
-                                      
+
 						</Select>
                          <Label text="Porcentaje"/>
-									<Select selectedKey="{/Porcentaje}" width="100%">
+									<Select selectedKey="{educaView>/Porcentaje}" width="100%">
 										<core:Item key="10" text="10%"/>
                                         <core:Item key="20" text="20%"/>
                                         <core:Item key="30" text="30%"/>
                                         <core:Item key="40" text="40%"/>
                                         <core:Item key="50" text="50%"/>
-                                      
+
 						</Select>                     
                 
                     </VBox>

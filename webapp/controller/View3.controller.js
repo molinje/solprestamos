@@ -58,7 +58,6 @@ sap.ui.define([
         programasPregrado: programasPregrado,
 
         // Buscador de programa pregrado
-        programasFiltrados: [],
         programaBusqueda: "",
         programaTitulo: "",
         programaUniversidad: "",
@@ -67,16 +66,6 @@ sap.ui.define([
       });
 
       this.getView().setModel(oViewModel, "educaView");
-
-      // Enlazar aggregation de sugerencias al array filtrado del modelo
-      this.byId("selectProgPregado").bindAggregation("suggestionItems", {
-        path: "educaView>/programasFiltrados",
-        template: new ListItem({
-          key: "{educaView>NIT}",
-          text: "{educaView>TITULO}",
-          additionalText: "{educaView>NAME1}"
-        })
-      });
 
       // Suscribirse al evento de ruta
       var oRouter = this.getOwnerComponent().getRouter();
@@ -114,8 +103,8 @@ sap.ui.define([
       if (aProgramas) {
         oViewModel.setProperty("/programasPregrado", aProgramas);
       }
-      // Limpiar selección previa
-      oViewModel.setProperty("/programasFiltrados", []);
+      // Limpiar selección previa y sugerencias del input
+      this.byId("selectProgPregado").removeAllSuggestionItems();
       oViewModel.setProperty("/programaBusqueda", "");
       oViewModel.setProperty("/programaTitulo", "");
       oViewModel.setProperty("/programaUniversidad", "");
@@ -125,26 +114,36 @@ sap.ui.define([
 
     /**
      * Filtra programasPregrado mientras el usuario escribe en el buscador.
+     * Crea los items manualmente para evitar desfases de índice con binding dinámico.
      * Busca coincidencias en TITULO, NAME1 y NAME2 (case-insensitive, contiene).
      */
     onSuggestPrograma: function (oEvent) {
       var sQuery = oEvent.getParameter("suggestValue");
+      var oInput = oEvent.getSource();
       var oViewModel = this.getView().getModel("educaView");
       var aProgramas = oViewModel.getProperty("/programasPregrado") || [];
 
+      // Limpiar items anteriores antes de agregar los nuevos
+      oInput.removeAllSuggestionItems();
+
       if (!sQuery || sQuery.trim() === "") {
-        oViewModel.setProperty("/programasFiltrados", []);
         return;
       }
 
       var sQueryLower = sQuery.trim().toLowerCase();
-      var aFiltrados = aProgramas.filter(function (oP) {
-        return (oP.TITULO && oP.TITULO.toLowerCase().indexOf(sQueryLower) !== -1) ||
-               (oP.NAME1  && oP.NAME1.toLowerCase().indexOf(sQueryLower)  !== -1) ||
-               (oP.NAME2  && oP.NAME2.toLowerCase().indexOf(sQueryLower)  !== -1);
-      });
-
-      oViewModel.setProperty("/programasFiltrados", aFiltrados);
+      aProgramas
+        .filter(function (oP) {
+          return (oP.TITULO && oP.TITULO.toLowerCase().indexOf(sQueryLower) !== -1) ||
+                 (oP.NAME1  && oP.NAME1.toLowerCase().indexOf(sQueryLower)  !== -1) ||
+                 (oP.NAME2  && oP.NAME2.toLowerCase().indexOf(sQueryLower)  !== -1);
+        })
+        .forEach(function (oP) {
+          oInput.addSuggestionItem(new ListItem({
+            key: oP.NIT,
+            text: oP.TITULO,
+            additionalText: oP.NAME1
+          }));
+        });
     },
 
     /**

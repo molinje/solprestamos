@@ -52,7 +52,60 @@
 
 						</Select>
 
-                        <!-- Buscador de programa académico (pregrado) -->
+                         <Label text="Valor Solicitado" labelFor="inputValorSolicitado" />
+                        <Input
+                            id="inputValorSolicitado"
+                            value="{educaView>/valorSolicitado}"
+                            type="Number"
+                            width="100%"
+                            placeholder="Ingrese el valor solicitado"
+                            change="onValorSolicitadoChange"
+                            valueState="{educaView>/valorValueState}"
+                            valueStateText="{educaView>/valorValueStateText}"/>
+
+                         <Label text="N. Cuotas"/>
+									<Select
+                                        selectedKey="{educaView>/NCuotas}"
+                                        width="100%"
+                                        change="onCuotasChange"
+                                        valueState="{educaView>/cuotasValueState}"
+                                        valueStateText="{educaView>/cuotasValueStateText}">
+										<core:Item key="05" text="5"/>
+                                        <core:Item key="10" text="10"/>
+
+						</Select>    
+
+                       
+
+                         
+                       <Label text="Valor Préstamo" labelFor="inputValorPrestamo" />
+                          <Input
+                            id="inputValorPrestamo"
+                            value="{educaView>/valorPrestamo}"
+                            type="Number"
+                            width="100%"
+                            editable="false"
+                            />
+                          <Label text="Valor a pagar" labelFor="inputValorValorPagar" />
+                          <Input
+                            id="inputValorValorPagar"
+                            value="{educaView>/ValorPagar}"
+                            type="Number"
+                            width="100%"
+                            editable="false"
+                            />
+
+                        
+                         <Label text="Valor cuota" labelFor="inputValorValorCuota" />
+                          <Input
+                            id="inputValorValorCuota"
+                            value="{educaView>/ValorCuota}"
+                            type="Number"
+                            width="100%"
+                            editable="false"
+                            />
+
+                            <!-- Buscador de programa académico (pregrado) -->
                         <Label text="Buscar Programa / Universidad" labelFor="selectProgPregado"/>
                         <Input
                             id="selectProgPregado"
@@ -80,54 +133,7 @@
                             id="inputProgCarrera"
                             value="{educaView>/programaCarrera}"
                             width="100%"
-                            editable="false"/>
-
-                          <Label text="Valor Solicitado" labelFor="inputValorSolicitado" />
-                        <Input
-                            id="inputValorSolicitado"
-                            value="{educaView>/valorSolicitado}"
-                            type="Number"
-                            width="100%"
-                            placeholder="Ingrese el valor solicitado"
-                            change="onValorSolicitadoChange"
-                            valueState="{educaView>/valorValueState}"
-                            valueStateText="{educaView>/valorValueStateText}"/>
-                       <Label text="Valor Préstamo" labelFor="inputValorPrestamo" />
-                          <Input
-                            id="inputValorPrestamo"
-                            value="{educaView>/valorPrestamo}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />
-                          <Label text="Valor a pagar" labelFor="inputValorValorPagar" />
-                          <Input
-                            id="inputValorValorPagar"
-                            value="{educaView>/ValorPagar}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />
-
-                         <Label text="N. Cuotas"/>
-									<Select
-                                        selectedKey="{educaView>/NCuotas}"
-                                        width="100%"
-                                        change="onCuotasChange"
-                                        valueState="{educaView>/cuotasValueState}"
-                                        valueStateText="{educaView>/cuotasValueStateText}">
-										<core:Item key="05" text="5"/>
-                                        <core:Item key="10" text="10"/>
-
-						</Select>
-                         <Label text="Valor cuota" labelFor="inputValorValorCuota" />
-                          <Input
-                            id="inputValorValorCuota"
-                            value="{educaView>/ValorCuota}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />
+                            editable="false"/> 
 
                              <Label text="Origen Universidad"/>
 									<Select selectedKey="{educaView>/OrigenU}" width="100%">

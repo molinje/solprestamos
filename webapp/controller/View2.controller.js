@@ -371,7 +371,7 @@ sap.ui.define([
 				oViewModel.setProperty("/valorCuota", 0);
 				return;
 			}
-            
+
 			// Se debe considerar el valor total de primas a descontar para calcular el valor del préstamo, 
 			// restando este valor al monto solicitado antes de dividir entre el número de cuotas. De esta forma, 
 			// el valor de la cuota reflejará el monto neto a pagar después de descontar las primas.
@@ -590,7 +590,7 @@ sap.ui.define([
 						);
 						return;
 					}
-				    */
+					*/
 
 					//that._oBackendService.guardarPrestamo(dataService)
 					that._oBackendService.guardarSolPrestamo(dataService)
@@ -1065,6 +1065,11 @@ sap.ui.define([
 
 						that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
 						that.getView().getModel("listprimas").setProperty("/items", aItems);
+						if (fTotalPrimas > 0) {
+
+							that._calcularValorPrestamo();
+						}
+
 
 
 						/*
@@ -1095,7 +1100,7 @@ sap.ui.define([
 			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
 			var employeenumber = oViewModel.getProperty("/employeeNumber");
 			var idPrestamo = oViewModel.getProperty("/idPrestamo");
-		   var moneda = oViewModel.getProperty("/moneda");
+			var moneda = oViewModel.getProperty("/moneda");
 
 			var oViewModelPrimas = this.getView().getModel("listprimas");
 			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
@@ -1150,9 +1155,14 @@ sap.ui.define([
 									iIdx = iIdx + 1;
 								}
 
-                                oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
+								oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
 								that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
 								that.getView().getModel("listprimas").setProperty("/items", aItems);
+
+								if (fTotalPrimas > 0) {
+
+									that._calcularValorPrestamo();
+								}
 
 
 								/*
@@ -1197,7 +1207,7 @@ sap.ui.define([
 			oViewModel.setProperty("/SelectedPrimas", sSelectedKey);
 		},
 
-		
+
 
 		onNavBack: function () {
 			var oRouter = this.getOwnerComponent().getRouter();

@@ -364,13 +364,18 @@ sap.ui.define([
 			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado") || 0;
 			var iNumeroCuotas = oViewModel.getProperty("/numeroCuotas") || 0;
 
+			var valorTotalPrimas = oViewModel.getProperty("/valorTotalPrimas") || 0;
+
 			if (fValorSolicitado <= 0 || iNumeroCuotas <= 0) {
 				oViewModel.setProperty("/valorPrestamo", 0);
 				oViewModel.setProperty("/valorCuota", 0);
 				return;
 			}
-
-			var fValorCuota = Math.round(fValorSolicitado / iNumeroCuotas);
+            
+			// Se debe considerar el valor total de primas a descontar para calcular el valor del préstamo, 
+			// restando este valor al monto solicitado antes de dividir entre el número de cuotas. De esta forma, 
+			// el valor de la cuota reflejará el monto neto a pagar después de descontar las primas.
+			var fValorCuota = Math.round((fValorSolicitado - valorTotalPrimas) / iNumeroCuotas);
 
 			oViewModel.setProperty("/valorPrestamo", Math.round(fValorSolicitado));
 			oViewModel.setProperty("/valorCuota", fValorCuota);
@@ -1145,8 +1150,7 @@ sap.ui.define([
 									iIdx = iIdx + 1;
 								}
 
-
-
+                                oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
 								that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
 								that.getView().getModel("listprimas").setProperty("/items", aItems);
 

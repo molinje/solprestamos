@@ -575,6 +575,8 @@ sap.ui.define([
 			that._oBackendService.validarSolPrestamo(validateDataService)
 				.then(function (oValidResponse) {
 					var oValidResult = oValidResponse["n0:ZCOHCMFM_VALIDACIONESResponse"];
+
+					/*
 					if (!oValidResult || oValidResult.EV_SUCCESS !== "X") {
 						oViewModel.setProperty("/solicitudEnabled", true);
 						MessageBox.error(
@@ -583,6 +585,7 @@ sap.ui.define([
 						);
 						return;
 					}
+				    */
 
 					//that._oBackendService.guardarPrestamo(dataService)
 					that._oBackendService.guardarSolPrestamo(dataService)

@@ -1049,7 +1049,8 @@ sap.ui.define([
 						var iIdx = 0;
 						while (iIdx < aItems.length) {
 							var fValorPrima = parseFloat(aItems[iIdx].VALOR_PRIMA) || 0;
-							var iValorEntero = Math.trunc(fValorPrima * 100);
+							//var iValorEntero = Math.trunc(fValorPrima * 100);
+							var iValorEntero = Math.trunc(fValorPrima);
 							aItems[iIdx].VALOR_PRIMA = String(iValorEntero);
 							aItems[iIdx].MONEDA_PRIMA = moneda;
 							fTotalPrimas = fTotalPrimas + fValorPrima;
@@ -1135,7 +1136,8 @@ sap.ui.define([
 								var iIdx = 0;
 								while (iIdx < aItems.length) {
 									var fValorPrima = parseFloat(aItems[iIdx].VALOR_PRIMA) || 0;
-									var iValorEntero = Math.trunc(fValorPrima * 100);
+									//var iValorEntero = Math.trunc(fValorPrima * 100);
+									var iValorEntero = Math.trunc(fValorPrima);
 									aItems[iIdx].VALOR_PRIMA = String(iValorEntero);
 									aItems[iIdx].MONEDA_PRIMA = moneda;
 									fTotalPrimas = fTotalPrimas + fValorPrima;
@@ -1190,34 +1192,7 @@ sap.ui.define([
 			oViewModel.setProperty("/SelectedPrimas", sSelectedKey);
 		},
 
-		/**
-		 * Método de prueba: llama a CCB_Consult_Prima con datos fijos del curl de referencia.
-		 * EMPLEADO: 00201308 | TIPO_PRESTAMO: 04 | VALOR_PRESTAMO: 4000000 | CANTIDAD_PRIMAS: 1
-		 */
-		getPrimasTest: function () {
-			var dataPrima = {
-				"CANTIDAD_PRIMAS": "1",
-				"EMPLEADO": "00201308",
-				"TIPO_PRESTAMO": "04",
-				"VALOR_PRESTAMO": "4000000"
-			};
-
-			var that = this;
-			this._oBackendService.get_Primas(dataPrima)
-				.then(function (oResponse) {
-					var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]
-						.RESPONSE_INFO_PRIMA.item;
-					that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
-					that.getView().getModel("listprimas").setProperty("/items", aItems);
-					MessageToast.show("getPrimasTest: " + aItems.length + " prima(s) cargada(s)");
-				})
-				.catch(function (oError) {
-					MessageBox.error(
-						"Error en getPrimasTest: " + (oError.message || oError.statusText || "Error desconocido"),
-						{ title: "Error" }
-					);
-				});
-		},
+		
 
 		onNavBack: function () {
 			var oRouter = this.getOwnerComponent().getRouter();

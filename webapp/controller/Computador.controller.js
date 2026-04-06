@@ -361,32 +361,60 @@ sap.ui.define([
         }
       };
 
-      that._oBackendService.guardarSolPrestamo(dataService)
-        .then(function (oResponse) {
-          oViewModel.setProperty("/solicitudEnabled", true);
+      var validateDataService = {
+        "n0:ZCOHCMFM_VALIDACIONES": {
+          "-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+          "GT_PRESTAMOS": dataSolic
+        }
+      };
 
-          var message_success = "";
-          if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
-            message_success = oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_MESSAGE;
-          } else {
-            message_success = "Solicitud de Préstamo Computador creada exitosamente.";
+      that._oBackendService.validarSolPrestamo(validateDataService)
+        .then(function (oValidResponse) {
+          var oValidResult = oValidResponse["n0:ZCOHCMFM_VALIDACIONESResponse"];
+          /*
+          if (!oValidResult || oValidResult.EV_SUCCESS !== "X") {
+            oViewModel.setProperty("/solicitudEnabled", true);
+            MessageBox.error(
+              (oValidResult && oValidResult.EV_MESSAGE) || "La solicitud no pasó las validaciones.",
+              { title: "Validación fallida" }
+            );
+            return;
           }
+          */
+          that._oBackendService.guardarSolPrestamo(dataService)
+            .then(function (oResponse) {
+              oViewModel.setProperty("/solicitudEnabled", true);
 
-          MessageBox.success(message_success, {
-            details: "Monto: " + that._formatCurrency(oData.valorPrestamo, oData.moneda) +
-              "\nCuotas: " + oData.numeroCuotas +
-              "\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda) +
-              "\nDestino: " + (oData.selectedDestino === "01" ? "Colaborador" : "Proveedor"),
-            onClose: function () {
-              that.onNavBack();
-            }
-          });
+              var message_success = "";
+              if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
+                message_success = oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_MESSAGE;
+              } else {
+                message_success = "Solicitud de Préstamo Computador creada exitosamente.";
+              }
+
+              MessageBox.success(message_success, {
+                details: "Monto: " + that._formatCurrency(oData.valorPrestamo, oData.moneda) +
+                  "\nCuotas: " + oData.numeroCuotas +
+                  "\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda) +
+                  "\nDestino: " + (oData.selectedDestino === "01" ? "Colaborador" : "Proveedor"),
+                onClose: function () {
+                  that.onNavBack();
+                }
+              });
+            })
+            .catch(function (oError) {
+              oViewModel.setProperty("/solicitudEnabled", true);
+              MessageBox.error(
+                "Error al guardar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
+                { title: "Error al guardar" }
+              );
+            });
         })
         .catch(function (oError) {
           oViewModel.setProperty("/solicitudEnabled", true);
           MessageBox.error(
-            "Error al guardar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
-            { title: "Error al guardar" }
+            "Error al validar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
+            { title: "Error de validación" }
           );
         });
     },

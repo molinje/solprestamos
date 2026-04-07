@@ -198,7 +198,7 @@ sap.ui.define([
      */
     onValorSolicitadoChange: function (oEvent) {
 
-      that = this;
+      var that = this;
       var oViewModel = this.getView().getModel("educaView");
 
       var sValue = oEvent.getParameter("value");

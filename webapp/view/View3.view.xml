@@ -23,8 +23,8 @@
                       
                         <Label text="Tipo de Educación"/>
 									<Select selectedKey="{educaView>/tipoEducacion}" width="100%">
-										<core:Item key="PRE" text="Pregrado"/>
-										<core:Item key="POS" text="Postgrado"/>
+										<core:Item key="1" text="Pregrado"/>
+										<core:Item key="2" text="Postgrado"/>
 						</Select>
 
                          <Label text="Nivel"/>

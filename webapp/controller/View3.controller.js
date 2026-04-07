@@ -3,12 +3,15 @@ sap.ui.define([
   "sap/ui/model/json/JSONModel",
   "sap/m/MessageBox",
   "sap/m/MessageToast",
-  "sap/ui/core/ListItem"
-], function (Controller, JSONModel, MessageBox, MessageToast, ListItem) {
+  "sap/ui/core/ListItem",
+  "prestamos/ccb/org/solprestamos/util/BackendService"
+], function (Controller, JSONModel, MessageBox, MessageToast, ListItem, BackendService) {
   "use strict";
 
   return Controller.extend("prestamos.ccb.org.solprestamos.controller.View3", {
     onInit: function () {
+      this._oBackendService = new BackendService();
+
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
       var programasPregrado = oGlobalModel ? oGlobalModel.getProperty("/gt_pregrado") : [];
 
@@ -198,6 +201,9 @@ sap.ui.define([
 
       var sValue = oEvent.getParameter("value");
       var fValorSolicitado = this._parseMoneyValue(sValue);
+      var tipoEducacion = oViewModel.getProperty("/tipoEducacion");
+      var nivelestudios = oViewModel.getProperty("/Nivel");
+
 
       oViewModel.setProperty("/valorSolicitado", fValorSolicitado);
 
@@ -219,6 +225,38 @@ sap.ui.define([
       if (fValorSolicitado > 0) {
         oViewModel.setProperty("/valorValueState", "None");
         oViewModel.setProperty("/valorValueStateText", "");
+      }
+
+
+    
+
+      if (fValorSolicitado && tipoEducacion && nivelestudios) {
+
+          var dataCondonado = {
+          "TIPO_ESTUDIO": tipoEducacion,
+          "SEMESTRE": nivelestudios,
+          "VALOR": fValorSolicitado
+          };
+
+
+
+        this._oBackendService.getValorCondonado(dataCondonado)
+          .then(function (oResponse) {
+            var oResult = oResponse["n0:ZCOHCMF_VALOR_CONDONADOResponse"] &&
+                          oResponse["n0:ZCOHCMF_VALOR_CONDONADOResponse"].RESPONSE;
+            if (oResult) {
+              oViewModel.setProperty("/valorCondonado", oResult.VALOR_CONDONADO);
+              MessageToast.show("Valor condonado calculado correctamente.");
+            } else {
+              MessageBox.error("No se obtuvo respuesta del servicio de condonación.", { title: "Error" });
+            }
+          })
+          .catch(function (oError) {
+            MessageBox.error(
+              "Error al consultar el valor condonado: " + (oError.message || oError.statusText || "Error desconocido"),
+              { title: "Error de condonación" }
+            );
+          });
       }
 
       this._calcularValorPrestamo();

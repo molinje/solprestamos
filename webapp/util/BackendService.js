@@ -11,6 +11,7 @@ sap.ui.define([
         _colaboradoresUrl: "/http/CCB_Colaboradores",
         _consultPrimasUrl: "/http/CCB_Consult_Prima",
         _getMemorandoUrl: "/http/CCB_Consult_Memorando",
+        _valorCondonadoUrl: "/http/CCB_Condonados",
 
         _getAppBase: function () {
             return sap.ui.require.toUrl("prestamos/ccb/org/solprestamos");
@@ -25,6 +26,15 @@ sap.ui.define([
             //return this._executePost(this._guardarPrestamosUrl, oData);
             //return this._executePost(this._getAppBase() + this._guardarPrestamosUrl, oData);
              return this._executePost(this._getAppBase() + this._guardarPrestamosUrl, oData);
+        },
+
+
+         getValorCondonado: function (oData) {
+  
+            var sUrl = this._valorCondonadoUrl;
+            var sToken = this.Get_tokenfromservice(sUrl);
+            return this._executePostService(sUrl, oData, sToken);
+
         },
 
          validarSolPrestamo: function (oData) {

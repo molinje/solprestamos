@@ -22,13 +22,13 @@
                     <VBox class="sapUiSmallMargin">
                       
                         <Label text="Tipo de Educación"/>
-									<Select selectedKey="{educaView>/tipoEducacion}" width="100%">
+									<Select selectedKey="{educaView>/tipoEducacion}" forceSelection="false" width="100%">
 										<core:Item key="1" text="Pregrado"/>
 										<core:Item key="2" text="Postgrado"/>
 						</Select>
 
                          <Label text="Nivel"/>
-									<Select selectedKey="{educaView>/Nivel}" width="100%">
+									<Select selectedKey="{educaView>/Nivel}" forceSelection="false" width="100%">
 										<core:Item key="01" text="1"/>
                                         <core:Item key="02" text="2"/>
                                         <core:Item key="03" text="3"/>
@@ -45,7 +45,7 @@
 						</Select>
 
                          <Label text="Periodicidad"/>
-									<Select selectedKey="{educaView>/Periodicidad}" width="100%">
+									<Select selectedKey="{educaView>/Periodicidad}" forceSelection="false" width="100%">
 										<core:Item key="01" text="Anual"/>
                                         <core:Item key="02" text="Cuatrimestral"/>
                                         <core:Item key="03" text="Semestral"/>
@@ -66,6 +66,7 @@
                          <Label text="N. Cuotas"/>
 									<Select
                                         selectedKey="{educaView>/NCuotas}"
+                                        forceSelection="false"
                                         width="100%"
                                         change="onCuotasChange"
                                         valueState="{educaView>/cuotasValueState}"
@@ -136,7 +137,7 @@
                             editable="false"/> 
 
                              <Label text="Origen Universidad"/>
-									<Select selectedKey="{educaView>/OrigenU}" width="100%">
+									<Select selectedKey="{educaView>/OrigenU}" forceSelection="false" width="100%">
 										<core:Item key="01" text="Colombia"/>
                                         <core:Item key="02" text="Ecuador"/>
                                         <core:Item key="03" text="Perú"/>
@@ -146,13 +147,13 @@
 						</Select>
 
                          <Label text="Descuento en Primas"/>
-									<Select selectedKey="{educaView>/DescuentoPrimas}" width="100%">
+									<Select selectedKey="{educaView>/DescuentoPrimas}" forceSelection="false" width="100%">
 										<core:Item key="NO" text="No Aplica"/>
                                         <core:Item key="SI" text="Descontar Primas"/>
 
 						</Select>
                          <Label text="Porcentaje"/>
-									<Select selectedKey="{educaView>/Porcentaje}" width="100%">
+									<Select selectedKey="{educaView>/Porcentaje}" forceSelection="false" width="100%">
 										<core:Item key="10" text="10%"/>
                                         <core:Item key="20" text="20%"/>
                                         <core:Item key="30" text="30%"/>

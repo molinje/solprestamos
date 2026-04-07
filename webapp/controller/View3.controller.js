@@ -44,7 +44,7 @@ sap.ui.define([
         Nivel: "",
         Periodicidad: "",
         OrigenU: "",
-        DescuentoPrimas: "NO",
+        DescuentoPrimas: "",
         Porcentaje: "",
 
         // Estados de validación

@@ -466,6 +466,68 @@ sap.ui.define([
       }
     },
 
+    	onCrearSolicitud: function () {
+      var oViewModel = this.getView().getModel("educaView");
+      var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+      var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
+
+      // Validar campos obligatorios
+      if (!oViewModel.getProperty("/valorSolicitado") || oViewModel.getProperty("/valorSolicitado") <= 0) {
+        MessageBox.error("Por favor ingrese un valor solicitado válido.", { title: "Error de validación" });
+        return;
+      }
+      if (!oViewModel.getProperty("/numeroCuotas") || oViewModel.getProperty("/numeroCuotas") <= 0) {
+        MessageBox.error("Por favor seleccione un número de cuotas válido.", { title: "Error de validación" });
+        return; 
+      }
+
+      // Aquí se construiría el payload para crear la solicitud de préstamo
+      var oPayload = {
+        EmployeeNumber: oViewModel.getProperty("/employeeNumber"),
+        IdPrestamo: oViewModel.getProperty("/idPrestamo"),
+       
+        ValorPrestamo: oViewModel.getProperty("/valorPrestamo"),
+        ValorCuota: oViewModel.getProperty("/ValorCuota"),
+        
+        
+       
+        Periodicidad: oViewModel.getProperty("/Periodicidad"),
+        OrigenU: oViewModel.getProperty("/OrigenU"),
+        DescuentoPrimas: oViewModel.getProperty("/DescuentoPrimas"),
+        Porcentaje: oViewModel.getProperty("/Porcentaje"),
+        ProgramaNIT: oViewModel.getProperty("/programaNIT"),
+        ProgramaTitulo: oViewModel.getProperty("/programaTitulo"),
+        ProgramaUniversidad: oViewModel.getProperty("/programaUniversidad"),
+        ProgramaCarrera: oViewModel.getProperty("/programaCarrera"),
+        TieneCodeudor: oViewModel.getProperty("/mostrarCCB") ? "Sí" : (oViewModel.getProperty("/mostrarExterno") ? "No" : "N/A"),
+        
+        CedulaCodeudor: oViewModel.getProperty("/cedulaCodeudor"),
+        DireccionCodeudor: oViewModel.getProperty("/direccionCodeudor"),
+        TelefonoCodeudor: oViewModel.getProperty("/telefonoCodeudor"),
+        
+        PERNR: oViewModel.getProperty("/employeeNumber"),
+        SUBTY: oPrestamoSeleccionado.PrestamoId,
+        DARBT: oViewModel.getProperty("/valorSolicitado"),
+        DATBW: new Date().toISOString().slice(0, 10),
+        DBTCU: oViewModel.getProperty("/moneda"),
+        ZNUEXT: oViewModel.getProperty("/numeroEmpleadoCodeudor"),
+        ZNOEXT: oViewModel.getProperty("/nombreCodeudor"),
+        ZFORP1: oViewModel.getProperty("/Nivel"),
+        ZFORPE: oViewModel.getProperty("/Nivel"),
+        ZTIEPE: oViewModel.getProperty("/tipoEducacion"),
+        ZVALPE: oViewModel.getProperty("/valorSolicitado"),
+        ZVALPEE: oViewModel.getProperty("/ValorPagar"),
+        ZPORPEE: oViewModel.getProperty("/porcPrestamo"),
+        ZPORPEC: oViewModel.getProperty("/porcCondonado"),
+        ZVALPEC: oViewModel.getProperty("/valorCondonado"),
+        ZNUCUPE: oViewModel.getProperty("/numeroCuotas"),
+        ZVALCOPE: oViewModel.getProperty("/valorCondonado"),
+        ZVALREPE: oViewModel.getProperty("/ValorPagar"),
+        ZNOTITU: oViewModel.getProperty("/programaTitulo"),
+        ZNOMFOR: oViewModel.getProperty("/programaTitulo")
+      };
+      },
+
     onNavBack: function () {
       var oRouter = this.getOwnerComponent().getRouter();
       oRouter.navTo("RouteViewini");

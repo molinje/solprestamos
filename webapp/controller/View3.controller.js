@@ -428,7 +428,7 @@ sap.ui.define([
       if (this._oDialogCodeudor3 === undefined) {
         this._oDialogCodeudor3 = sap.ui.xmlfragment(
           this.getView().getId(),
-          "prestamos.ccb.org.solprestamos.view.IdentifCodeudorVHelp",
+          "prestamos.ccb.org.solprestamos.view.IdentifCodeudorVHelpEduca",
           this
         );
         this.getView().addDependent(this._oDialogCodeudor3);

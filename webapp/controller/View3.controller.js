@@ -246,6 +246,7 @@ sap.ui.define([
                           oResponse["n0:ZCOHCMF_VALOR_CONDONADOResponse"].RESPONSE;
             if (oResult) {
               oViewModel.setProperty("/valorCondonado", oResult.VALOR_CONDONADO);
+               this._calcularValorPrestamo();
               MessageToast.show("Valor condonado calculado correctamente.");
             } else {
               MessageBox.error("No se obtuvo respuesta del servicio de condonación.", { title: "Error" });
@@ -256,10 +257,11 @@ sap.ui.define([
               "Error al consultar el valor condonado: " + (oError.message || oError.statusText || "Error desconocido"),
               { title: "Error de condonación" }
             );
+             this._calcularValorPrestamo();
           });
       }
 
-      this._calcularValorPrestamo();
+     
     },
 
     /**

@@ -58,9 +58,17 @@ sap.ui.define([
         cuotasValueState: "None",
         cuotasValueStateText: "",
 
-        // Otros
+        // Codeudor
         tieneCodeudor: -1,
-        numeroDocumento: "",
+        mostrarCCB: false,
+        mostrarExterno: false,
+        nombreCodeudor: "",
+        cedulaCodeudor: "",
+        numeroEmpleadoCodeudor: "",
+        direccionCodeudor: "",
+        telefonoCodeudor: "",
+
+        // Otros
         solicitudEnabled: true,
         adjuntos: [],
         programasPregrado: programasPregrado,
@@ -74,6 +82,8 @@ sap.ui.define([
       });
 
       this.getView().setModel(oViewModel, "educaView");
+
+      this._wizard = this.byId("wizardEduca");
 
       // Suscribirse al evento de ruta
       var oRouter = this.getOwnerComponent().getRouter();
@@ -362,6 +372,98 @@ sap.ui.define([
         maxFractionDigits: 0
       });
       return oFormat.format(fValue, sCurrency);
+    },
+
+    /**
+     * Muestra u oculta los campos del codeudor según si es empleado CCB o externo.
+     * index 0 = "Sí" (empleado CCB), index 1 = "No" (externo)
+     */
+    onCodeudorTypeSelect3: function (oEvent) {
+      var iIndex = oEvent.getParameter("selectedIndex");
+      var oViewModel = this.getView().getModel("educaView");
+
+      oViewModel.setProperty("/mostrarCCB", iIndex === 0);
+      oViewModel.setProperty("/mostrarExterno", iIndex === 1);
+
+      if (iIndex === 0) {
+        oViewModel.setProperty("/nombreCodeudor", "");
+        oViewModel.setProperty("/cedulaCodeudor", "");
+        oViewModel.setProperty("/direccionCodeudor", "");
+        oViewModel.setProperty("/telefonoCodeudor", "");
+      } else {
+        oViewModel.setProperty("/nombreCodeudor", "");
+        oViewModel.setProperty("/numeroEmpleadoCodeudor", "");
+        oViewModel.setProperty("/cedulaCodeudor", "");
+      }
+      this.onStepCodeudorActivate3();
+    },
+
+    /**
+     * Valida o invalida el step02 según si el codeudor tiene datos completos.
+     */
+    onStepCodeudorActivate3: function () {
+      var oViewModel = this.getView().getModel("educaView");
+      var sNombre = oViewModel.getProperty("/nombreCodeudor");
+      var sCedula = oViewModel.getProperty("/cedulaCodeudor");
+
+      if ((sNombre && sNombre.trim() !== "") && (sCedula && sCedula.trim() !== "")) {
+        this._wizard.validateStep(this.byId("step02"));
+      } else {
+        this._wizard.invalidateStep(this.byId("step02"));
+      }
+    },
+
+    /**
+     * Abre el diálogo de ayuda para buscar un colaborador CCB.
+     */
+    onIdentificacionValueHelp3: function () {
+      var sIdentificacion = String(this.byId("inputIdentificacion3").getValue()).trim();
+      var oColaborador = this._oBackendService.Get_colaborador(sIdentificacion);
+      var oViewModel = this.getView().getModel("educaView");
+
+      if (oColaborador !== undefined) {
+        oViewModel.setProperty("/Codeudores", oColaborador);
+      }
+
+      if (this._oDialogCodeudor3 === undefined) {
+        this._oDialogCodeudor3 = sap.ui.xmlfragment(
+          this.getView().getId(),
+          "prestamos.ccb.org.solprestamos.view.IdentifCodeudorVHelp",
+          this
+        );
+        this.getView().addDependent(this._oDialogCodeudor3);
+      }
+      this._oDialogCodeudor3.open();
+    },
+
+    /**
+     * Selecciona un colaborador de la tabla del diálogo y lo carga en el modelo.
+     */
+    onCodeudorSelect: function (oEvent) {
+      var documento = oEvent.getSource().getBindingContext("educaView").getObject().PERID;
+      var nombre = oEvent.getSource().getBindingContext("educaView").getObject().ENAME;
+      var numeroEmpleado = oEvent.getSource().getBindingContext("educaView").getObject().PERNR;
+      var oViewModel = this.getView().getModel("educaView");
+
+      if (oViewModel !== undefined) {
+        oViewModel.setProperty("/nombreCodeudor", nombre);
+        oViewModel.setProperty("/numeroEmpleadoCodeudor", numeroEmpleado);
+        oViewModel.setProperty("/cedulaCodeudor", documento);
+        this._wizard.validateStep(this.byId("step02"));
+        MessageToast.show("Codeudor seleccionado: " + nombre);
+      }
+      if (this._oDialogCodeudor3) {
+        this._oDialogCodeudor3.close();
+      }
+    },
+
+    /**
+     * Cierra el diálogo de búsqueda de codeudor.
+     */
+    onCloseIdentifCodeudorVHelp: function () {
+      if (this._oDialogCodeudor3) {
+        this._oDialogCodeudor3.close();
+      }
     },
 
     onNavBack: function () {

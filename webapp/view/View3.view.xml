@@ -203,26 +203,95 @@
                     </layout:Grid>
                 </WizardStep>
                 
-                <!-- Paso 2: Información del Solicitante -->
+                <!-- Paso 2: Datos del codeudor -->
                 <WizardStep
                     id="step02"
-                    title="Información del Solicitante"
-                    validated="true">
+                    title="Datos codeudor"
+                    validated="false"
+                    activate="onStepCodeudorActivate3">
                     <VBox class="sapUiSmallMargin">
-                        <Label text="¿Tiene codeudor?" class="sapUiSmallMarginBottom"/>
-                        <RadioButtonGroup
-                            id="rbGroupCodeudor3"
-                            selectedIndex="{educaView>/tieneCodeudor}">
-                            <RadioButton text="Sí"/>
-                            <RadioButton text="No"/>
-                        </RadioButtonGroup>
-                        
-                        <Label text="Número de Documento" labelFor="inputDocumento" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
-                        <Input
-                            id="inputDocumento3"
-                            value="{educaView>/numeroDocumento}"
-                            width="100%"
-                            placeholder="Ingrese número de documento"/>
+                        <form:SimpleForm editable="true" layout="ResponsiveGridLayout">
+
+                            <Label text="¿Codeudor es trabajador de la CCB?" class="sapUiSmallMarginBottom"/>
+                            <RadioButtonGroup
+                                id="rbGroupCodeudor3"
+                                selectedIndex="{educaView>/tieneCodeudor}"
+                                select="onCodeudorTypeSelect3">
+                                <RadioButton text="Sí"/>
+                                <RadioButton text="No"/>
+                            </RadioButtonGroup>
+
+                            <!-- Codeudor CCB (empleado interno) -->
+                            <Label text="Búsqueda colaborador" labelFor="inputIdentificacion3" visible="{educaView>/mostrarCCB}"/>
+                            <Input
+                                id="inputIdentificacion3"
+                                showValueHelp="true"
+                                valueHelpRequest="onIdentificacionValueHelp3"
+                                placeholder="Busque por nombre o identificación"
+                                visible="{educaView>/mostrarCCB}"/>
+
+                            <Label text="Nombre" labelFor="CodeudorNombre3" visible="{educaView>/mostrarCCB}"/>
+                            <Input
+                                id="CodeudorNombre3"
+                                value="{educaView>/nombreCodeudor}"
+                                editable="false"
+                                width="100%"
+                                visible="{educaView>/mostrarCCB}"/>
+
+                            <Label text="Núm. de empleado" labelFor="CodeudorNumEmpleado3" visible="{educaView>/mostrarCCB}"/>
+                            <Input
+                                id="CodeudorNumEmpleado3"
+                                value="{educaView>/numeroEmpleadoCodeudor}"
+                                editable="false"
+                                width="100%"
+                                visible="{educaView>/mostrarCCB}"/>
+
+                            <Label text="Cédula" labelFor="CodeudorCedula3" visible="{educaView>/mostrarCCB}"/>
+                            <Input
+                                id="CodeudorCedula3"
+                                value="{educaView>/cedulaCodeudor}"
+                                editable="false"
+                                width="100%"
+                                visible="{educaView>/mostrarCCB}"/>
+
+                            <!-- Codeudor externo -->
+                            <Label text="Nombre" labelFor="CodeudorNombreEx3" visible="{educaView>/mostrarExterno}"/>
+                            <Input
+                                id="CodeudorNombreEx3"
+                                value="{educaView>/nombreCodeudor}"
+                                editable="true"
+                                width="100%"
+                                visible="{educaView>/mostrarExterno}"
+                                change="onStepCodeudorActivate3"/>
+
+                            <Label text="Cédula" labelFor="CodeudorCedulaEx3" visible="{educaView>/mostrarExterno}"/>
+                            <Input
+                                id="CodeudorCedulaEx3"
+                                value="{educaView>/cedulaCodeudor}"
+                                editable="true"
+                                width="100%"
+                                visible="{educaView>/mostrarExterno}"
+                                change="onStepCodeudorActivate3"/>
+
+                            <Label text="Dirección" labelFor="CodeudorDireccionEx3" visible="{educaView>/mostrarExterno}"/>
+                            <Input
+                                id="CodeudorDireccionEx3"
+                                value="{educaView>/direccionCodeudor}"
+                                editable="true"
+                                width="100%"
+                                visible="{educaView>/mostrarExterno}"
+                                change="onStepCodeudorActivate3"/>
+
+                            <Label text="Teléfono" labelFor="CodeudorTelefonoEx3" visible="{educaView>/mostrarExterno}"/>
+                            <Input
+                                id="CodeudorTelefonoEx3"
+                                value="{educaView>/telefonoCodeudor}"
+                                editable="true"
+                                width="100%"
+                                visible="{educaView>/mostrarExterno}"
+                                change="onStepCodeudorActivate3"/>
+
+                        </form:SimpleForm>
                     </VBox>
                 </WizardStep>
                 

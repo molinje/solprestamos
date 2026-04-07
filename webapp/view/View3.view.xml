@@ -96,6 +96,15 @@
                             editable="false"
                             />
 
+                          <Label text="Valor condonado" labelFor="inputValorCondonado" />
+                          <Input
+                            id="inputValorCondonado"
+                            value="{educaView>/ValorCondonado}"
+                            type="Number"
+                            width="100%"
+                            editable="false"
+                            />   
+
                         
                          <Label text="Valor cuota" labelFor="inputValorValorCuota" />
                           <Input

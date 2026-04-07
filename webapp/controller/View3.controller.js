@@ -291,6 +291,8 @@ sap.ui.define([
 
       var fValorSolicitado = oViewModel.getProperty("/valorSolicitado") || 0;
       var iNumeroCuotas = oViewModel.getProperty("/numeroCuotas") || 0;
+      var fValorCondonado = oViewModel.getProperty("/valorCondonado") || 0;
+      var fValorPagar = fValorSolicitado - fValorCondonado; 
 
       if (fValorSolicitado <= 0 || iNumeroCuotas <= 0) {
         oViewModel.setProperty("/valorPrestamo", 0);
@@ -299,11 +301,15 @@ sap.ui.define([
         return;
       }
 
-      var fValorCuota = Math.round(fValorSolicitado / iNumeroCuotas);
-
       oViewModel.setProperty("/valorPrestamo", Math.round(fValorSolicitado));
-      oViewModel.setProperty("/ValorPagar", Math.round(fValorSolicitado));
-      oViewModel.setProperty("/ValorCuota", fValorCuota);
+
+      oViewModel.setProperty("/ValorPagar", Math.round(fValorPagar));
+
+      if ((fValorPagar > 0 && iNumeroCuotas > 0 ) && ( fValorPagar > iNumeroCuotas)) {
+        var fValorCuota = Math.round(fValorPagar / iNumeroCuotas);
+        oViewModel.setProperty("/ValorCuota", fValorCuota);
+      } 
+
 
       MessageToast.show("Cuota: " + this._formatCurrency(fValorCuota, "COP"));
     },

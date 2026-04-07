@@ -41,6 +41,7 @@ sap.ui.define([
 				montoMaximo: 0,             // Monto máximo a solicitar (se carga desde globalData al navegar)
 				valorSolicitado: 0,         // Valor que ingresa el usuario
 				valorPrestamo: 0,           // Valor calculado del préstamo
+				ValorCondonado: 0,          // Valor condonado (si aplica)
 				valorCuota: 0,              // Valor de cada cuota
 				valorComprometido: 0,       // Valor comprometido
 				valorTotalPrimas: 0,         // Valor total de primas a descontar

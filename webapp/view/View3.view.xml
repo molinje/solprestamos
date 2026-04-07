@@ -19,159 +19,188 @@
                     id="step01"
                     title="Datos del Préstamo"
                     validated="true">
-                    <VBox class="sapUiSmallMargin">
-                      
-                        <Label text="Tipo de Educación"/>
-									<Select selectedKey="{educaView>/tipoEducacion}" forceSelection="false" width="100%">
-										<core:Item key="1" text="Pregrado"/>
-										<core:Item key="2" text="Postgrado"/>
-						</Select>
+                    <!-- Grid responsivo: 2 columnas en L/M, 1 columna en S -->
+                    <layout:Grid defaultSpan="L6 M6 S12" class="sapUiSmallMargin">
 
-                         <Label text="Nivel"/>
-									<Select selectedKey="{educaView>/Nivel}" forceSelection="false" width="100%">
-										<core:Item key="01" text="1"/>
-                                        <core:Item key="02" text="2"/>
-                                        <core:Item key="03" text="3"/>
-                                        <core:Item key="04" text="4"/>
-                                        <core:Item key="05" text="5"/>
-                                        <core:Item key="06" text="6"/>
-                                        <core:Item key="07" text="7"/>
-                                        <core:Item key="08" text="8"/>
-                                        <core:Item key="09" text="9"/>
-                                        <core:Item key="10" text="10"/>
-                                         <core:Item key="11" text="11"/>
-                                        <core:Item key="12" text="12"/>
+                        <!-- Fila 1: Tipo de Educación | Nivel -->
+                        <VBox>
+                            <Label text="Tipo de Educación"/>
+                            <Select selectedKey="{educaView>/tipoEducacion}" forceSelection="false" width="100%">
+                                <core:Item key="1" text="Pregrado"/>
+                                <core:Item key="2" text="Postgrado"/>
+                            </Select>
+                        </VBox>
+                        <VBox>
+                            <Label text="Nivel"/>
+                            <Select selectedKey="{educaView>/Nivel}" forceSelection="false" width="100%">
+                                <core:Item key="01" text="1"/>
+                                <core:Item key="02" text="2"/>
+                                <core:Item key="03" text="3"/>
+                                <core:Item key="04" text="4"/>
+                                <core:Item key="05" text="5"/>
+                                <core:Item key="06" text="6"/>
+                                <core:Item key="07" text="7"/>
+                                <core:Item key="08" text="8"/>
+                                <core:Item key="09" text="9"/>
+                                <core:Item key="10" text="10"/>
+                                <core:Item key="11" text="11"/>
+                                <core:Item key="12" text="12"/>
+                            </Select>
+                        </VBox>
 
-						</Select>
+                        <!-- Fila 2: Periodicidad | N. Cuotas -->
+                        <VBox>
+                            <Label text="Periodicidad"/>
+                            <Select selectedKey="{educaView>/Periodicidad}" forceSelection="false" width="100%">
+                                <core:Item key="01" text="Anual"/>
+                                <core:Item key="02" text="Cuatrimestral"/>
+                                <core:Item key="03" text="Semestral"/>
+                            </Select>
+                        </VBox>
+                        <VBox>
+                            <Label text="N. Cuotas"/>
+                            <Select
+                                selectedKey="{educaView>/NCuotas}"
+                                forceSelection="false"
+                                width="100%"
+                                change="onCuotasChange"
+                                valueState="{educaView>/cuotasValueState}"
+                                valueStateText="{educaView>/cuotasValueStateText}">
+                                <core:Item key="05" text="5"/>
+                                <core:Item key="10" text="10"/>
+                            </Select>
+                        </VBox>
 
-                         <Label text="Periodicidad"/>
-									<Select selectedKey="{educaView>/Periodicidad}" forceSelection="false" width="100%">
-										<core:Item key="01" text="Anual"/>
-                                        <core:Item key="02" text="Cuatrimestral"/>
-                                        <core:Item key="03" text="Semestral"/>
+                        <!-- Fila 3: Valor Solicitado | Valor Préstamo -->
+                        <VBox>
+                            <Label text="Valor Solicitado" labelFor="inputValorSolicitado"/>
+                            <Input
+                                id="inputValorSolicitado"
+                                value="{educaView>/valorSolicitado}"
+                                type="Number"
+                                width="100%"
+                                placeholder="Ingrese el valor solicitado"
+                                change="onValorSolicitadoChange"
+                                valueState="{educaView>/valorValueState}"
+                                valueStateText="{educaView>/valorValueStateText}"/>
+                        </VBox>
+                        <VBox>
+                            <Label text="Valor Préstamo" labelFor="inputValorPrestamo"/>
+                            <Input
+                                id="inputValorPrestamo"
+                                value="{educaView>/valorPrestamo}"
+                                type="Number"
+                                width="100%"
+                                editable="false"/>
+                        </VBox>
 
-						</Select>
+                        <!-- Fila 4: Valor a pagar | Valor condonado -->
+                        <VBox>
+                            <Label text="Valor a pagar" labelFor="inputValorValorPagar"/>
+                            <Input
+                                id="inputValorValorPagar"
+                                value="{educaView>/ValorPagar}"
+                                type="Number"
+                                width="100%"
+                                editable="false"/>
+                        </VBox>
+                        <VBox>
+                            <Label text="Valor condonado" labelFor="inputValorCondonado"/>
+                            <Input
+                                id="inputValorCondonado"
+                                value="{educaView>/valorCondonado}"
+                                type="Number"
+                                width="100%"
+                                editable="false"/>
+                        </VBox>
 
-                         <Label text="Valor Solicitado" labelFor="inputValorSolicitado" />
-                        <Input
-                            id="inputValorSolicitado"
-                            value="{educaView>/valorSolicitado}"
-                            type="Number"
-                            width="100%"
-                            placeholder="Ingrese el valor solicitado"
-                            change="onValorSolicitadoChange"
-                            valueState="{educaView>/valorValueState}"
-                            valueStateText="{educaView>/valorValueStateText}"/>
+                        <!-- Fila 5: Valor cuota (columna izquierda) -->
+                        <VBox>
+                            <Label text="Valor cuota" labelFor="inputValorValorCuota"/>
+                            <Input
+                                id="inputValorValorCuota"
+                                value="{educaView>/ValorCuota}"
+                                type="Number"
+                                width="100%"
+                                editable="false"/>
+                        </VBox>
+                        <VBox/>
 
-                         <Label text="N. Cuotas"/>
-									<Select
-                                        selectedKey="{educaView>/NCuotas}"
-                                        forceSelection="false"
-                                        width="100%"
-                                        change="onCuotasChange"
-                                        valueState="{educaView>/cuotasValueState}"
-                                        valueStateText="{educaView>/cuotasValueStateText}">
-										<core:Item key="05" text="5"/>
-                                        <core:Item key="10" text="10"/>
+                        <!-- Buscador de programa: ancho completo siempre -->
+                        <VBox>
+                            <layoutData>
+                                <layout:GridData span="L12 M12 S12"/>
+                            </layoutData>
+                            <Label text="Buscar Programa / Universidad" labelFor="selectProgPregado"/>
+                            <Input
+                                id="selectProgPregado"
+                                width="100%"
+                                placeholder="Digite título, carrera o universidad para buscar..."
+                                showSuggestion="true"
+                                suggest="onSuggestPrograma"
+                                suggestionItemSelected="onProgramaSeleccionado"
+                                value="{educaView>/programaBusqueda}"/>
+                        </VBox>
 
-						</Select>    
+                        <!-- Fila 6: Título del Programa | Universidad -->
+                        <VBox>
+                            <Label text="Título del Programa"/>
+                            <Input
+                                id="inputProgTitulo"
+                                value="{educaView>/programaTitulo}"
+                                width="100%"
+                                editable="false"/>
+                        </VBox>
+                        <VBox>
+                            <Label text="Universidad"/>
+                            <Input
+                                id="inputProgUniversidad"
+                                value="{educaView>/programaUniversidad}"
+                                width="100%"
+                                editable="false"/>
+                        </VBox>
 
-                       
+                        <!-- Fila 7: Carrera / Programa | Origen Universidad -->
+                        <VBox>
+                            <Label text="Carrera / Programa"/>
+                            <Input
+                                id="inputProgCarrera"
+                                value="{educaView>/programaCarrera}"
+                                width="100%"
+                                editable="false"/>
+                        </VBox>
+                        <VBox>
+                            <Label text="Origen Universidad"/>
+                            <Select selectedKey="{educaView>/OrigenU}" forceSelection="false" width="100%">
+                                <core:Item key="01" text="Colombia"/>
+                                <core:Item key="02" text="Ecuador"/>
+                                <core:Item key="03" text="Perú"/>
+                                <core:Item key="04" text="Brasil"/>
+                                <core:Item key="05" text="España"/>
+                                <core:Item key="06" text="EE.UU."/>
+                            </Select>
+                        </VBox>
 
-                         
-                       <Label text="Valor Préstamo" labelFor="inputValorPrestamo" />
-                          <Input
-                            id="inputValorPrestamo"
-                            value="{educaView>/valorPrestamo}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />
-                          <Label text="Valor a pagar" labelFor="inputValorValorPagar" />
-                          <Input
-                            id="inputValorValorPagar"
-                            value="{educaView>/ValorPagar}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />
+                        <!-- Fila 8: Descuento en Primas | Porcentaje -->
+                        <VBox>
+                            <Label text="Descuento en Primas"/>
+                            <Select selectedKey="{educaView>/DescuentoPrimas}" forceSelection="false" width="100%">
+                                <core:Item key="NO" text="No Aplica"/>
+                                <core:Item key="SI" text="Descontar Primas"/>
+                            </Select>
+                        </VBox>
+                        <VBox>
+                            <Label text="Porcentaje"/>
+                            <Select selectedKey="{educaView>/Porcentaje}" forceSelection="false" width="100%">
+                                <core:Item key="10" text="10%"/>
+                                <core:Item key="20" text="20%"/>
+                                <core:Item key="30" text="30%"/>
+                                <core:Item key="40" text="40%"/>
+                                <core:Item key="50" text="50%"/>
+                            </Select>
+                        </VBox>
 
-                          <Label text="Valor condonado" labelFor="inputValorCondonado" />
-                          <Input
-                            id="inputValorCondonado"
-                            value="{educaView>/ValorCondonado}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />   
-
-                        
-                         <Label text="Valor cuota" labelFor="inputValorValorCuota" />
-                          <Input
-                            id="inputValorValorCuota"
-                            value="{educaView>/ValorCuota}"
-                            type="Number"
-                            width="100%"
-                            editable="false"
-                            />
-
-                            <!-- Buscador de programa académico (pregrado) -->
-                        <Label text="Buscar Programa / Universidad" labelFor="selectProgPregado"/>
-                        <Input
-                            id="selectProgPregado"
-                            width="100%"
-                            placeholder="Digite título, carrera o universidad para buscar..."
-                            showSuggestion="true"
-                            suggest="onSuggestPrograma"
-                            suggestionItemSelected="onProgramaSeleccionado"
-                            value="{educaView>/programaBusqueda}"/>
-
-                        <Label text="Título del Programa"/>
-                        <Input
-                            id="inputProgTitulo"
-                            value="{educaView>/programaTitulo}"
-                            width="100%"
-                            editable="false"/>
-                        <Label text="Universidad"/>
-                        <Input
-                            id="inputProgUniversidad"
-                            value="{educaView>/programaUniversidad}"
-                            width="100%"
-                            editable="false"/>
-                        <Label text="Carrera / Programa"/>
-                        <Input
-                            id="inputProgCarrera"
-                            value="{educaView>/programaCarrera}"
-                            width="100%"
-                            editable="false"/> 
-
-                             <Label text="Origen Universidad"/>
-									<Select selectedKey="{educaView>/OrigenU}" forceSelection="false" width="100%">
-										<core:Item key="01" text="Colombia"/>
-                                        <core:Item key="02" text="Ecuador"/>
-                                        <core:Item key="03" text="Perú"/>
-                                        <core:Item key="04" text="Brasil"/>
-                                        <core:Item key="05" text="España"/>
-                                        <core:Item key="06" text="EE.UU."/>
-						</Select>
-
-                         <Label text="Descuento en Primas"/>
-									<Select selectedKey="{educaView>/DescuentoPrimas}" forceSelection="false" width="100%">
-										<core:Item key="NO" text="No Aplica"/>
-                                        <core:Item key="SI" text="Descontar Primas"/>
-
-						</Select>
-                         <Label text="Porcentaje"/>
-									<Select selectedKey="{educaView>/Porcentaje}" forceSelection="false" width="100%">
-										<core:Item key="10" text="10%"/>
-                                        <core:Item key="20" text="20%"/>
-                                        <core:Item key="30" text="30%"/>
-                                        <core:Item key="40" text="40%"/>
-                                        <core:Item key="50" text="50%"/>
-
-						</Select>                     
-                
-                    </VBox>
+                    </layout:Grid>
                 </WizardStep>
                 
                 <!-- Paso 2: Información del Solicitante -->

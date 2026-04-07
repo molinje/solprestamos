@@ -32,6 +32,11 @@ sap.ui.define([
         ValorPagar: 0,
         ValorCuota: 0,
 
+        // Condonación
+        valorCondonado: 0,
+        porcCondonado: 0,
+        porcPrestamo: 0,
+
         // Configuración de moneda
 				moneda: "COP",              // Código de moneda (Peso Colombiano)
 
@@ -244,9 +249,18 @@ sap.ui.define([
 
         this._oBackendService.getValorCondonado(dataCondonado)
           .then(function (oResponse) {
+            var porcCondonado = "";
+            var porcPrestamo = "";
+
             var oResult = oResponse["n0:ZCOHCMF_VALOR_CONDONADOResponse"] &&
                           oResponse["n0:ZCOHCMF_VALOR_CONDONADOResponse"].RESPONSE;
             if (oResult) {
+              porcCondonado = parseFloat(oResult.PORCENTAJE_CONDONADO ? oResult.PORCENTAJE_CONDONADO.trim() : "0").toFixed(2);
+              porcPrestamo = parseFloat(oResult.PORCENTAJE_PRESTAMO ? oResult.PORCENTAJE_PRESTAMO.trim() : "0").toFixed(2);
+              
+              oViewModel.setProperty("/porcCondonado", porcCondonado);
+              oViewModel.setProperty("/porcPrestamo", porcPrestamo);
+
               oViewModel.setProperty("/valorCondonado", oResult.VALOR_CONDONADO);
                that._calcularValorPrestamo();
               MessageToast.show("Valor condonado calculado correctamente.");

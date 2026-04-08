@@ -504,6 +504,7 @@ sap.ui.define([
         ZVALPEC: "",
         ZNUCUPE: "",
         ZVALCOPE: "",
+        ZVALSO: "",
         ZVALREPE: "",
         ZNOTITU: "",
         ZNOMFOR: "",
@@ -575,7 +576,9 @@ sap.ui.define([
       }
 
       if (lv_DARBT && lv_DARBT > 0) {
-        oPayload.DARBT = lv_DARBT;
+        //oPayload.DARBT =  lv_DARBT;
+        oPayload.DARBT = (parseFloat(lv_DARBT) / 100).toFixed(2);
+        oPayload.ZVALSO = (parseFloat(lv_DARBT) / 100).toFixed(2);
       } else {
 
         MessageBox.error(
@@ -714,15 +717,15 @@ sap.ui.define([
       }
 
       if (lv_ZVALPEC && lv_ZVALPEC > 0) {
-        oPayload.ZVALPEC = lv_ZVALPEC;
+        oPayload.ZVALPEC = (parseFloat(lv_ZVALPEC) / 100).toFixed(2);
       }
 
       if (lv_ZVALCOPE && lv_ZVALCOPE > 0) {
-        oPayload.ZVALCOPE = lv_ZVALCOPE;
+        oPayload.ZVALCOPE = (parseFloat(lv_ZVALCOPE) / 100).toFixed(2);
       }
 
       if (lv_ZVALREPE && lv_ZVALREPE > 0) {
-        oPayload.ZVALREPE = lv_ZVALREPE;
+        oPayload.ZVALREPE = (parseFloat(lv_ZVALREPE) / 100).toFixed(2);
       }
 
 

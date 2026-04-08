@@ -273,8 +273,10 @@ sap.ui.define([
 			var oData = oViewModel.getData();
 
 			if (oData.valorPrestamo > 0) {
-				dataSolic.DARBT = oData.valorPrestamo;
-				dataSolic.ZVALSO = oData.valorPrestamo;
+				//dataSolic.DARBT = oData.valorPrestamo;
+				//dataSolic.ZVALSO = oData.valorPrestamo;
+				dataSolic.DARBT = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
+				dataSolic.ZVALSO = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
 			} else {
 				MessageBox.error("Por favor registre el valor a solicitar");
 				return;

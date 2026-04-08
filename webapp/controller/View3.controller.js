@@ -38,7 +38,7 @@ sap.ui.define([
         porcPrestamo: 0,
 
         // Configuración de moneda
-				moneda: "COP",              // Código de moneda (Peso Colombiano)
+        moneda: "COP",              // Código de moneda (Peso Colombiano)
 
         // Cuotas
         NCuotas: "",
@@ -161,8 +161,8 @@ sap.ui.define([
 
       this._aUltimosFiltrados = aProgramas.filter(function (oP) {
         return (oP.TITULO && oP.TITULO.toLowerCase().indexOf(sQueryLower) !== -1) ||
-               (oP.NAME1  && oP.NAME1.toLowerCase().indexOf(sQueryLower)  !== -1) ||
-               (oP.NAME2  && oP.NAME2.toLowerCase().indexOf(sQueryLower)  !== -1);
+          (oP.NAME1 && oP.NAME1.toLowerCase().indexOf(sQueryLower) !== -1) ||
+          (oP.NAME2 && oP.NAME2.toLowerCase().indexOf(sQueryLower) !== -1);
       });
 
       this._aUltimosFiltrados.forEach(function (oP) {
@@ -183,7 +183,7 @@ sap.ui.define([
       var oItem = oEvent.getParameter("selectedItem");
       if (!oItem) { return; }
 
-      var sTitulo      = oItem.getText();
+      var sTitulo = oItem.getText();
       var sUniversidad = oItem.getAdditionalText ? oItem.getAdditionalText() : "";
 
       // Buscar en el último conjunto filtrado (scope reducido = más rápido y exacto)
@@ -201,11 +201,11 @@ sap.ui.define([
       if (!oPrograma) { return; }
 
       var oViewModel = this.getView().getModel("educaView");
-      oViewModel.setProperty("/programaNIT",         oPrograma.NIT);
-      oViewModel.setProperty("/programaTitulo",      oPrograma.TITULO);
+      oViewModel.setProperty("/programaNIT", oPrograma.NIT);
+      oViewModel.setProperty("/programaTitulo", oPrograma.TITULO);
       oViewModel.setProperty("/programaUniversidad", oPrograma.NAME1);
-      oViewModel.setProperty("/programaCarrera",     oPrograma.NAME2);
-      oViewModel.setProperty("/programaBusqueda",    oPrograma.TITULO + " — " + oPrograma.NAME1);
+      oViewModel.setProperty("/programaCarrera", oPrograma.NAME2);
+      oViewModel.setProperty("/programaBusqueda", oPrograma.TITULO + " — " + oPrograma.NAME1);
     },
 
     /**
@@ -245,15 +245,15 @@ sap.ui.define([
       }
 
 
-    
+
 
       if (fValorSolicitado && tipoEducacion && nivelestudios) {
 
-          var dataCondonado = {
+        var dataCondonado = {
           "TIPO_ESTUDIO": tipoEducacion,
           "SEMESTRE": nivelestudios,
           "VALOR": fValorSolicitado
-          };
+        };
 
 
 
@@ -263,16 +263,16 @@ sap.ui.define([
             var porcPrestamo = "";
 
             var oResult = oResponse["n0:ZCOHCMF_VALOR_CONDONADOResponse"] &&
-                          oResponse["n0:ZCOHCMF_VALOR_CONDONADOResponse"].RESPONSE;
+              oResponse["n0:ZCOHCMF_VALOR_CONDONADOResponse"].RESPONSE;
             if (oResult) {
               porcCondonado = parseFloat(oResult.PORCENTAJE_CONDONADO ? oResult.PORCENTAJE_CONDONADO.trim() : "0").toFixed(2);
               porcPrestamo = parseFloat(oResult.PORCENTAJE_PRESTAMO ? oResult.PORCENTAJE_PRESTAMO.trim() : "0").toFixed(2);
-              
+
               oViewModel.setProperty("/porcCondonado", porcCondonado);
               oViewModel.setProperty("/porcPrestamo", porcPrestamo);
 
               oViewModel.setProperty("/valorCondonado", oResult.VALOR_CONDONADO);
-               that._calcularValorPrestamo();
+              that._calcularValorPrestamo();
               MessageToast.show("Valor condonado calculado correctamente.");
             } else {
               MessageBox.error("No se obtuvo respuesta del servicio de condonación.", { title: "Error" });
@@ -283,11 +283,11 @@ sap.ui.define([
               "Error al consultar el valor condonado: " + (oError.message || oError.statusText || "Error desconocido"),
               { title: "Error de condonación" }
             );
-             that._calcularValorPrestamo();
+            that._calcularValorPrestamo();
           });
       }
 
-     
+
     },
 
     /**
@@ -320,7 +320,7 @@ sap.ui.define([
       var fValorSolicitado = oViewModel.getProperty("/valorSolicitado") || 0;
       var iNumeroCuotas = oViewModel.getProperty("/numeroCuotas") || 0;
       var fValorCondonado = oViewModel.getProperty("/valorCondonado") || 0;
-      var fValorPagar = fValorSolicitado - fValorCondonado; 
+      var fValorPagar = fValorSolicitado - fValorCondonado;
 
       if (fValorSolicitado <= 0 || iNumeroCuotas <= 0) {
         oViewModel.setProperty("/valorPrestamo", 0);
@@ -333,10 +333,10 @@ sap.ui.define([
 
       oViewModel.setProperty("/ValorPagar", Math.round(fValorPagar));
 
-      if ((fValorPagar > 0 && iNumeroCuotas > 0 ) && ( fValorPagar > iNumeroCuotas)) {
+      if ((fValorPagar > 0 && iNumeroCuotas > 0) && (fValorPagar > iNumeroCuotas)) {
         var fValorCuota = Math.round(fValorPagar / iNumeroCuotas);
         oViewModel.setProperty("/ValorCuota", fValorCuota);
-      } 
+      }
 
 
       MessageToast.show("Cuota: " + this._formatCurrency(fValorCuota, "COP"));
@@ -466,10 +466,11 @@ sap.ui.define([
       }
     },
 
-    	onCrearSolicitud: function () {
+    onCrearSolicitud: function () {
       var oViewModel = this.getView().getModel("educaView");
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
       var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
+      var iIndexCod = oViewModel.getProperty("/tieneCodeudor");
 
       // Validar campos obligatorios
       if (!oViewModel.getProperty("/valorSolicitado") || oViewModel.getProperty("/valorSolicitado") <= 0) {
@@ -478,55 +479,357 @@ sap.ui.define([
       }
       if (!oViewModel.getProperty("/numeroCuotas") || oViewModel.getProperty("/numeroCuotas") <= 0) {
         MessageBox.error("Por favor seleccione un número de cuotas válido.", { title: "Error de validación" });
-        return; 
+        return;
       }
 
-      // Aquí se construiría el payload para crear la solicitud de préstamo
       var oPayload = {
-        EmployeeNumber: oViewModel.getProperty("/employeeNumber"),
-        IdPrestamo: oViewModel.getProperty("/idPrestamo"),
-       
-        ValorPrestamo: oViewModel.getProperty("/valorPrestamo"),
-        ValorCuota: oViewModel.getProperty("/ValorCuota"),
-        
-        
-       
-        Periodicidad: oViewModel.getProperty("/Periodicidad"),
-        OrigenU: oViewModel.getProperty("/OrigenU"),
-        DescuentoPrimas: oViewModel.getProperty("/DescuentoPrimas"),
-        Porcentaje: oViewModel.getProperty("/Porcentaje"),
-        ProgramaNIT: oViewModel.getProperty("/programaNIT"),
-        ProgramaTitulo: oViewModel.getProperty("/programaTitulo"),
-        ProgramaUniversidad: oViewModel.getProperty("/programaUniversidad"),
-        ProgramaCarrera: oViewModel.getProperty("/programaCarrera"),
-        TieneCodeudor: oViewModel.getProperty("/mostrarCCB") ? "Sí" : (oViewModel.getProperty("/mostrarExterno") ? "No" : "N/A"),
-        
-        CedulaCodeudor: oViewModel.getProperty("/cedulaCodeudor"),
-        DireccionCodeudor: oViewModel.getProperty("/direccionCodeudor"),
-        TelefonoCodeudor: oViewModel.getProperty("/telefonoCodeudor"),
-        
-        PERNR: oViewModel.getProperty("/employeeNumber"),
-        SUBTY: oPrestamoSeleccionado.PrestamoId,
-        DARBT: oViewModel.getProperty("/valorSolicitado"),
+
+        PERNR: "",
+        ENDDA: "9999-12-31",
+        DBTCU: "",
+        SUBTY: "",
+        DARBT: "",
         DATBW: new Date().toISOString().slice(0, 10),
-        DBTCU: oViewModel.getProperty("/moneda"),
-        ZNUEXT: oViewModel.getProperty("/numeroEmpleadoCodeudor"),
-        ZNOEXT: oViewModel.getProperty("/nombreCodeudor"),
-        ZFORP1: oViewModel.getProperty("/Nivel"),
-        ZFORPE: oViewModel.getProperty("/Nivel"),
-        ZTIEPE: oViewModel.getProperty("/tipoEducacion"),
-        ZVALPE: oViewModel.getProperty("/valorSolicitado"),
-        ZVALPEE: oViewModel.getProperty("/ValorPagar"),
-        ZPORPEE: oViewModel.getProperty("/porcPrestamo"),
-        ZPORPEC: oViewModel.getProperty("/porcCondonado"),
-        ZVALPEC: oViewModel.getProperty("/valorCondonado"),
-        ZNUCUPE: oViewModel.getProperty("/numeroCuotas"),
-        ZVALCOPE: oViewModel.getProperty("/valorCondonado"),
-        ZVALREPE: oViewModel.getProperty("/ValorPagar"),
-        ZNOTITU: oViewModel.getProperty("/programaTitulo"),
-        ZNOMFOR: oViewModel.getProperty("/programaTitulo")
+        ZNUEXT: "",
+        ZNOEXT: "",
+        ZFORP1: "",
+        ZFORPE: "",
+        ZTIEPE: "",
+        ZVALPE: "",
+        ZVALPEE: "",
+        ZPORPEE: "",
+        ZPORPEC: "",
+        ZVALPEC: "",
+        ZNUCUPE: "",
+        ZVALCOPE: "",
+        ZVALREPE: "",
+        ZNOTITU: "",
+        ZNOMFOR: ""
       };
-      },
+
+      var lv_EmployeeNumber = oViewModel.getProperty("/employeeNumber");
+      var lv_IdPrestamo = oViewModel.getProperty("/idPrestamo");
+      var lv_ValorPrestamo = oViewModel.getProperty("/valorPrestamo");
+      var lv_ValorCuota = oViewModel.getProperty("/ValorCuota");
+      var lv_Periodicidad = oViewModel.getProperty("/Periodicidad");
+      var lv_OrigenU = oViewModel.getProperty("/OrigenU");
+      var lv_DescuentoPrimas = oViewModel.getProperty("/DescuentoPrimas");
+      var lv_Porcentaje = oViewModel.getProperty("/Porcentaje");
+      var lv_ProgramaNIT = oViewModel.getProperty("/programaNIT");
+      var lv_ProgramaTitulo = oViewModel.getProperty("/programaTitulo");
+      var lv_ProgramaUniversidad = oViewModel.getProperty("/programaUniversidad");
+      var lv_ProgramaCarrera = oViewModel.getProperty("/programaCarrera");
+      var lv_TieneCodeudor = oViewModel.getProperty("/mostrarCCB") ? "Sí" : (oViewModel.getProperty("/mostrarExterno") ? "No" : "N/A");
+
+      var lv_CedulaCodeudor = oViewModel.getProperty("/cedulaCodeudor");
+      var lv_DireccionCodeudor = oViewModel.getProperty("/direccionCodeudor");
+      var lv_TelefonoCodeudor = oViewModel.getProperty("/telefonoCodeudor");
+
+      var lv_PERNR = oViewModel.getProperty("/employeeNumber");
+      var lv_SUBTY = oPrestamoSeleccionado.PrestamoId;
+      var lv_DARBT = oViewModel.getProperty("/valorSolicitado");
+      //var lv_DATBW = new Date().toISOString().slice(0, 10);
+      var lv_DBTCU = oViewModel.getProperty("/moneda");
+      var lv_ZNUEXT = oViewModel.getProperty("/numeroEmpleadoCodeudor");
+      var lv_ZNOEXT = oViewModel.getProperty("/nombreCodeudor");
+      var lv_ZFORP1 = oViewModel.getProperty("/Nivel");
+      var lv_ZFORPE = oViewModel.getProperty("/Nivel");
+      var lv_ZTIEPE = oViewModel.getProperty("/tipoEducacion");
+      var lv_ZVALPE = oViewModel.getProperty("/valorSolicitado");
+      var lv_ZVALPEE = oViewModel.getProperty("/ValorPagar");
+      var lv_ZPORPEE = oViewModel.getProperty("/porcPrestamo");
+      var lv_ZPORPEC = oViewModel.getProperty("/porcCondonado");
+      var lv_ZVALPEC = oViewModel.getProperty("/valorCondonado");
+      var lv_ZNUCUPE = oViewModel.getProperty("/numeroCuotas");
+      var lv_ZVALCOPE = oViewModel.getProperty("/valorCondonado");
+      var lv_ZVALREPE = oViewModel.getProperty("/ValorPagar");
+      var lv_ZNOTITU = oViewModel.getProperty("/programaTitulo");
+      var lv_ZNOMFOR = oViewModel.getProperty("/programaTitulo");
+
+      if (lv_PERNR && lv_PERNR.trim() !== "") {
+        oPayload.PERNR = lv_PERNR;
+      } else {
+
+        MessageBox.error(
+          "No se identifico numero de personal para el usuario actual"
+        );
+        return;
+      }
+
+      if (lv_SUBTY && lv_SUBTY.trim() !== "") {
+        oPayload.SUBTY = lv_SUBTY;
+      } else {
+
+        MessageBox.error(
+          "No se identifico el tipo de prestamo seleccionado"
+        );
+        return;
+      }
+
+      if (lv_DARBT && lv_DARBT > 0) {
+        oPayload.DARBT = lv_DARBT;
+      } else {
+
+        MessageBox.error(
+          "El valor solicitado debe ser mayor a cero"
+        );
+        return;
+      }
+
+      if (lv_DBTCU && lv_DBTCU.trim() !== "") {
+        oPayload.DBTCU = lv_DBTCU;
+      } else {
+
+        MessageBox.error(
+          "No se identifico la moneda para el préstamo"
+        );
+        return;
+      }
+
+      if (iIndexCod == 1) {
+
+
+        if (lv_ZNOEXT == "" || lv_CedulaCodeudor == "" || lv_DireccionCodeudor == "" || lv_TelefonoCodeudor == "") {
+
+          MessageBox.error(
+            "Por favor complete todos los datos del codeudor externo para continuar"
+          );
+          return;
+
+        } else {
+          dataSolic.ZINCEX = "X";
+
+          dataSolic.ZCODEX = lv_ZNOEXT;
+          dataSolic.ZNUCEX = lv_CedulaCodeudor;
+          dataSolic.ZDIREX = lv_DireccionCodeudor;
+          dataSolic.ZTELEX = lv_TelefonoCodeudor;
+
+        }
+      }
+
+      // Se selecciono codeudor interno  
+			if (iIndexCod == 0) {
+
+				if (lv_ZNUEXT == "" || lv_ZNUEXT == undefined) {
+
+					MessageBox.error(
+						"Por favor seleccione un codeudor  para continuar"
+					);
+					return;
+
+				} else {
+					dataSolic.ZINCIN = "X";
+
+					dataSolic.ZNUEXT = lv_ZNUEXT;
+
+				}
+
+			}
+
+      if (lv_ZFORP1 && lv_ZFORP1.trim() !== "") {
+        oPayload.ZFORP1 = lv_ZFORP1;
+        oPayload.ZFORPE = lv_ZFORPE;
+      } else {
+
+        MessageBox.error(
+          "No se identifico el nivel de estudios seleccionado"
+        );
+        return;
+      }
+
+      if(lv_ZTIEPE && lv_ZTIEPE.trim() !== "") {
+        oPayload.ZTIEPE = lv_ZTIEPE;
+      } else {
+
+        MessageBox.error(
+          "No se identifico el tipo de educación seleccionado"
+        );
+        return;
+      }
+
+      if (lv_ZVALPE && lv_ZVALPE > 0) {
+        oPayload.ZVALPE = lv_ZVALPE;
+      } else {
+
+        MessageBox.error(
+          "El valor solicitado debe ser mayor a cero"
+        );
+        return;
+      }
+
+      if (lv_ZNUCUPE && lv_ZNUCUPE > 0) {
+        oPayload.ZNUCUPE = lv_ZNUCUPE;
+      } else {
+
+        MessageBox.error(
+          "El número de cuotas debe ser mayor a cero"
+        );
+        return;
+      }
+
+      if (lv_ZNOTITU && lv_ZNOTITU.trim() !== "") {
+        oPayload.ZNOTITU = lv_ZNOTITU;
+      } else {
+
+        MessageBox.error(
+          "No se identifico el programa académico seleccionado"
+        );
+        return;
+      }
+
+      if (lv_ZNOMFOR && lv_ZNOMFOR.trim() !== "") {
+        oPayload.ZNOMFOR = lv_ZNOMFOR;
+      } else {
+
+        MessageBox.error(
+          "No se identifico el programa académico seleccionado"
+        );
+         return;
+      } 
+
+      if (lv_ZVALPEE && lv_ZVALPEE > 0) {
+        oPayload.ZVALPEE = lv_ZVALPEE;
+      } else {
+
+        MessageBox.error(
+          "No se ha determinado el valor a pagar"
+        );
+         return;
+      }
+
+      if (lv_ZPORPEE && lv_ZPORPEE > 0) {
+        oPayload.ZPORPEE = lv_ZPORPEE;
+      }
+
+      if (lv_ZPORPEC && lv_ZPORPEC > 0) {
+        oPayload.ZPORPEC = lv_ZPORPEC;
+      }
+
+      if (lv_ZVALPEC && lv_ZVALPEC > 0) {
+        oPayload.ZVALPEC = lv_ZVALPEC;
+      }
+
+      if (lv_ZVALCOPE && lv_ZVALCOPE > 0) {
+        oPayload.ZVALCOPE = lv_ZVALCOPE;
+      }
+
+      if (lv_ZVALREPE && lv_ZVALREPE > 0) {
+        oPayload.ZVALREPE = lv_ZVALREPE;
+      }
+
+
+      var dataService = {
+				"n0:ZCOHCMFM_0045GUARDARPRESTAMO": {
+					"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+					"IV_PRESTAMO":
+						dataSolic
+
+				}
+			};
+
+			var validateDataService = {
+				"n0:ZCOHCMFM_VALIDACIONES": {
+					"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+					"GT_PRESTAMOS":
+						dataSolic
+
+				}
+			};
+
+      that._oBackendService.validarSolPrestamo(validateDataService)
+				.then(function (oValidResponse) {
+					var oValidResult = oValidResponse["n0:ZCOHCMFM_VALIDACIONESResponse"];
+
+					/*
+					if (!oValidResult || oValidResult.EV_SUCCESS !== "X") {
+						oViewModel.setProperty("/solicitudEnabled", true);
+						MessageBox.error(
+							(oValidResult && oValidResult.EV_MESSAGE) || "La solicitud no pasó las validaciones.",
+							{ title: "Validación fallida" }
+						);
+						return;
+					}
+					*/
+
+					//that._oBackendService.guardarPrestamo(dataService)
+					that._oBackendService.guardarSolPrestamo(dataService)
+						.then(function (oResponse) {
+							oViewModel.setProperty("/solicitudEnabled", true);
+
+							var message_success = "";
+							// validamos si el servicio nos retorno un mensaje de éxito para mostrarlo,
+							// de lo contrario mostramos un mensaje genérico de éxito
+							if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
+
+								message_success = oResponse['n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse'].EV_MESSAGE;
+
+								// Extraer el número de solicitud del mensaje (ej: 'Registro guardado correctamente 8000000026')
+								var oMatch = message_success.match(/(\d+)$/);
+								var sIdSolicitud = oMatch ? oMatch[1] : "";
+                /*
+								var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
+
+								if (adjuntosPayload.BIN_SOPORTE_CALAMIDAD.length > 0) {
+									var oAdjuntosServiceData = {
+										"n0:ZCOHCMFM_GUARDAR_PROCPASIT45": {
+											"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+											"PDF_DOCUMENTOS": {
+												"item": [
+													{
+														"UUID": sIdSolicitud,
+														"BIN_SOPORTE_CALAMIDAD": adjuntosPayload.BIN_SOPORTE_CALAMIDAD,
+														"FILE_NAME_SOPORTE_CALAMIDAD": adjuntosPayload.FILE_NAME_SOPORTE_CALAMIDAD
+
+													}
+												]
+											}
+										}
+									};
+								}
+               
+
+
+								if (oAdjuntosServiceData != undefined) {
+									that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
+								}
+
+                */
+
+							} else {
+
+								message_success = "Solicitud de Préstamo Calamidad creada exitosamente.";
+
+							}
+
+							MessageBox.success(message_success, {
+								details: "Monto: " + that._formatCurrency(oData.valorPrestamo, oData.moneda) +
+									"\nCuotas: " + oData.numeroCuotas +
+									"\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda),
+								onClose: function () {
+									that.onNavBack();
+								}
+							});
+						})
+						.catch(function (oError) {
+							oViewModel.setProperty("/solicitudEnabled", true);
+							MessageBox.error(
+								"Error al guardar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
+								{ title: "Error al guardar" }
+							);
+						});
+				})
+				.catch(function (oError) {
+					oViewModel.setProperty("/solicitudEnabled", true);
+					MessageBox.error(
+						"Error al validar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
+						{ title: "Error de validación" }
+					);
+				});
+
+
+      // Aquí se construiría el payload para crear la solicitud de préstamo
+
+    },
 
     onNavBack: function () {
       var oRouter = this.getOwnerComponent().getRouter();

@@ -728,7 +728,7 @@ sap.ui.define([
 				"n0:ZCOHCMFM_0045GUARDARPRESTAMO": {
 					"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
 					"IV_PRESTAMO":
-						dataSolic
+						oPayload
 
 				}
 			};
@@ -737,7 +737,7 @@ sap.ui.define([
 				"n0:ZCOHCMFM_VALIDACIONES": {
 					"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
 					"GT_PRESTAMOS":
-						dataSolic
+						oPayload
 
 				}
 			};

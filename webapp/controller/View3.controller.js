@@ -809,9 +809,9 @@ sap.ui.define([
 							}
 
 							MessageBox.success(message_success, {
-								details: "Monto: " + that._formatCurrency(oData.valorPrestamo, oData.moneda) +
-									"\nCuotas: " + oData.numeroCuotas +
-									"\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda),
+								details: "Monto: " + that._formatCurrency(oPayload.DARBT , oPayload.DBTCU ) +
+									"\nCuotas: " + oPayload.ZNUCUPE +
+									"\nValor Cuota: " + that._formatCurrency(lv_ValorCuota, oPayload.DBTCU),
 								onClose: function () {
 									that.onNavBack();
 								}

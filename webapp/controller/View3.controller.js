@@ -504,7 +504,13 @@ sap.ui.define([
         ZVALCOPE: "",
         ZVALREPE: "",
         ZNOTITU: "",
-        ZNOMFOR: ""
+        ZNOMFOR: "",
+        ZINCIN: "",
+        ZINCEX: "",
+        ZCODEX: "",
+        ZNUCEX: "",
+        ZDIREX: "",
+        ZTELEX: "" 
       };
 
       var lv_EmployeeNumber = oViewModel.getProperty("/employeeNumber");
@@ -597,12 +603,12 @@ sap.ui.define([
           return;
 
         } else {
-          dataSolic.ZINCEX = "X";
+          oPayload.ZINCEX = "X";
 
-          dataSolic.ZCODEX = lv_ZNOEXT;
-          dataSolic.ZNUCEX = lv_CedulaCodeudor;
-          dataSolic.ZDIREX = lv_DireccionCodeudor;
-          dataSolic.ZTELEX = lv_TelefonoCodeudor;
+          oPayload.ZCODEX = lv_ZNOEXT;
+          oPayload.ZNUCEX = lv_CedulaCodeudor;
+          oPayload.ZDIREX = lv_DireccionCodeudor;
+          oPayload.ZTELEX = lv_TelefonoCodeudor;
 
         }
       }
@@ -618,9 +624,9 @@ sap.ui.define([
 					return;
 
 				} else {
-					dataSolic.ZINCIN = "X";
+					oPayload.ZINCIN = "X";
 
-					dataSolic.ZNUEXT = lv_ZNUEXT;
+					oPayload.ZNUEXT = lv_ZNUEXT;
 
 				}
 

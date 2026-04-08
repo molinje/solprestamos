@@ -467,6 +467,7 @@ sap.ui.define([
     },
 
     onCrearSolicitud: function () {
+      var that = this;
       var oViewModel = this.getView().getModel("educaView");
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
       var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
@@ -742,7 +743,7 @@ sap.ui.define([
 				}
 			};
 
-      that._oBackendService.validarSolPrestamo(validateDataService)
+      this._oBackendService.validarSolPrestamo(validateDataService)
 				.then(function (oValidResponse) {
 					var oValidResult = oValidResponse["n0:ZCOHCMFM_VALIDACIONESResponse"];
 

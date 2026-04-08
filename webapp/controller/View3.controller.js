@@ -486,6 +486,7 @@ sap.ui.define([
       var oPayload = {
 
         PERNR: "",
+        BEGDA: new Date().toISOString().slice(0, 10),
         ENDDA: "9999-12-31",
         DBTCU: "",
         SUBTY: "",

@@ -431,6 +431,7 @@ sap.ui.define([
 				DARBT: 0,
 				PERNR: "",
 				ENDDA: "9999-12-31",
+				BEGDA: new Date().toISOString().slice(0, 10),
 				DBTCU: "COP",
 				ZINCEX: "",
 				ZCODEX: "",

@@ -210,11 +210,14 @@
                     <!-- Grid responsivo: 2 columnas en L/M, 1 columna en S -->
                     <layout:Grid defaultSpan="L6 M6 S12" class="sapUiSmallMargin">
 
-
-                        <!-- Fila 8: Descuento en Primas | Porcentaje -->
+                        <!-- Fila: Descuento en Primas | Porcentaje -->
                         <VBox>
-                            <Label text="Descuento en Primas"/>
-                            <Select selectedKey="{educaView>/SelectedPrimas}" forceSelection="false" width="100%">
+                            <Label text="Primas y Bonificaciones"/>
+                            <Select
+                                selectedKey="{educaView>/SelectedPrimas}"
+                                forceSelection="false"
+                                width="100%"
+                                change=".onChangePrimas3">
                                <items>
                                         <core:Item key="NO_APLICA" text="No Aplica"/>
                                         <core:Item key="DESCONTAR_PRIMAS" text="Descontar Primas"/>
@@ -233,6 +236,52 @@
                         </VBox>
 
                     </layout:Grid>
+
+                    <Table
+                        id="tablaPrimas3"
+                        items="{listprimas3>/items}"
+                        visible="{= ${educaView>/SelectedPrimas} === 'DESCONTAR_PRIMAS' }"
+                        class="sapUiSmallMargin">
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="Primas a Descontar"/>
+                                <ToolbarSpacer/>
+                                <Button
+                                    icon="sap-icon://add"
+                                    press=".onAddPrimas3"
+                                    tooltip="Agregar prima"/>
+                                <Button
+                                    icon="sap-icon://less"
+                                    press=".onReducePrimas3"
+                                    tooltip="Eliminar última prima"/>
+                            </Toolbar>
+                        </headerToolbar>
+                        <columns>
+                            <Column>
+                                <Text text="Fecha Inicio"/>
+                            </Column>
+                            <Column>
+                                <Text text="Valor Comprometido"/>
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <Text text="{listprimas3>FECHA_PRIMA}"/>
+                                    <ObjectNumber
+                                        number="{
+                                            parts: [
+                                                {path: 'listprimas3>VALOR_PRIMA'},
+                                                {path: 'listprimas3>MONEDA_PRIMA'}
+                                            ],
+                                            type: 'sap.ui.model.type.Currency',
+                                            formatOptions: { showMeasure: true }
+                                        }"
+                                        />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
 
                 </WizardStep>
                

@@ -84,6 +84,10 @@ sap.ui.define([
 
       this.getView().setModel(oViewModel, "educaView");
 
+      // Modelo para la colección de primas a descontar
+      var oPrimasModel = new JSONModel({ items: [] });
+      this.getView().setModel(oPrimasModel, "listprimas3");
+
       this._wizard = this.byId("wizardEduca");
 
       // Suscribirse al evento de ruta
@@ -122,6 +126,10 @@ sap.ui.define([
       if (aProgramas) {
         oViewModel.setProperty("/programasPregrado", aProgramas);
       }
+      // Limpiar primas al navegar
+      this.getView().getModel("listprimas3").setProperty("/items", []);
+      oViewModel.setProperty("/SelectedPrimas", "NO_APLICA");
+
       // Limpiar selección previa y sugerencias del input
       this._aUltimosFiltrados = [];
       this.byId("selectProgPregado").removeAllSuggestionItems();
@@ -841,6 +849,153 @@ sap.ui.define([
 
       // Aquí se construiría el payload para crear la solicitud de préstamo
 
+    },
+
+    /**
+     * Evento cuando cambia la selección de Primas y Bonificaciones
+     */
+    onChangePrimas3: function (oEvent) {
+      var sSelectedKey = oEvent.getParameter("selectedItem").getKey();
+      var oViewModel = this.getView().getModel("educaView");
+      oViewModel.setProperty("/SelectedPrimas", sSelectedKey);
+
+      // Limpiar tabla si se deselecciona
+      if (sSelectedKey !== "DESCONTAR_PRIMAS") {
+        this.getView().getModel("listprimas3").setProperty("/items", []);
+      }
+    },
+
+    /**
+     * Agrega un registro a la colección listprimas3 llamando al servicio de primas
+     */
+    onAddPrimas3: function () {
+      var that = this;
+      var oViewModel = this.getView().getModel("educaView");
+
+      var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
+      var employeenumber = oViewModel.getProperty("/employeeNumber");
+      var idPrestamo = oViewModel.getProperty("/idPrestamo");
+      var moneda = oViewModel.getProperty("/moneda");
+
+      var oViewModelPrimas = this.getView().getModel("listprimas3");
+      var aPrimas = oViewModelPrimas.getProperty("/items") || [];
+      var NoPrimas = aPrimas.length + 1;
+
+      var dataPrima = {
+        "EMPLEADO": employeenumber,
+        "VALOR_PRESTAMO": String(fValorSolicitado),
+        "CANTIDAD_PRIMAS": String(NoPrimas),
+        "TIPO_PRESTAMO": idPrestamo,
+        "PORCENTAJE": "50"
+      };
+
+      this._oBackendService.Add_PrimaService(dataPrima)
+        .then(function (oResponse) {
+          var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]
+            .RESPONSE_INFO_PRIMA.item;
+          if (!aItems) {
+            MessageToast.show("No se encontraron primas para los datos ingresados");
+            return;
+          }
+
+          if (!Array.isArray(aItems)) {
+            aItems = [aItems];
+          }
+
+          var fTotalPrimas = 0;
+          var iIdx = 0;
+          while (iIdx < aItems.length) {
+            var fValorPrima = parseFloat(aItems[iIdx].VALOR_PRIMA) || 0;
+            var iValorEntero = Math.trunc(fValorPrima);
+            aItems[iIdx].VALOR_PRIMA = String(iValorEntero);
+            aItems[iIdx].MONEDA_PRIMA = moneda;
+            fTotalPrimas = fTotalPrimas + fValorPrima;
+            iIdx = iIdx + 1;
+          }
+
+          oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
+          oViewModel.setProperty("/primasADescontar", aItems);
+          that.getView().getModel("listprimas3").setProperty("/items", aItems);
+        })
+        .catch(function (oError) {
+          MessageBox.error(
+            "Error al consultar primas: " + (oError.message || oError.statusText || "Error desconocido"),
+            { title: "Error" }
+          );
+        });
+    },
+
+    /**
+     * Elimina el último registro de la tabla de primas
+     */
+    onReducePrimas3: function () {
+      var that = this;
+      var oViewModel = this.getView().getModel("educaView");
+
+      var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
+      var fValorPagar = oViewModel.getProperty("/ValorPagar");
+      var employeenumber = oViewModel.getProperty("/employeeNumber");
+      var idPrestamo = oViewModel.getProperty("/idPrestamo");
+      var moneda = oViewModel.getProperty("/moneda");
+
+      var oViewModelPrimas = this.getView().getModel("listprimas3");
+      var aPrimas = oViewModelPrimas.getProperty("/items") || [];
+      var aTimes = aPrimas.length;
+
+      if (aTimes === 0) {
+        return;
+      }
+
+      if (aTimes === 1) {
+        oViewModelPrimas.setProperty("/items", []);
+        oViewModel.setProperty("/valorTotalPrimas", 0);
+        oViewModel.setProperty("/primasADescontar", []);
+        return;
+      }
+
+      var NoPrimas = aTimes - 1;
+      var dataPrima = {
+        "EMPLEADO": employeenumber,
+        "VALOR_PRESTAMO": String(fValorPagar),
+        "CANTIDAD_PRIMAS": String(NoPrimas),
+        "TIPO_PRESTAMO": idPrestamo,
+        "PORCENTAJE": "50"
+      };
+
+      this._oBackendService.Add_PrimaService(dataPrima)
+        .then(function (oResponse) {
+          var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]
+            .RESPONSE_INFO_PRIMA.item;
+          if (!aItems) {
+            MessageToast.show("No se encontraron primas para los datos ingresados");
+            return;
+          }
+
+          if (!Array.isArray(aItems)) {
+            aItems = [aItems];
+          }
+
+          var fTotalPrimas = 0;
+          var iIdx = 0;
+          while (iIdx < aItems.length) {
+            var fValorPrima = parseFloat(aItems[iIdx].VALOR_PRIMA) || 0;
+            var iValorEntero = Math.trunc(fValorPrima);
+            aItems[iIdx].VALOR_PRIMA = String(iValorEntero);
+            aItems[iIdx].MONEDA_PRIMA = moneda;
+            fTotalPrimas = fTotalPrimas + fValorPrima;
+            iIdx = iIdx + 1;
+          }
+
+          oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
+          oViewModel.setProperty("/primasADescontar", aItems);
+          that.getView().getModel("listprimas3").setProperty("/items", aItems);
+        })
+        .catch(function (oError) {
+          MessageBox.error(
+            "Error al consultar primas: " + (oError.message || oError.statusText || "Error desconocido"),
+            { title: "Error" }
+          );
+        });
     },
 
     onNavBack: function () {

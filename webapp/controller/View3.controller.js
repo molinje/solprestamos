@@ -953,6 +953,7 @@ sap.ui.define([
       var aTimes = aPrimas.length;
 
       if (aTimes === 0) {
+        that._calcularValorPrestamo();   
         return;
       }
 
@@ -960,6 +961,7 @@ sap.ui.define([
         oViewModelPrimas.setProperty("/items", []);
         oViewModel.setProperty("/valorTotalPrimas", 0);
         oViewModel.setProperty("/primasADescontar", []);
+        that._calcularValorPrestamo();   
         return;
       }
 

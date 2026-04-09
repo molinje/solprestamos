@@ -368,14 +368,39 @@
                     title="Soportes"
                     validated="true">
                     <VBox class="sapUiSmallMargin">
-                        <Label text="Adjuntar Documentos" class="sapUiSmallMarginBottom"/>
-                        <UploadCollection
-                            id="uploadCollection3"
-                            uploadUrl="/upload"
-                            multiple="true"
-                            uploadComplete="onUploadComplete">
-                        </UploadCollection>
-                        
+                        <Toolbar>
+                            <Title text="Documentos Adjuntos"/>
+                            <ToolbarSpacer/>
+                            <Button
+                                text="Agregar"
+                                icon="sap-icon://add"
+                                type="Emphasized"
+                                press="onAgregarDocumento3"/>
+                        </Toolbar>
+
+                        <Table
+                            id="tableAdjuntos3"
+                            items="{educaView>/adjuntos}"
+                            noDataText="No hay documentos adjuntos. Use el botón Agregar."
+                            class="sapUiSmallMarginBottom">
+                            <columns>
+                                <Column width="60%">
+                                    <Text text="Nombre de Archivo"/>
+                                </Column>
+                                <Column width="40%">
+                                    <Text text="Tipo de Documento"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{educaView>nombreArchivo}"/>
+                                        <Text text="{educaView>tipoArchivoText}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+
                         <Button
                             id="btnCrearSolicitud3"
                             text="Crear Solicitud"

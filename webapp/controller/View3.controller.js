@@ -4,8 +4,9 @@ sap.ui.define([
   "sap/m/MessageBox",
   "sap/m/MessageToast",
   "sap/ui/core/ListItem",
+  "sap/ui/core/Fragment",
   "prestamos/ccb/org/solprestamos/util/BackendService"
-], function (Controller, JSONModel, MessageBox, MessageToast, ListItem, BackendService) {
+], function (Controller, JSONModel, MessageBox, MessageToast, ListItem, Fragment, BackendService) {
   "use strict";
 
   return Controller.extend("prestamos.ccb.org.solprestamos.controller.View3", {
@@ -1012,6 +1013,167 @@ sap.ui.define([
             { title: "Error" }
           );
         });
+    },
+
+    /**
+     * Abre el diálogo para agregar un documento adjunto
+     */
+    onAgregarDocumento3: function () {
+      var oView = this.getView();
+      var that = this;
+
+      if (!this._oAdjuntosDialog3) {
+        Fragment.load({
+          id: oView.getId(),
+          name: "prestamos.ccb.org.solprestamos.view.AdjuntosDialog",
+          controller: this
+        }).then(function (oDialog) {
+          that._oAdjuntosDialog3 = oDialog;
+          oView.addDependent(oDialog);
+          that._resetAdjuntosDialog3();
+          oDialog.open();
+        });
+      } else {
+        this._resetAdjuntosDialog3();
+        this._oAdjuntosDialog3.open();
+      }
+    },
+
+    /**
+     * Reinicia el modelo del diálogo de adjuntos
+     * @private
+     */
+    _resetAdjuntosDialog3: function () {
+      var oDialogModel = new JSONModel({
+        rutaArchivo: "",
+        nombreArchivo: "",
+        tipoArchivo: "",
+        tipoValueState: "None",
+        tipoValueStateText: "",
+        isReadingFile: false,
+        base64Content: null
+      });
+      this._oAdjuntosDialog3.setModel(oDialogModel, "adjuntoDlg");
+
+      var oFileUploader = this.byId("fileUploaderDialog");
+      if (oFileUploader) {
+        oFileUploader.clear();
+        oFileUploader.setValueState("None");
+        oFileUploader.setValueStateText("");
+      }
+    },
+
+    /**
+     * Captura el archivo seleccionado en el FileUploader del diálogo
+     */
+    onArchivoSeleccionado: function (oEvent) {
+      var oFileUploader = oEvent.getSource();
+      var sFileName = oEvent.getParameter("newValue") || oFileUploader.getValue();
+      var oDialogModel = this._oAdjuntosDialog3.getModel("adjuntoDlg");
+      oDialogModel.setProperty("/nombreArchivo", sFileName);
+      oDialogModel.setProperty("/rutaArchivo", sFileName);
+      oDialogModel.setProperty("/base64Content", null);
+
+      if (sFileName) {
+        oFileUploader.setValueState("None");
+        oFileUploader.setValueStateText("");
+
+        var oDomRef = oFileUploader.getDomRef("fu");
+        var oFile = oDomRef && oDomRef.files && oDomRef.files[0];
+        if (oFile) {
+          oDialogModel.setProperty("/isReadingFile", true);
+          var oReader = new FileReader();
+          oReader.onload = function (e) {
+            var sBase64 = e.target.result.split(",")[1];
+            oDialogModel.setProperty("/base64Content", sBase64);
+            oDialogModel.setProperty("/isReadingFile", false);
+          };
+          oReader.onerror = function () {
+            oDialogModel.setProperty("/isReadingFile", false);
+          };
+          oReader.readAsDataURL(oFile);
+        }
+      }
+    },
+
+    /**
+     * Acepta el diálogo y agrega el documento a la tabla
+     */
+    onAceptarAdjunto: function () {
+      var oDialogModel = this._oAdjuntosDialog3.getModel("adjuntoDlg");
+      var oFileUploader = this.byId("fileUploaderDialog");
+      var sNombreArchivo = oDialogModel.getProperty("/nombreArchivo") || (oFileUploader && oFileUploader.getValue());
+      var sTipoArchivo = oDialogModel.getProperty("/tipoArchivo");
+      var bValid = true;
+
+      if (!sNombreArchivo || sNombreArchivo.trim() === "") {
+        if (oFileUploader) {
+          oFileUploader.setValueState("Error");
+          oFileUploader.setValueStateText("Debe seleccionar un archivo");
+        }
+        bValid = false;
+      }
+
+      if (!sTipoArchivo || sTipoArchivo === "") {
+        oDialogModel.setProperty("/tipoValueState", "Error");
+        oDialogModel.setProperty("/tipoValueStateText", "Debe seleccionar el tipo de documento");
+        bValid = false;
+      }
+
+      if (!bValid) {
+        return;
+      }
+
+      var mTipos = { "1": "Soporte Calamidad", "2": "Otro" };
+
+      var oViewModel = this.getView().getModel("educaView");
+      var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
+
+      aAdjuntos.push({
+        nombreArchivo: sNombreArchivo,
+        tipoArchivo: sTipoArchivo,
+        tipoArchivoText: mTipos[sTipoArchivo] || sTipoArchivo,
+        base64Content: oDialogModel.getProperty("/base64Content") || null
+      });
+
+      oViewModel.setProperty("/adjuntos", aAdjuntos);
+      this._oAdjuntosDialog3.close();
+    },
+
+    /**
+     * Cancela y cierra el diálogo de adjuntos
+     */
+    onCancelarAdjunto: function () {
+      this._oAdjuntosDialog3.close();
+    },
+
+    /**
+     * Guarda los adjuntos asociados a una solicitud de préstamo
+     * @param {string} id_prestamo - ID de la solicitud (UUID)
+     */
+    Guardar_adjuntosFrom_idSol: function (id_prestamo) {
+      var oViewModel = this.getView().getModel("educaView");
+      var aAdjuntos = oViewModel.getProperty("/adjuntos");
+
+      var oPayload = {
+        "UUID": id_prestamo,
+        "FILE_NAME_SOPORTE_CALAMIDAD": "",
+        "BIN_SOPORTE_CALAMIDAD": "",
+        "FILE_NAME_FACTURA_COMPRA": "",
+        "BIN_FACTURA_COMPRA": ""
+      };
+
+      aAdjuntos.forEach(function (oAdjunto) {
+        if (oAdjunto.tipoArchivo === "1") {
+          oPayload.BIN_SOPORTE_CALAMIDAD = oAdjunto.base64Content || "";
+          oPayload.FILE_NAME_SOPORTE_CALAMIDAD = oAdjunto.nombreArchivo || "";
+        } else if (oAdjunto.tipoArchivo === "2") {
+          oPayload.BIN_FACTURA_COMPRA = oAdjunto.base64Content || "";
+          oPayload.FILE_NAME_FACTURA_COMPRA = oAdjunto.nombreArchivo || "";
+        }
+      });
+
+      return oPayload;
     },
 
     onNavBack: function () {

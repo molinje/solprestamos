@@ -207,13 +207,14 @@
                             </Select>
                         </VBox>
                         <VBox>
-                            <Label text="Porcentaje"/>
-                            <Select selectedKey="{educaView>/Porcentaje}" forceSelection="false" width="100%">
+                            <Label text="Porcentaje %"/>
+                            <Select selectedKey="{educaView>/PorcentajePrima}" forceSelection="false" width="100%">
                                 <core:Item key="10" text="10%"/>
                                 <core:Item key="20" text="20%"/>
                                 <core:Item key="30" text="30%"/>
                                 <core:Item key="40" text="40%"/>
                                 <core:Item key="50" text="50%"/>
+                                <core:Item key="60" text="60%"/>
                             </Select>
                         </VBox>
 

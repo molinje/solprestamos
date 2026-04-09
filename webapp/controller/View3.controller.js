@@ -51,7 +51,7 @@ sap.ui.define([
         OrigenU: "",
         DescuentoPrimas: "",
         SelectedPrimas: "NO_APLICA",
-        Porcentaje: "",
+        PorcentajePrima: "",
 
         // Estados de validación
         valorValueState: "None",
@@ -532,7 +532,7 @@ sap.ui.define([
       var lv_Periodicidad = oViewModel.getProperty("/Periodicidad");
       var lv_OrigenU = oViewModel.getProperty("/OrigenU");
       var lv_DescuentoPrimas = oViewModel.getProperty("/DescuentoPrimas");
-      var lv_Porcentaje = oViewModel.getProperty("/Porcentaje");
+      var lv_Porcentaje = oViewModel.getProperty("/PorcentajePrima");
       var lv_ProgramaNIT = oViewModel.getProperty("/programaNIT");
       var lv_ProgramaTitulo = oViewModel.getProperty("/programaTitulo");
       var lv_ProgramaUniversidad = oViewModel.getProperty("/programaUniversidad");
@@ -873,9 +873,11 @@ sap.ui.define([
       var oViewModel = this.getView().getModel("educaView");
 
       var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
+      var fValorPagar = oViewModel.getProperty("/ValorPagar");
       var employeenumber = oViewModel.getProperty("/employeeNumber");
       var idPrestamo = oViewModel.getProperty("/idPrestamo");
       var moneda = oViewModel.getProperty("/moneda");
+      var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
 
       var oViewModelPrimas = this.getView().getModel("listprimas3");
       var aPrimas = oViewModelPrimas.getProperty("/items") || [];
@@ -883,10 +885,10 @@ sap.ui.define([
 
       var dataPrima = {
         "EMPLEADO": employeenumber,
-        "VALOR_PRESTAMO": String(fValorSolicitado),
+        "VALOR_PRESTAMO": String(fValorPagar),
         "CANTIDAD_PRIMAS": String(NoPrimas),
         "TIPO_PRESTAMO": idPrestamo,
-        "PORCENTAJE": "50"
+        "PORCENTAJE": porcentajePrima
       };
 
       this._oBackendService.Add_PrimaService(dataPrima)
@@ -937,6 +939,7 @@ sap.ui.define([
       var employeenumber = oViewModel.getProperty("/employeeNumber");
       var idPrestamo = oViewModel.getProperty("/idPrestamo");
       var moneda = oViewModel.getProperty("/moneda");
+      var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
 
       var oViewModelPrimas = this.getView().getModel("listprimas3");
       var aPrimas = oViewModelPrimas.getProperty("/items") || [];
@@ -959,7 +962,7 @@ sap.ui.define([
         "VALOR_PRESTAMO": String(fValorPagar),
         "CANTIDAD_PRIMAS": String(NoPrimas),
         "TIPO_PRESTAMO": idPrestamo,
-        "PORCENTAJE": "50"
+        "PORCENTAJE": porcentajePrima
       };
 
       this._oBackendService.Add_PrimaService(dataPrima)

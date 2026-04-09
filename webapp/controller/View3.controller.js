@@ -999,6 +999,9 @@ sap.ui.define([
           oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
           oViewModel.setProperty("/primasADescontar", aItems);
           that.getView().getModel("listprimas3").setProperty("/items", aItems);
+
+          that._calcularValorPrestamo();   
+
         })
         .catch(function (oError) {
           MessageBox.error(

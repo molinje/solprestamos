@@ -330,6 +330,8 @@ sap.ui.define([
       var iNumeroCuotas = oViewModel.getProperty("/numeroCuotas") || 0;
       var fValorCondonado = oViewModel.getProperty("/valorCondonado") || 0;
       var fValorPagar = fValorSolicitado - fValorCondonado;
+      var valorTotalPrimas = oViewModel.getProperty("/valorTotalPrimas") ;
+
 
       if (fValorSolicitado <= 0 || iNumeroCuotas <= 0) {
         oViewModel.setProperty("/valorPrestamo", 0);
@@ -343,7 +345,7 @@ sap.ui.define([
       oViewModel.setProperty("/ValorPagar", Math.round(fValorPagar));
 
       if ((fValorPagar > 0 && iNumeroCuotas > 0) && (fValorPagar > iNumeroCuotas)) {
-        var fValorCuota = Math.round(fValorPagar / iNumeroCuotas);
+        var fValorCuota = Math.round((fValorPagar - valorTotalPrimas) / iNumeroCuotas);
         oViewModel.setProperty("/ValorCuota", fValorCuota);
       }
 

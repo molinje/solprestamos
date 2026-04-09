@@ -181,24 +181,6 @@
                             </Select>
                         </VBox>
 
-                        <!-- Fila 8: Descuento en Primas | Porcentaje -->
-                        <VBox>
-                            <Label text="Descuento en Primas"/>
-                            <Select selectedKey="{educaView>/DescuentoPrimas}" forceSelection="false" width="100%">
-                                <core:Item key="NO" text="No Aplica"/>
-                                <core:Item key="SI" text="Descontar Primas"/>
-                            </Select>
-                        </VBox>
-                        <VBox>
-                            <Label text="Porcentaje"/>
-                            <Select selectedKey="{educaView>/Porcentaje}" forceSelection="false" width="100%">
-                                <core:Item key="10" text="10%"/>
-                                <core:Item key="20" text="20%"/>
-                                <core:Item key="30" text="30%"/>
-                                <core:Item key="40" text="40%"/>
-                                <core:Item key="50" text="50%"/>
-                            </Select>
-                        </VBox>
 
                     </layout:Grid>
                 </WizardStep>

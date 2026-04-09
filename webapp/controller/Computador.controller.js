@@ -304,6 +304,7 @@ sap.ui.define([
         ENDDA: "9999-12-31",
         BEGDA: new Date().toISOString().slice(0, 10),
         DBTCU: "COP",
+        ZWAERS: "COP",
         ZMOCA: "",
         ZVALSO: "",
         ZNUCUCA: "",

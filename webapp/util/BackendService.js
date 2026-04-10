@@ -30,16 +30,16 @@ sap.ui.define([
 
 
          getValorCondonado: function (oData) {
-  
-            var sUrl = this._valorCondonadoUrl;
+
+            var sUrl = this._getAppBase() + this._valorCondonadoUrl;
             var sToken = this.Get_tokenfromservice(sUrl);
             return this._executePostService(sUrl, oData, sToken);
 
         },
 
          validarSolPrestamo: function (oData) {
-  
-            var sUrl = this._validarPrestamosUrl;
+
+            var sUrl = this._getAppBase() + this._validarPrestamosUrl;
             var sToken = this.Get_tokenfromservice(sUrl);
             return this._executePostService(sUrl, oData, sToken);
 
@@ -95,7 +95,7 @@ sap.ui.define([
          * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
          */
         get_Primas: function (oData) {
-            var sUrl = this._consultPrimasUrl;
+            var sUrl = this._getAppBase() + this._consultPrimasUrl;
             return new Promise(function (resolve, reject) {
                 var xhr = new XMLHttpRequest();
                 xhr.open("POST", sUrl, true);

@@ -527,7 +527,7 @@ sap.ui.define([
         ZCODEX: "",
         ZNUCEX: "",
         ZDIREX: "",
-        ZTELEX: "" 
+        ZTELEX: ""
       };
 
       var lv_EmployeeNumber = oViewModel.getProperty("/employeeNumber");
@@ -633,23 +633,23 @@ sap.ui.define([
       }
 
       // Se selecciono codeudor interno  
-			if (iIndexCod == 0) {
+      if (iIndexCod == 0) {
 
-				if (lv_ZNUEXT == "" || lv_ZNUEXT == undefined) {
+        if (lv_ZNUEXT == "" || lv_ZNUEXT == undefined) {
 
-					MessageBox.error(
-						"Por favor seleccione un codeudor  para continuar"
-					);
-					return;
+          MessageBox.error(
+            "Por favor seleccione un codeudor  para continuar"
+          );
+          return;
 
-				} else {
-					oPayload.ZINCIN = "X";
+        } else {
+          oPayload.ZINCIN = "X";
 
-					oPayload.ZNUEXT = lv_ZNUEXT;
+          oPayload.ZNUEXT = lv_ZNUEXT;
 
-				}
+        }
 
-			}
+      }
 
       if (lv_ZFORP1 && lv_ZFORP1.trim() !== "") {
         oPayload.ZFORP1 = lv_ZFORP1;
@@ -662,7 +662,7 @@ sap.ui.define([
         return;
       }
 
-      if(lv_ZTIEPE && lv_ZTIEPE.trim() !== "") {
+      if (lv_ZTIEPE && lv_ZTIEPE.trim() !== "") {
         oPayload.ZTIEPE = lv_ZTIEPE;
       } else {
 
@@ -709,8 +709,8 @@ sap.ui.define([
         MessageBox.error(
           "No se identifico el programa académico seleccionado"
         );
-         return;
-      } 
+        return;
+      }
 
       if (lv_ZVALPEE && lv_ZVALPEE > 0) {
         oPayload.ZVALPEE = lv_ZVALPEE;
@@ -719,7 +719,7 @@ sap.ui.define([
         MessageBox.error(
           "No se ha determinado el valor a pagar"
         );
-         return;
+        return;
       }
 
       if (lv_ZPORPEE && lv_ZPORPEE > 0) {
@@ -744,108 +744,110 @@ sap.ui.define([
 
 
       var dataService = {
-				"n0:ZCOHCMFM_0045GUARDARPRESTAMO": {
-					"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
-					"IV_PRESTAMO":
-						oPayload
+        "n0:ZCOHCMFM_0045GUARDARPRESTAMO": {
+          "-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+          "IV_PRESTAMO":
+            oPayload
 
-				}
-			};
+        }
+      };
 
-			var validateDataService = {
-				"n0:ZCOHCMFM_VALIDACIONES": {
-					"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
-					"GT_PRESTAMOS":
-						oPayload
+      var validateDataService = {
+        "n0:ZCOHCMFM_VALIDACIONES": {
+          "-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+          "GT_PRESTAMOS":
+            oPayload
 
-				}
-			};
+        }
+      };
 
+      /* 
       this._oBackendService.validarSolPrestamo(validateDataService)
-				.then(function (oValidResponse) {
-					var oValidResult = oValidResponse["n0:ZCOHCMFM_VALIDACIONESResponse"];
+        .then(function (oValidResponse) {
+          var oValidResult = oValidResponse["n0:ZCOHCMFM_VALIDACIONESResponse"];
+*/
+      /*
+      if (!oValidResult || oValidResult.EV_SUCCESS !== "X") {
+        oViewModel.setProperty("/solicitudEnabled", true);
+        MessageBox.error(
+          (oValidResult && oValidResult.EV_MESSAGE) || "La solicitud no pasó las validaciones.",
+          { title: "Validación fallida" }
+        );
+        return;
+      }
+      */
 
-					/*
-					if (!oValidResult || oValidResult.EV_SUCCESS !== "X") {
-						oViewModel.setProperty("/solicitudEnabled", true);
-						MessageBox.error(
-							(oValidResult && oValidResult.EV_MESSAGE) || "La solicitud no pasó las validaciones.",
-							{ title: "Validación fallida" }
-						);
-						return;
-					}
-					*/
+      //that._oBackendService.guardarPrestamo(dataService)
+      that._oBackendService.guardarSolPrestamo(dataService)
+        .then(function (oResponse) {
+          oViewModel.setProperty("/solicitudEnabled", true);
 
-					//that._oBackendService.guardarPrestamo(dataService)
-					that._oBackendService.guardarSolPrestamo(dataService)
-						.then(function (oResponse) {
-							oViewModel.setProperty("/solicitudEnabled", true);
+          var message_success = "";
+          // validamos si el servicio nos retorno un mensaje de éxito para mostrarlo,
+          // de lo contrario mostramos un mensaje genérico de éxito
+          if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
 
-							var message_success = "";
-							// validamos si el servicio nos retorno un mensaje de éxito para mostrarlo,
-							// de lo contrario mostramos un mensaje genérico de éxito
-							if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
+            message_success = oResponse['n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse'].EV_MESSAGE;
 
-								message_success = oResponse['n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse'].EV_MESSAGE;
+            // Extraer el número de solicitud del mensaje (ej: 'Registro guardado correctamente 8000000026')
+            var oMatch = message_success.match(/(\d+)$/);
+            var sIdSolicitud = oMatch ? oMatch[1] : "";
 
-								// Extraer el número de solicitud del mensaje (ej: 'Registro guardado correctamente 8000000026')
-								var oMatch = message_success.match(/(\d+)$/);
-								var sIdSolicitud = oMatch ? oMatch[1] : "";
-                
-								var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
+            var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
 
-								if (adjuntosPayload.BIN_RECIBO_MATRICULA.length > 0) {
-									var oAdjuntosServiceData = {
-										"n0:ZCOHCMFM_GUARDAR_PROCPASIT45": {
-											"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
-											"PDF_DOCUMENTOS": {
-												"item": [
-													adjuntosPayload
-												]
-											}
-										}
-									};
-								}
-               
+            if (adjuntosPayload.BIN_RECIBO_MATRICULA.length > 0) {
+              var oAdjuntosServiceData = {
+                "n0:ZCOHCMFM_GUARDAR_PROCPASIT45": {
+                  "-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+                  "PDF_DOCUMENTOS": {
+                    "item": [
+                      adjuntosPayload
+                    ]
+                  }
+                }
+              };
+            }
 
 
-								if (oAdjuntosServiceData != undefined) {
-									that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
-								}
 
-                
+            if (oAdjuntosServiceData != undefined) {
+              that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
+            }
 
-							} else {
 
-								message_success = "Solicitud de Préstamo Calamidad creada exitosamente.";
 
-							}
+          } else {
 
-							MessageBox.success(message_success, {
-								details: "Monto: " + that._formatCurrency(oPayload.DARBT , oPayload.DBTCU ) +
-									"\nCuotas: " + oPayload.ZNUCUPE +
-									"\nValor Cuota: " + that._formatCurrency(lv_ValorCuota, oPayload.DBTCU),
-								onClose: function () {
-									that.onNavBack();
-								}
-							});
-						})
-						.catch(function (oError) {
-							oViewModel.setProperty("/solicitudEnabled", true);
-							MessageBox.error(
-								"Error al guardar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
-								{ title: "Error al guardar" }
-							);
-						});
-				})
-				.catch(function (oError) {
-					oViewModel.setProperty("/solicitudEnabled", true);
-					MessageBox.error(
-						"Error al validar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
-						{ title: "Error de validación" }
-					);
-				});
+            message_success = "Solicitud de Préstamo Calamidad creada exitosamente.";
 
+          }
+
+          MessageBox.success(message_success, {
+            details: "Monto: " + that._formatCurrency(oPayload.DARBT, oPayload.DBTCU) +
+              "\nCuotas: " + oPayload.ZNUCUPE +
+              "\nValor Cuota: " + that._formatCurrency(lv_ValorCuota, oPayload.DBTCU),
+            onClose: function () {
+              that.onNavBack();
+            }
+          });
+        })
+        .catch(function (oError) {
+          oViewModel.setProperty("/solicitudEnabled", true);
+          MessageBox.error(
+            "Error al guardar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
+            { title: "Error al guardar" }
+          );
+        });
+      /*
+        })
+      .catch(function (oError) {
+        oViewModel.setProperty("/solicitudEnabled", true);
+        MessageBox.error(
+          "Error al validar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
+          { title: "Error de validación" }
+        );
+      });
+     */
 
       // Aquí se construiría el payload para crear la solicitud de préstamo
 
@@ -920,8 +922,8 @@ sap.ui.define([
           that.getView().getModel("listprimas3").setProperty("/items", aItems);
 
 
-           that._calcularValorPrestamo();         
-        
+          that._calcularValorPrestamo();
+
         })
         .catch(function (oError) {
           MessageBox.error(
@@ -950,7 +952,7 @@ sap.ui.define([
       var aTimes = aPrimas.length;
 
       if (aTimes === 0) {
-        that._calcularValorPrestamo();   
+        that._calcularValorPrestamo();
         return;
       }
 
@@ -958,7 +960,7 @@ sap.ui.define([
         oViewModelPrimas.setProperty("/items", []);
         oViewModel.setProperty("/valorTotalPrimas", 0);
         oViewModel.setProperty("/primasADescontar", []);
-        that._calcularValorPrestamo();   
+        that._calcularValorPrestamo();
         return;
       }
 
@@ -999,7 +1001,7 @@ sap.ui.define([
           oViewModel.setProperty("/primasADescontar", aItems);
           that.getView().getModel("listprimas3").setProperty("/items", aItems);
 
-          that._calcularValorPrestamo();   
+          that._calcularValorPrestamo();
 
         })
         .catch(function (oError) {
@@ -1152,18 +1154,18 @@ sap.ui.define([
 
       var oPayload = {
         "UUID": id_prestamo,
-        "FILE_NAME_RECIBO_MATRICULA":"",
-        "BIN_RECIBO_MATRICULA":"",
-        "FILE_NAME_PENSUM_ACADEMICO":"",
-        "BIN_PENSUM_ACADEMICO":"",
-        "FILE_NAME_CERTIFICADO_NOTAS":"",
-        "BIN_CERTIFICADO_NOTAS":"",
-        "FILE_NAME_PAGARE":"",
-        "BIN_PAGARE":"",
-        "FILE_NAME_PAGARE_FIRMADO":"",
-        "BIN_PAGARE_FIRMADO":"",
-        "FILE_NAME_MEMORANDO":"",
-        "BIN_MEMORANDO":""
+        "FILE_NAME_RECIBO_MATRICULA": "",
+        "BIN_RECIBO_MATRICULA": "",
+        "FILE_NAME_PENSUM_ACADEMICO": "",
+        "BIN_PENSUM_ACADEMICO": "",
+        "FILE_NAME_CERTIFICADO_NOTAS": "",
+        "BIN_CERTIFICADO_NOTAS": "",
+        "FILE_NAME_PAGARE": "",
+        "BIN_PAGARE": "",
+        "FILE_NAME_PAGARE_FIRMADO": "",
+        "BIN_PAGARE_FIRMADO": "",
+        "FILE_NAME_MEMORANDO": "",
+        "BIN_MEMORANDO": ""
       };
 
       aAdjuntos.forEach(function (oAdjunto) {

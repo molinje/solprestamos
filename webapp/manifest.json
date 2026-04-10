@@ -3,9 +3,13 @@
   "sap.app": {
     "id": "prestamos.ccb.org.solprestamos",
     "type": "application",
-    "i18n": "i18n/i18n.properties",
+    "i18n": {
+      "bundleUrl": "i18n/i18n.properties",
+      "supportedLocales": [""],
+      "fallbackLocale": ""
+    },
     "applicationVersion": {
-      "version": "0.1.1"
+      "version": "0.1.2"
     },
     "dataSources": {
       "restService": {

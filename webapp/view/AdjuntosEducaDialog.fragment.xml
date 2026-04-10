@@ -1,0 +1,55 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:u="sap.ui.unified">
+
+    <Dialog
+        id="adjuntosDialogEduca"
+        title="Agregar Documento"
+        contentWidth="420px"
+        draggable="true">
+
+        <content>
+            <VBox class="sapUiSmallMargin sapUiSmallMarginBottom">
+                <Label text="Archivo *" required="true" class="sapUiSmallMarginBottom"/>
+                <u:FileUploader
+			id="fileUploaderDialogEduca"
+			name="myFileUpload"
+			uploadUrl="upload/"
+			tooltip="Upload your file to the local server"
+			change="onArchivoSeleccionado"/>
+               
+
+                <Label text="Tipo de Documento *" required="true" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                <Select
+                    id="selectTipoDocDialogEduca"
+                    width="100%"
+                    selectedKey="{adjuntoDlg>/tipoArchivo}"
+                    forceSelection="false"
+                    valueState="{adjuntoDlg>/tipoValueState}"
+                    valueStateText="{adjuntoDlg>/tipoValueStateText}">
+                    <core:Item key="" text="-- Seleccione --"/>
+                    <core:Item key="1" text="Recibo matrícula"/>
+                    <core:Item key="2" text="Pensum Academico"/>
+                    <core:Item key="3" text="Certificado de notas"/>
+                    <core:Item key="4" text="Pagaré"/>
+                    <core:Item key="5" text="Pagaré firmado"/>
+                    <core:Item key="6" text="Memorando"/>
+                </Select>
+            </VBox>
+        </content>
+
+        <buttons>
+            <Button
+                text="Cancelar"
+                press="onCancelarAdjunto"/>
+            <Button
+                text="Aceptar"
+                type="Emphasized"
+                press="onAceptarAdjunto"
+                enabled="{= !${adjuntoDlg>/isReadingFile} }"/>
+        </buttons>
+
+    </Dialog>
+
+</core:FragmentDefinition>

@@ -791,21 +791,16 @@ sap.ui.define([
 								// Extraer el número de solicitud del mensaje (ej: 'Registro guardado correctamente 8000000026')
 								var oMatch = message_success.match(/(\d+)$/);
 								var sIdSolicitud = oMatch ? oMatch[1] : "";
-                /*
+                
 								var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
 
-								if (adjuntosPayload.BIN_SOPORTE_CALAMIDAD.length > 0) {
+								if (adjuntosPayload.BIN_RECIBO_MATRICULA.length > 0) {
 									var oAdjuntosServiceData = {
 										"n0:ZCOHCMFM_GUARDAR_PROCPASIT45": {
 											"-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
 											"PDF_DOCUMENTOS": {
 												"item": [
-													{
-														"UUID": sIdSolicitud,
-														"BIN_SOPORTE_CALAMIDAD": adjuntosPayload.BIN_SOPORTE_CALAMIDAD,
-														"FILE_NAME_SOPORTE_CALAMIDAD": adjuntosPayload.FILE_NAME_SOPORTE_CALAMIDAD
-
-													}
+													adjuntosPayload
 												]
 											}
 										}
@@ -818,7 +813,7 @@ sap.ui.define([
 									that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
 								}
 
-                */
+                
 
 							} else {
 
@@ -1025,7 +1020,7 @@ sap.ui.define([
       if (!this._oAdjuntosDialog3) {
         Fragment.load({
           id: oView.getId(),
-          name: "prestamos.ccb.org.solprestamos.view.AdjuntosDialog",
+          name: "prestamos.ccb.org.solprestamos.view.AdjuntosEducaDialog",
           controller: this
         }).then(function (oDialog) {
           that._oAdjuntosDialog3 = oDialog;
@@ -1157,19 +1152,39 @@ sap.ui.define([
 
       var oPayload = {
         "UUID": id_prestamo,
-        "FILE_NAME_SOPORTE_CALAMIDAD": "",
-        "BIN_SOPORTE_CALAMIDAD": "",
-        "FILE_NAME_FACTURA_COMPRA": "",
-        "BIN_FACTURA_COMPRA": ""
+        "FILE_NAME_RECIBO_MATRICULA":"",
+        "BIN_RECIBO_MATRICULA":"",
+        "FILE_NAME_PENSUM_ACADEMICO":"",
+        "BIN_PENSUM_ACADEMICO":"",
+        "FILE_NAME_CERTIFICADO_NOTAS":"",
+        "BIN_CERTIFICADO_NOTAS":"",
+        "FILE_NAME_PAGARE":"",
+        "BIN_PAGARE":"",
+        "FILE_NAME_PAGARE_FIRMADO":"",
+        "BIN_PAGARE_FIRMADO":"",
+        "FILE_NAME_MEMORANDO":"",
+        "BIN_MEMORANDO":""
       };
 
       aAdjuntos.forEach(function (oAdjunto) {
         if (oAdjunto.tipoArchivo === "1") {
-          oPayload.BIN_SOPORTE_CALAMIDAD = oAdjunto.base64Content || "";
-          oPayload.FILE_NAME_SOPORTE_CALAMIDAD = oAdjunto.nombreArchivo || "";
+          oPayload.BIN_RECIBO_MATRICULA = oAdjunto.base64Content || "";
+          oPayload.FILE_NAME_RECIBO_MATRICULA = oAdjunto.nombreArchivo || "";
         } else if (oAdjunto.tipoArchivo === "2") {
-          oPayload.BIN_FACTURA_COMPRA = oAdjunto.base64Content || "";
-          oPayload.FILE_NAME_FACTURA_COMPRA = oAdjunto.nombreArchivo || "";
+          oPayload.BIN_PENSUM_ACADEMICO = oAdjunto.base64Content || "";
+          oPayload.FILE_NAME_PENSUM_ACADEMICO = oAdjunto.nombreArchivo || "";
+        } else if (oAdjunto.tipoArchivo === "3") {
+          oPayload.BIN_CERTIFICADO_NOTAS = oAdjunto.base64Content || "";
+          oPayload.FILE_NAME_CERTIFICADO_NOTAS = oAdjunto.nombreArchivo || "";
+        } else if (oAdjunto.tipoArchivo === "4") {
+          oPayload.BIN_PAGARE = oAdjunto.base64Content || "";
+          oPayload.FILE_NAME_PAGARE = oAdjunto.nombreArchivo || "";
+        } else if (oAdjunto.tipoArchivo === "5") {
+          oPayload.BIN_PAGARE_FIRMADO = oAdjunto.base64Content || "";
+          oPayload.FILE_NAME_PAGARE_FIRMADO = oAdjunto.nombreArchivo || "";
+        } else if (oAdjunto.tipoArchivo === "6") {
+          oPayload.BIN_MEMORANDO = oAdjunto.base64Content || "";
+          oPayload.FILE_NAME_MEMORANDO = oAdjunto.nombreArchivo || "";
         }
       });
 

@@ -12,10 +12,11 @@
     "@sap/ui5-builder-webide-extension": "^1.1.8",
     "@sap/ux-ui5-tooling": "^1.20.1",
     "@ui5/cli": "^4.0.33",
+    "mbt": "^1.2.29",
+    "rimraf": "^5.0.5",
     "ui5-middleware-simpleproxy": "^3.0.0",
     "ui5-task-zipper": "^3.4.x",
-    "rimraf": "^5.0.5",
-    "mbt": "^1.2.29"
+    "xlsx": "^0.18.5"
   },
   "ui5": {
     "dependencies": [

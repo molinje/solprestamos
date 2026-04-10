@@ -81,7 +81,8 @@ sap.ui.define([
         programaTitulo: "",
         programaUniversidad: "",
         programaCarrera: "",
-        programaNIT: ""
+        programaNIT: "",
+        programaCodigo: ""
       });
 
       this.getView().setModel(oViewModel, "educaView");
@@ -140,6 +141,7 @@ sap.ui.define([
       oViewModel.setProperty("/programaUniversidad", "");
       oViewModel.setProperty("/programaCarrera", "");
       oViewModel.setProperty("/programaNIT", "");
+      oViewModel.setProperty("/programaCodigo", "");
     },
 
     /**
@@ -216,6 +218,7 @@ sap.ui.define([
       oViewModel.setProperty("/programaTitulo", oPrograma.TITULO);
       oViewModel.setProperty("/programaUniversidad", oPrograma.NAME1);
       oViewModel.setProperty("/programaCarrera", oPrograma.NAME2);
+      oViewModel.setProperty("/programaCodigo", oPrograma.STCD1);
       oViewModel.setProperty("/programaBusqueda", oPrograma.TITULO + " — " + oPrograma.NAME1);
     },
 
@@ -513,6 +516,7 @@ sap.ui.define([
         ZTIEPE: "",
         ZVALPE: "",
         ZVALPEE: "",
+        ZPERPE: "",
         ZPORPEE: "",
         ZPORPEC: "",
         ZVALPEC: "",
@@ -527,7 +531,8 @@ sap.ui.define([
         ZCODEX: "",
         ZNUCEX: "",
         ZDIREX: "",
-        ZTELEX: ""
+        ZTELEX: "",
+        ZNOINST: ""
       };
 
       var lv_EmployeeNumber = oViewModel.getProperty("/employeeNumber");
@@ -539,6 +544,7 @@ sap.ui.define([
       var lv_DescuentoPrimas = oViewModel.getProperty("/DescuentoPrimas");
       var lv_Porcentaje = oViewModel.getProperty("/PorcentajePrima");
       var lv_ProgramaNIT = oViewModel.getProperty("/programaNIT");
+      var lv_ProgramaCodigo = oViewModel.getProperty("/programaCodigo");
       var lv_ProgramaTitulo = oViewModel.getProperty("/programaTitulo");
       var lv_ProgramaUniversidad = oViewModel.getProperty("/programaUniversidad");
       var lv_ProgramaCarrera = oViewModel.getProperty("/programaCarrera");
@@ -563,11 +569,33 @@ sap.ui.define([
       var lv_ZPORPEE = oViewModel.getProperty("/porcPrestamo");
       var lv_ZPORPEC = oViewModel.getProperty("/porcCondonado");
       var lv_ZVALPEC = oViewModel.getProperty("/valorCondonado");
-      var lv_ZNUCUPE = oViewModel.getProperty("/numeroCuotas");
+      var lv_ZNUCUPE = oViewModel.getProperty("/NCuotas");
+      
       var lv_ZVALCOPE = oViewModel.getProperty("/valorCondonado");
       var lv_ZVALREPE = oViewModel.getProperty("/ValorPagar");
       var lv_ZNOTITU = oViewModel.getProperty("/programaTitulo");
       var lv_ZNOMFOR = oViewModel.getProperty("/programaTitulo");
+      var lv_ZCODPRO = oViewModel.getProperty("/programaCodigo");
+
+      if(lv_Periodicidad && lv_Periodicidad.trim() !== ""){
+        oPayload.ZPERPE = lv_Periodicidad;
+      } else {
+
+        MessageBox.error(
+          "No se identifico la periodicidad del programa educativo seleccionado"
+        );
+        return;
+      }
+
+      if(lv_ZCODPRO && lv_ZCODPRO.trim() !== ""){
+        oPayload.ZNOINST = lv_ZCODPRO;
+      } else {
+
+        MessageBox.error(
+          "No se identifico el programa educativo seleccionado"
+        );
+        return;
+      }
 
       if (lv_PERNR && lv_PERNR.trim() !== "") {
         oPayload.PERNR = lv_PERNR;

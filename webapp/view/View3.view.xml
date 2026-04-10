@@ -26,8 +26,8 @@
                         <VBox>
                             <Label text="Tipo de Educación"/>
                             <Select selectedKey="{educaView>/tipoEducacion}" forceSelection="false" width="100%">
-                                <core:Item key="1" text="Pregrado"/>
-                                <core:Item key="2" text="Postgrado"/>
+                                <core:Item key="2" text="Pregrado"/>
+                                <core:Item key="1" text="Postgrado"/>
                             </Select>
                         </VBox>
                         <VBox>
@@ -52,9 +52,9 @@
                         <VBox>
                             <Label text="Periodicidad"/>
                             <Select selectedKey="{educaView>/Periodicidad}" forceSelection="false" width="100%">
-                                <core:Item key="01" text="Anual"/>
-                                <core:Item key="02" text="Cuatrimestral"/>
-                                <core:Item key="03" text="Semestral"/>
+                                <core:Item key="1" text="Anual"/>
+                                <core:Item key="4" text="Cuatrimestral"/>
+                                <core:Item key="2" text="Semestral"/>
                             </Select>
                         </VBox>
                         <VBox>
@@ -66,7 +66,7 @@
                                 change="onCuotasChange"
                                 valueState="{educaView>/cuotasValueState}"
                                 valueStateText="{educaView>/cuotasValueStateText}">
-                                <core:Item key="05" text="5"/>
+                                <core:Item key="5" text="5"/>
                                 <core:Item key="10" text="10"/>
                             </Select>
                         </VBox>

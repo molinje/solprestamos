@@ -731,7 +731,7 @@ sap.ui.define([
       }
 
       if (lv_ZNOMFOR && lv_ZNOMFOR.trim() !== "") {
-        oPayload.ZNOMFOR = lv_ZNOMFOR;
+        oPayload.ZNOMFOR = lv_ZNOMFOR.substring(0, 30);
       } else {
 
         MessageBox.error(

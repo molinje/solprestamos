@@ -673,7 +673,7 @@ sap.ui.define([
       }
 
       if (lv_ZVALPE && lv_ZVALPE > 0) {
-        oPayload.ZVALPE = lv_ZVALPE;
+        oPayload.ZVALPE = (parseFloat(lv_ZVALPE) / 100).toFixed(2);
       } else {
 
         MessageBox.error(
@@ -713,7 +713,7 @@ sap.ui.define([
       }
 
       if (lv_ZVALPEE && lv_ZVALPEE > 0) {
-        oPayload.ZVALPEE = lv_ZVALPEE;
+        oPayload.ZVALPEE = (parseFloat(lv_ZVALPEE) / 100).toFixed(2);
       } else {
 
         MessageBox.error(

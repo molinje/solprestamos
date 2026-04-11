@@ -25,14 +25,14 @@
                         <!-- Fila 1: Tipo de Educación | Nivel -->
                         <VBox>
                             <Label text="Tipo de Educación"/>
-                            <Select selectedKey="{educaView>/tipoEducacion}" forceSelection="false" width="100%">
+                            <Select id="selectTipoEducacion" selectedKey="{educaView>/tipoEducacion}" forceSelection="false" width="100%" change="onTipoEducacionChange">
                                 <core:Item key="2" text="Pregrado"/>
                                 <core:Item key="1" text="Postgrado"/>
                             </Select>
                         </VBox>
                         <VBox>
                             <Label text="Nivel"/>
-                            <Select selectedKey="{educaView>/Nivel}" forceSelection="false" width="100%">
+                            <Select id="selectNivel" selectedKey="{educaView>/Nivel}" forceSelection="false" width="100%">
                                 <core:Item key="01" text="1"/>
                                 <core:Item key="02" text="2"/>
                                 <core:Item key="03" text="3"/>
@@ -51,7 +51,7 @@
                         <!-- Fila 2: Periodicidad | N. Cuotas -->
                         <VBox>
                             <Label text="Periodicidad"/>
-                            <Select selectedKey="{educaView>/Periodicidad}" forceSelection="false" width="100%">
+                            <Select id="selectPeriodicidad" selectedKey="{educaView>/Periodicidad}" forceSelection="false" width="100%">
                                 <core:Item key="1" text="Anual"/>
                                 <core:Item key="4" text="Cuatrimestral"/>
                                 <core:Item key="2" text="Semestral"/>
@@ -60,14 +60,15 @@
                         <VBox>
                             <Label text="N. Cuotas"/>
                             <Select
+                                id="selectCuotasEduca"
                                 selectedKey="{educaView>/NCuotas}"
                                 forceSelection="false"
                                 width="100%"
                                 change="onCuotasChange"
                                 valueState="{educaView>/cuotasValueState}"
-                                valueStateText="{educaView>/cuotasValueStateText}">
-                                <core:Item key="5" text="5"/>
-                                <core:Item key="10" text="10"/>
+                                valueStateText="{educaView>/cuotasValueStateText}"
+                                items="{educaView>/CuotasEducaCollection}">
+                                <core:Item key="{educaView>CuotasId}" text="{educaView>Name}"/>
                             </Select>
                         </VBox>
 

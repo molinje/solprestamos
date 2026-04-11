@@ -74,6 +74,9 @@ sap.ui.define([
         // Otros
         solicitudEnabled: true,
         adjuntos: [],
+
+        // Opciones de cuotas según tipo de educación (se construye en onTipoEducacionChange)
+        CuotasEducaCollection: [],
         programasPregrado: programasPregrado,
 
         // Buscador de programa pregrado
@@ -302,6 +305,37 @@ sap.ui.define([
       }
 
 
+    },
+
+    /**
+     * Evento cuando cambia el tipo de educación.
+     * Filtra las cuotas disponibles según la selección:
+     *   key "2" Pregrado  → solo cuota 5
+     *   key "1" Postgrado → solo cuota 10
+     */
+    onTipoEducacionChange: function (oEvent) {
+      var oViewModel = this.getView().getModel("educaView");
+      var sKey = oEvent.getParameter("selectedItem").getKey();
+
+      var oCuotasPorTipo = {
+        "2": { CuotasId: "5",  Name: "5"  },   // Pregrado
+        "1": { CuotasId: "10", Name: "10" }    // Postgrado
+      };
+
+      var oCuota = oCuotasPorTipo[sKey];
+      if (oCuota) {
+        oViewModel.setProperty("/CuotasEducaCollection", [oCuota]);
+        oViewModel.setProperty("/NCuotas", oCuota.CuotasId);
+        oViewModel.setProperty("/numeroCuotas", parseInt(oCuota.CuotasId));
+      } else {
+        oViewModel.setProperty("/CuotasEducaCollection", []);
+        oViewModel.setProperty("/NCuotas", "");
+        oViewModel.setProperty("/numeroCuotas", 0);
+      }
+
+      // Limpiar estado de validación de cuotas al cambiar tipo
+      oViewModel.setProperty("/cuotasValueState", "None");
+      oViewModel.setProperty("/cuotasValueStateText", "");
     },
 
     /**

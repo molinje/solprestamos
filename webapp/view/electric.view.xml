@@ -54,25 +54,9 @@
                             width="100%"
                             change="onCuotasChange"
                             valueState="{movelectricView>/cuotasValueState}"
-                            valueStateText="{movelectricView>/cuotasValueStateText}">
-                            <core:Item key="01" text="1"/>
-                            <core:Item key="02" text="2"/>
-                            <core:Item key="03" text="3"/>
-                            <core:Item key="04" text="4"/>
-                            <core:Item key="05" text="5"/>
-                            <core:Item key="06" text="6"/>
-                            <core:Item key="07" text="7"/>
-                            <core:Item key="08" text="8"/>
-                            <core:Item key="09" text="9"/>
-                            <core:Item key="10" text="10"/>
-                            <core:Item key="11" text="11"/>
-                            <core:Item key="12" text="12"/>
-                            <core:Item key="13" text="13"/>
-                            <core:Item key="14" text="14"/>
-                            <core:Item key="15" text="15"/>
-                            <core:Item key="16" text="16"/>
-                            <core:Item key="17" text="17"/>
-                            <core:Item key="18" text="18"/>
+                            valueStateText="{movelectricView>/cuotasValueStateText}"
+                            items="{movelectricView>/CuotasCollection}">
+                            <core:Item key="{movelectricView>CuotasId}" text="{movelectricView>Name}"/>
                         </Select>
 
                         <Label text="Valor préstamo" labelFor="ValorPrestamoMelectric" class="sapUiSmallMarginTop"/>

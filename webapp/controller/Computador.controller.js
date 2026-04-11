@@ -43,7 +43,10 @@ sap.ui.define([
         solicitudEnabled: true,
 
         // Total primas a descontar
-        valorTotalPrimas: 0
+        valorTotalPrimas: 0,
+
+        // Opciones de cuotas (se construye dinámicamente en _onRouteMatched)
+        CuotasCollection: []
       });
       this.getView().setModel(oViewModel, "compuView");
 
@@ -69,6 +72,17 @@ sap.ui.define([
        //oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo));
         oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, "")));
       }
+
+      // Construir CuotasCollection dinámicamente según oPrestamoSeleccionado.Cuotas
+      // El valor llega como string con ceros a la izquierda, ej: "0018" → 18 cuotas
+      var iMaxCuotas = oPrestamoSeleccionado && oPrestamoSeleccionado.Cuotas
+        ? parseInt(oPrestamoSeleccionado.Cuotas, 10)
+        : 12;
+      var aCuotasCollection = [];
+      for (var i = 1; i <= iMaxCuotas; i++) {
+        aCuotasCollection.push({ CuotasId: String(i), Name: String(i) });
+      }
+      oViewModel.setProperty("/CuotasCollection", aCuotasCollection);
     },
 
     /**
@@ -94,7 +108,8 @@ sap.ui.define([
         destinoValueState: "None",
         destinoValueStateText: "",
         solicitudEnabled: true,
-        valorTotalPrimas: 0
+        valorTotalPrimas: 0,
+        CuotasCollection: []
       });
     },
 

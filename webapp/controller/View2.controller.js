@@ -107,59 +107,23 @@ sap.ui.define([
 
 			}
 
+			// Construir CuotasCollection dinámicamente según oPrestamoSeleccionado.Cuotas
+			// El valor llega como string con ceros a la izquierda, ej: "0018" → 18 cuotas
+			var iMaxCuotas = oPrestamoSeleccionado && oPrestamoSeleccionado.Cuotas
+				? parseInt(oPrestamoSeleccionado.Cuotas, 10)
+				: 12;
+
+			var aCuotasCollection = [];
+			for (var i = 1; i <= iMaxCuotas; i++) {
+				aCuotasCollection.push({
+					"CuotasId": String(i),
+					"Name": String(i)
+				});
+			}
+
 			var oData = {
 				"SelectedCuotas": "SP-1001",
-
-				"CuotasCollection": [
-					{
-						"CuotasId": "01",
-						"Name": "1"
-					},
-					{
-						"CuotasId": "02",
-						"Name": "2"
-					},
-					{
-						"CuotasId": "03",
-						"Name": "3"
-					},
-					{
-						"CuotasId": "04",
-						"Name": "4"
-					},
-					{
-						"CuotasId": "05",
-						"Name": "5"
-					},
-					{
-						"CuotasId": "06",
-						"Name": "6"
-					},
-					{
-						"CuotasId": "07",
-						"Name": "7"
-					},
-					{
-						"CuotasId": "08",
-						"Name": "8"
-					},
-					{
-						"CuotasId": "09",
-						"Name": "9"
-					},
-					{
-						"CuotasId": "10",
-						"Name": "10"
-					},
-					{
-						"CuotasId": "11",
-						"Name": "11"
-					},
-					{
-						"CuotasId": "12",
-						"Name": "12"
-					}
-				],
+				"CuotasCollection": aCuotasCollection,
 				"Editable": true,
 				"Enabled": true
 			};

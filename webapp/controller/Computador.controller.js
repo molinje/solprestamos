@@ -72,6 +72,33 @@ sap.ui.define([
     },
 
     /**
+     * Reinicializa el modelo compuView con los valores iniciales del onInit.
+     */
+    _resetCompuView: function () {
+      var oViewModel = this.getView().getModel("compuView");
+      oViewModel.setData({
+        moneda: "COP",
+        montoMaximo: 0,
+        valorSolicitado: 0,
+        valorPrestamo: 0,
+        valorCuota: 0,
+        valorDescuentoPrimas: 0,
+        selectedCuotas: "",
+        numeroCuotas: 0,
+        selectedDestino: "",
+        descuentoPrimas: "NO",
+        valorValueState: "None",
+        valorValueStateText: "",
+        cuotasValueState: "None",
+        cuotasValueStateText: "",
+        destinoValueState: "None",
+        destinoValueStateText: "",
+        solicitudEnabled: true,
+        valorTotalPrimas: 0
+      });
+    },
+
+    /**
      * Evento cuando se activa el Step 1
      */
     onStep1Activate: function () {
@@ -499,6 +526,7 @@ sap.ui.define([
      * Navega hacia atrás
      */
     onNavBack: function () {
+      this._resetCompuView();
       var oRouter = this.getOwnerComponent().getRouter();
       oRouter.navTo("RouteViewini");
     }

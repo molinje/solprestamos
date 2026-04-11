@@ -76,6 +76,32 @@ sap.ui.define([
 		},
 
 		/**
+		 * Reinicializa el modelo movelectricView con los valores iniciales del onInit.
+		 */
+		_resetMovelectricView: function () {
+			var oViewModel = this.getView().getModel("movelectricView");
+			oViewModel.setData({
+				moneda: "COP",
+				montoMaximo: 0,
+				valorSolicitado: 0,
+				valorPrestamo: 0,
+				valorCuota: 0,
+				selectedCuotas: "",
+				numeroCuotas: 0,
+				cuotasValueState: "None",
+				cuotasValueStateText: "",
+				valorValueState: "None",
+				valorValueStateText: "",
+				ValorCuotaMelectric: 0,
+				ValorPrestamoMelectric: 0,
+				ValorDescPrimasMelectric: 0,
+				descuentoPrimas: "NO",
+				valorTotalPrimas: 0,
+				solicitudEnabled: true
+			});
+		},
+
+		/**
 		 * Evento cuando cambia el número de cuotas
 		 */
 		onCuotasChange: function (oEvent) {
@@ -430,6 +456,7 @@ sap.ui.define([
 		},
 
 		onNavBack: function () {
+			this._resetMovelectricView();
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("RouteViewini");
 		}

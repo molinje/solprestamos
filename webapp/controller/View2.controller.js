@@ -186,6 +186,55 @@ sap.ui.define([
 		},
 
 		/**
+		 * Reinicializa el modelo calamView con los valores iniciales del onInit.
+		 * Releer userData y prestamoSeleccionado desde globalData para restaurar
+		 * los campos derivados del contexto del usuario.
+		 */
+		_resetCalamView: function () {
+			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+			var oUserData = oGlobalModel ? oGlobalModel.getProperty("/userData") : null;
+			var oPrestamoSeleccionado = oGlobalModel ? oGlobalModel.getProperty("/prestamoSeleccionado") : null;
+
+			var oViewModel = this.getView().getModel("calamView");
+			oViewModel.setData({
+				employeeNumber: oUserData ? oUserData.PERNR : "",
+				idPrestamo: oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : "",
+				moneda: "COP",
+				montoMaximo: 0,
+				valorSolicitado: 0,
+				valorPrestamo: 0,
+				ValorCondonado: 0,
+				valorCuota: 0,
+				valorComprometido: 0,
+				valorTotalPrimas: 0,
+				selectedCuotas: "",
+				numeroCuotas: 0,
+				cuotasValueState: "None",
+				cuotasValueStateText: "",
+				valorValueState: "None",
+				valorValueStateText: "",
+				motivoValueState: "None",
+				motivoValueStateText: "",
+				mostrarCCB: false,
+				mostrarExterno: false,
+				tieneCodeudor: -1,
+				numeroDocumento: "",
+				docBusqueda: "",
+				nombreCodeudor: "",
+				cedulaCodeudor: "",
+				direccionCodeudor: "",
+				telefonoCodeudor: "",
+				fecha: "",
+				selectedMotCalamidad: "",
+				SelectedPrimas: "NO_APLICA",
+				primasADescontar: [],
+				solicitudEnabled: true,
+				adjuntos: [],
+				Codeudores: {}
+			});
+		},
+
+		/**
 		 * Evento cuando se activa el Step 1
 		 */
 		onStep1Activate: function () {
@@ -1213,6 +1262,7 @@ sap.ui.define([
 
 
 		onNavBack: function () {
+			this._resetCalamView();
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("RouteViewini");
 		}

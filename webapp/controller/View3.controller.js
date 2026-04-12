@@ -80,6 +80,8 @@ sap.ui.define([
         CuotasEducaCollection: [],
         programasPregrado: programasPregrado,
         programasPostgrado: programasPostgrado,
+        mostrarPregrado: false,
+        mostrarPostgrado: false,
  
         // Buscador de programa postgrado
         programaPostGradoBusqueda: "",
@@ -140,6 +142,10 @@ sap.ui.define([
       // Limpiar primas al navegar
       this.getView().getModel("listprimas3").setProperty("/items", []);
       oViewModel.setProperty("/SelectedPrimas", "NO_APLICA");
+
+      // Ocultar buscadores hasta que el usuario elija tipo de educación
+      oViewModel.setProperty("/mostrarPregrado", false);
+      oViewModel.setProperty("/mostrarPostgrado", false);
 
       // Limpiar selección previa y sugerencias del input
       this._aUltimosFiltrados = [];
@@ -394,6 +400,10 @@ sap.ui.define([
     onTipoEducacionChange: function (oEvent) {
       var oViewModel = this.getView().getModel("educaView");
       var sKey = oEvent.getParameter("selectedItem").getKey();
+
+      // Mostrar/ocultar buscador según tipo: "2" = Pregrado, "1" = Postgrado
+      oViewModel.setProperty("/mostrarPregrado", sKey === "2");
+      oViewModel.setProperty("/mostrarPostgrado", sKey === "1");
 
       var oCuotasPorTipo = {
         "2": { CuotasId: "5", Name: "5" },   // Pregrado

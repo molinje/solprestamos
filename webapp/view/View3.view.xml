@@ -128,7 +128,7 @@
                         <VBox/>
 
                         <!-- Buscador de programa: ancho completo siempre -->
-                        <VBox>
+                        <VBox visible="{educaView>/mostrarPregrado}">
                             <layoutData>
                                 <layout:GridData span="L12 M12 S12"/>
                             </layoutData>
@@ -143,7 +143,7 @@
                                 value="{educaView>/programaBusqueda}"/>
                         </VBox>
 
-                        <VBox>
+                        <VBox visible="{educaView>/mostrarPostgrado}">
                             <layoutData>
                                 <layout:GridData span="L12 M12 S12"/>
                             </layoutData>

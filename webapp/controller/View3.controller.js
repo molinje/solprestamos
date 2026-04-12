@@ -15,6 +15,7 @@ sap.ui.define([
 
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
       var programasPregrado = oGlobalModel ? oGlobalModel.getProperty("/gt_pregrado") : [];
+      var programasPostgrado = oGlobalModel ? oGlobalModel.getProperty("/gt_postgrado") : [];
 
 
       var oUserData = oGlobalModel ? oGlobalModel.getProperty("/userData") : null;
@@ -78,6 +79,10 @@ sap.ui.define([
         // Opciones de cuotas según tipo de educación (se construye en onTipoEducacionChange)
         CuotasEducaCollection: [],
         programasPregrado: programasPregrado,
+        programasPostgrado: programasPostgrado,
+ 
+        // Buscador de programa postgrado
+        programaPostGradoBusqueda: "",
 
         // Buscador de programa pregrado
         programaBusqueda: "",
@@ -139,12 +144,15 @@ sap.ui.define([
       // Limpiar selección previa y sugerencias del input
       this._aUltimosFiltrados = [];
       this.byId("selectProgPregado").removeAllSuggestionItems();
+      this._aUltimosFiltradosPost = [];
+      this.byId("selectPostPregado").removeAllSuggestionItems();
       oViewModel.setProperty("/programaBusqueda", "");
       oViewModel.setProperty("/programaTitulo", "");
       oViewModel.setProperty("/programaUniversidad", "");
       oViewModel.setProperty("/programaCarrera", "");
       oViewModel.setProperty("/programaNIT", "");
       oViewModel.setProperty("/programaCodigo", "");
+      oViewModel.setProperty("/programaPostGradoBusqueda", "");
     },
 
     /**
@@ -219,10 +227,80 @@ sap.ui.define([
       var oViewModel = this.getView().getModel("educaView");
       oViewModel.setProperty("/programaNIT", oPrograma.NIT);
       oViewModel.setProperty("/programaTitulo", oPrograma.TITULO);
+       
+      oViewModel.setProperty("/programaUniversidad", oPrograma.NAME1); // Mapeados en la vista como "Universidad" y "Carrera"
+      oViewModel.setProperty("/programaCarrera", oPrograma.NAME2); // Mapeados en la vista como "Universidad" y "Carrera"
+      oViewModel.setProperty("/programaCodigo", oPrograma.STCD1);
+      oViewModel.setProperty("/programaBusqueda", oPrograma.TITULO + " — " + oPrograma.NAME1);
+    },
+
+    /**
+     * Filtra programasPostgrado mientras el usuario escribe en el buscador.
+     * Misma lógica que onSuggestPrograma pero lee de /programasPostgrado.
+     */
+    onSuggestPostgrado: function (oEvent) {
+      var sQuery = oEvent.getParameter("suggestValue");
+      var oInput = oEvent.getSource();
+
+      var bNavegando = oInput.getSuggestionItems().some(function (oItem) {
+        return oItem.getText() === sQuery;
+      });
+      if (bNavegando) { return; }
+
+      oInput.removeAllSuggestionItems();
+      this._aUltimosFiltradosPost = [];
+
+      if (!sQuery || sQuery.trim() === "") { return; }
+
+      var oViewModel = this.getView().getModel("educaView");
+      var aProgramas = oViewModel.getProperty("/programasPostgrado") || [];
+      var sQueryLower = sQuery.trim().toLowerCase();
+
+      this._aUltimosFiltradosPost = aProgramas.filter(function (oP) {
+        return (oP.TITULO && oP.TITULO.toLowerCase().indexOf(sQueryLower) !== -1) ||
+          (oP.NAME1 && oP.NAME1.toLowerCase().indexOf(sQueryLower) !== -1) ||
+          (oP.NAME2 && oP.NAME2.toLowerCase().indexOf(sQueryLower) !== -1);
+      });
+
+      this._aUltimosFiltradosPost.forEach(function (oP) {
+        oInput.addSuggestionItem(new ListItem({
+          key: oP.NIT,
+          text: oP.TITULO,
+          additionalText: oP.NAME1
+        }));
+      });
+    },
+
+    /**
+     * Rellena los inputs de solo lectura con los datos del postgrado seleccionado.
+     * Usa los mismos properties de educaView que onProgramaSeleccionado.
+     */
+    onPostgradoSeleccionado: function (oEvent) {
+      var oItem = oEvent.getParameter("selectedItem");
+      if (!oItem) { return; }
+
+      var sTitulo = oItem.getText();
+      var sUniversidad = oItem.getAdditionalText ? oItem.getAdditionalText() : "";
+
+      var aCandidatos = this._aUltimosFiltradosPost && this._aUltimosFiltradosPost.length
+        ? this._aUltimosFiltradosPost
+        : (this.getView().getModel("educaView").getProperty("/programasPostgrado") || []);
+
+      var oPrograma = aCandidatos.find(function (oP) {
+        return oP.TITULO === sTitulo && oP.NAME1 === sUniversidad;
+      });
+      if (!oPrograma) {
+        oPrograma = aCandidatos.find(function (oP) { return oP.TITULO === sTitulo; });
+      }
+      if (!oPrograma) { return; }
+
+      var oViewModel = this.getView().getModel("educaView");
+      oViewModel.setProperty("/programaNIT", oPrograma.NIT);
+      oViewModel.setProperty("/programaTitulo", oPrograma.TITULO);
       oViewModel.setProperty("/programaUniversidad", oPrograma.NAME1);
       oViewModel.setProperty("/programaCarrera", oPrograma.NAME2);
       oViewModel.setProperty("/programaCodigo", oPrograma.STCD1);
-      oViewModel.setProperty("/programaBusqueda", oPrograma.TITULO + " — " + oPrograma.NAME1);
+      oViewModel.setProperty("/programaPostGradoBusqueda", oPrograma.TITULO + " — " + oPrograma.NAME1);
     },
 
     /**
@@ -318,7 +396,7 @@ sap.ui.define([
       var sKey = oEvent.getParameter("selectedItem").getKey();
 
       var oCuotasPorTipo = {
-        "2": { CuotasId: "5",  Name: "5"  },   // Pregrado
+        "2": { CuotasId: "5", Name: "5" },   // Pregrado
         "1": { CuotasId: "10", Name: "10" }    // Postgrado
       };
 
@@ -604,14 +682,14 @@ sap.ui.define([
       var lv_ZPORPEC = oViewModel.getProperty("/porcCondonado");
       var lv_ZVALPEC = oViewModel.getProperty("/valorCondonado");
       var lv_ZNUCUPE = oViewModel.getProperty("/NCuotas");
-      
+
       var lv_ZVALCOPE = oViewModel.getProperty("/valorCondonado");
       var lv_ZVALREPE = oViewModel.getProperty("/ValorPagar");
       var lv_ZNOTITU = oViewModel.getProperty("/programaTitulo");
       var lv_ZNOMFOR = oViewModel.getProperty("/programaTitulo");
       var lv_ZCODPRO = oViewModel.getProperty("/programaCodigo");
 
-      if(lv_Periodicidad && lv_Periodicidad.trim() !== ""){
+      if (lv_Periodicidad && lv_Periodicidad.trim() !== "") {
         oPayload.ZPERPE = lv_Periodicidad;
       } else {
 
@@ -621,7 +699,7 @@ sap.ui.define([
         return;
       }
 
-      if(lv_ZCODPRO && lv_ZCODPRO.trim() !== ""){
+      if (lv_ZCODPRO && lv_ZCODPRO.trim() !== "") {
         oPayload.ZNOINST = lv_ZCODPRO;
       } else {
 
@@ -876,6 +954,19 @@ sap.ui.define([
               that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
             }
 
+            if (sIdSolicitud) {
+              // Guardar las primas asociadas a la solicitud
+              /*
+              this.GuardarPrimas(sUUID, sEmpleado)
+                .then(function (oResponse) {
+                  // éxito
+                })
+                .catch(function (oError) {
+                  MessageBox.error("Error al guardar primas: " + (oError.message || oError.statusText || "Error desconocido"), { title: "Error" });
+                });
+              */
+
+            }
 
 
           } else {
@@ -1253,6 +1344,27 @@ sap.ui.define([
       });
 
       return oPayload;
+    },
+
+    /**
+     * Guarda las primas asociadas a una solicitud enviándolas al backend.
+     * @param {string} NumSolicitud - UUID de la solicitud (campo UUID en cada registro)
+     * @param {string} NumEmpleado  - Número de empleado (campo EMPLEADO en cada registro)
+     * @returns {Promise} Promise que resuelve con la respuesta del servicio
+     */
+    GuardarPrimas: function (NumSolicitud, NumEmpleado) {
+      var aItems = this.getView().getModel("listprimas3").getProperty("/items") || [];
+
+      var jsonprimas = aItems.map(function (oItem) {
+        return {
+          "UUID": NumSolicitud,
+          "EMPLEADO": NumEmpleado,
+          "FECHA_PRIMA": oItem.FECHA_PRIMA || "",
+          "VALOR_PRIMA": oItem.VALOR_PRIMA || ""
+        };
+      });
+
+      return this._oBackendService.guardarPrimas(jsonprimas);
     },
 
     onNavBack: function () {

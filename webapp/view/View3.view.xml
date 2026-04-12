@@ -143,6 +143,21 @@
                                 value="{educaView>/programaBusqueda}"/>
                         </VBox>
 
+                        <VBox>
+                            <layoutData>
+                                <layout:GridData span="L12 M12 S12"/>
+                            </layoutData>
+                            <Label text="Buscar Programa / Universidad" labelFor="selectPostPregado"/>
+                            <Input
+                                id="selectPostPregado"
+                                width="100%"
+                                placeholder="Digite título, carrera o universidad para buscar..."
+                                showSuggestion="true"
+                                suggest="onSuggestPostgrado"
+                                suggestionItemSelected="onPostgradoSeleccionado"
+                                value="{educaView>/programaPostGradoBusqueda}"/>
+                        </VBox>
+
                         <!-- Fila 6: Título del Programa | Universidad -->
                         <VBox>
                             <Label text="Título del Programa"/>

@@ -74,16 +74,33 @@
 
                         <!-- Fila 3: Valor Solicitado | Valor Préstamo -->
                         <VBox>
-                            <Label text="Valor Solicitado" labelFor="inputValorSolicitado"/>
-                            <Input
-                                id="inputValorSolicitado"
-                                value="{educaView>/valorSolicitado}"
-                                type="Number"
-                                width="100%"
-                                placeholder="Ingrese el valor solicitado"
-                                change="onValorSolicitadoChange"
-                                valueState="{educaView>/valorValueState}"
-                                valueStateText="{educaView>/valorValueStateText}"/>
+                            <Label text="Valor Solicitado" labelFor="inputValorSolicitado" required="true"/>
+                            <HBox width="100%" alignItems="Center">
+                                <Input
+                                    id="inputValorSolicitado"
+                                    value="{
+                                        parts: [
+                                            {path: 'educaView>/valorSolicitado'},
+                                            {path: 'educaView>/moneda'}
+                                        ],
+                                        type: 'sap.ui.model.type.Currency',
+                                        formatOptions: {
+                                            showMeasure: false,
+                                            maxFractionDigits: 0
+                                        }
+                                    }"
+                                    change="onValorSolicitadoChange"
+                                    width="100%"
+                                    textAlign="End"
+                                    valueState="{educaView>/valorValueState}"
+                                    valueStateText="{educaView>/valorValueStateText}"
+                                    placeholder="Ingrese el valor solicitado"/>
+                                <Input
+                                    value="{educaView>/moneda}"
+                                    editable="false"
+                                    width="5rem"
+                                    textAlign="Center"/>
+                            </HBox>
                         </VBox>
                         <VBox>
                             <Label text="Valor Préstamo" labelFor="inputValorPrestamo"/>

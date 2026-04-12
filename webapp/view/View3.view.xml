@@ -128,7 +128,7 @@
                         <VBox/>
 
                         <!-- Buscador de programa: ancho completo siempre -->
-                        <VBox visible="{educaView>/mostrarPregrado}">
+                        <VBox id="vboxPregrado" visible="false">
                             <layoutData>
                                 <layout:GridData span="L12 M12 S12"/>
                             </layoutData>
@@ -143,15 +143,15 @@
                                 value="{educaView>/programaBusqueda}"/>
                         </VBox>
 
-                        <VBox visible="{educaView>/mostrarPostgrado}">
+                        <VBox id="vboxPostgrado" visible="false">
                             <layoutData>
                                 <layout:GridData span="L12 M12 S12"/>
                             </layoutData>
-                            <Label text="Buscar Programa / Universidad" labelFor="selectPostPregado"/>
+                            <Label text="Buscar PostGrado / Universidad" labelFor="selectPostPregado"/>
                             <Input
                                 id="selectPostPregado"
                                 width="100%"
-                                placeholder="Digite título, carrera o universidad para buscar..."
+                                placeholder="Digite título, o programa Postgrado para buscar..."
                                 showSuggestion="true"
                                 suggest="onSuggestPostgrado"
                                 suggestionItemSelected="onPostgradoSeleccionado"

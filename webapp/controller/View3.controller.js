@@ -144,8 +144,8 @@ sap.ui.define([
       oViewModel.setProperty("/SelectedPrimas", "NO_APLICA");
 
       // Ocultar buscadores hasta que el usuario elija tipo de educación
-      oViewModel.setProperty("/mostrarPregrado", false);
-      oViewModel.setProperty("/mostrarPostgrado", false);
+      this.byId("vboxPregrado").setVisible(false);
+      this.byId("vboxPostgrado").setVisible(false);
 
       // Limpiar selección previa y sugerencias del input
       this._aUltimosFiltrados = [];
@@ -402,8 +402,8 @@ sap.ui.define([
       var sKey = oEvent.getParameter("selectedItem").getKey();
 
       // Mostrar/ocultar buscador según tipo: "2" = Pregrado, "1" = Postgrado
-      oViewModel.setProperty("/mostrarPregrado", sKey === "2");
-      oViewModel.setProperty("/mostrarPostgrado", sKey === "1");
+      this.byId("vboxPregrado").setVisible(sKey === "2");
+      this.byId("vboxPostgrado").setVisible(sKey === "1");
 
       var oCuotasPorTipo = {
         "2": { CuotasId: "5", Name: "5" },   // Pregrado

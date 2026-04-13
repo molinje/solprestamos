@@ -82,7 +82,7 @@ sap.ui.define([
         programasPostgrado: programasPostgrado,
         mostrarPregrado: false,
         mostrarPostgrado: false,
- 
+
         // Buscador de programa postgrado
         programaPostGradoBusqueda: "",
 
@@ -233,7 +233,7 @@ sap.ui.define([
       var oViewModel = this.getView().getModel("educaView");
       oViewModel.setProperty("/programaNIT", oPrograma.NIT);
       oViewModel.setProperty("/programaTitulo", oPrograma.TITULO);
-       
+
       oViewModel.setProperty("/programaUniversidad", oPrograma.NAME1); // Mapeados en la vista como "Universidad" y "Carrera"
       oViewModel.setProperty("/programaCarrera", oPrograma.NAME2); // Mapeados en la vista como "Universidad" y "Carrera"
       oViewModel.setProperty("/programaCodigo", oPrograma.STCD1);
@@ -911,106 +911,106 @@ sap.ui.define([
         }
       };
 
-      /* 
+
       this._oBackendService.validarSolPrestamo(validateDataService)
         .then(function (oValidResponse) {
           var oValidResult = oValidResponse["n0:ZCOHCMFM_VALIDACIONESResponse"];
-*/
-      /*
-      if (!oValidResult || oValidResult.EV_SUCCESS !== "X") {
-        oViewModel.setProperty("/solicitudEnabled", true);
-        MessageBox.error(
-          (oValidResult && oValidResult.EV_MESSAGE) || "La solicitud no pasó las validaciones.",
-          { title: "Validación fallida" }
-        );
-        return;
-      }
-      */
 
-      //that._oBackendService.guardarPrestamo(dataService)
-      that._oBackendService.guardarSolPrestamo(dataService)
-        .then(function (oResponse) {
-          oViewModel.setProperty("/solicitudEnabled", true);
-
-          var message_success = "";
-          // validamos si el servicio nos retorno un mensaje de éxito para mostrarlo,
-          // de lo contrario mostramos un mensaje genérico de éxito
-          if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
-
-            message_success = oResponse['n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse'].EV_MESSAGE;
-
-            // Extraer el número de solicitud del mensaje (ej: 'Registro guardado correctamente 8000000026')
-            var oMatch = message_success.match(/(\d+)$/);
-            var sIdSolicitud = oMatch ? oMatch[1] : "";
-
-            var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
-
-            if (adjuntosPayload.BIN_RECIBO_MATRICULA.length > 0) {
-              var oAdjuntosServiceData = {
-                "n0:ZCOHCMFM_GUARDAR_PROCPASIT45": {
-                  "-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
-                  "PDF_DOCUMENTOS": {
-                    "item": [
-                      adjuntosPayload
-                    ]
-                  }
-                }
-              };
-            }
-
-
-
-            if (oAdjuntosServiceData != undefined) {
-              that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
-            }
-
-            if (sIdSolicitud) {
-              // Guardar las primas asociadas a la solicitud
-              /*
-              this.GuardarPrimas(sUUID, sEmpleado)
-                .then(function (oResponse) {
-                  // éxito
-                })
-                .catch(function (oError) {
-                  MessageBox.error("Error al guardar primas: " + (oError.message || oError.statusText || "Error desconocido"), { title: "Error" });
-                });
-              */
-
-            }
-
-
-          } else {
-
-            message_success = "Solicitud de Préstamo Calamidad creada exitosamente.";
-
+          /*
+          if (!oValidResult || oValidResult.EV_SUCCESS !== "X") {
+            oViewModel.setProperty("/solicitudEnabled", true);
+            MessageBox.error(
+              (oValidResult && oValidResult.EV_MESSAGE) || "La solicitud no pasó las validaciones.",
+              { title: "Validación fallida" }
+            );
+            return;
           }
+          */
 
-          MessageBox.success(message_success, {
-            details: "Monto: " + that._formatCurrency(oPayload.DARBT, oPayload.DBTCU) +
-              "\nCuotas: " + oPayload.ZNUCUPE +
-              "\nValor Cuota: " + that._formatCurrency(lv_ValorCuota, oPayload.DBTCU),
-            onClose: function () {
-              that.onNavBack();
-            }
-          });
+          //that._oBackendService.guardarPrestamo(dataService)
+          that._oBackendService.guardarSolPrestamo(dataService)
+            .then(function (oResponse) {
+              oViewModel.setProperty("/solicitudEnabled", true);
+
+              var message_success = "";
+              // validamos si el servicio nos retorno un mensaje de éxito para mostrarlo,
+              // de lo contrario mostramos un mensaje genérico de éxito
+              if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
+
+                message_success = oResponse['n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse'].EV_MESSAGE;
+
+                // Extraer el número de solicitud del mensaje (ej: 'Registro guardado correctamente 8000000026')
+                var oMatch = message_success.match(/(\d+)$/);
+                var sIdSolicitud = oMatch ? oMatch[1] : "";
+
+                var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
+
+                if (adjuntosPayload.BIN_RECIBO_MATRICULA.length > 0) {
+                  var oAdjuntosServiceData = {
+                    "n0:ZCOHCMFM_GUARDAR_PROCPASIT45": {
+                      "-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
+                      "PDF_DOCUMENTOS": {
+                        "item": [
+                          adjuntosPayload
+                        ]
+                      }
+                    }
+                  };
+                }
+
+
+
+                if (oAdjuntosServiceData != undefined) {
+                  that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
+                }
+
+                if (sIdSolicitud) {
+                  // Guardar las primas asociadas a la solicitud
+                  /*
+                  this.GuardarPrimas(sUUID, sEmpleado)
+                    .then(function (oResponse) {
+                      // éxito
+                    })
+                    .catch(function (oError) {
+                      MessageBox.error("Error al guardar primas: " + (oError.message || oError.statusText || "Error desconocido"), { title: "Error" });
+                    });
+                  */
+
+                }
+
+
+              } else {
+
+                message_success = "Solicitud de Préstamo Calamidad creada exitosamente.";
+
+              }
+
+              MessageBox.success(message_success, {
+                details: "Monto: " + that._formatCurrency(oPayload.DARBT, oPayload.DBTCU) +
+                  "\nCuotas: " + oPayload.ZNUCUPE +
+                  "\nValor Cuota: " + that._formatCurrency(lv_ValorCuota, oPayload.DBTCU),
+                onClose: function () {
+                  that.onNavBack();
+                }
+              });
+            })
+            .catch(function (oError) {
+              oViewModel.setProperty("/solicitudEnabled", true);
+              MessageBox.error(
+                "Error al guardar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
+                { title: "Error al guardar" }
+              );
+            });
+
         })
         .catch(function (oError) {
           oViewModel.setProperty("/solicitudEnabled", true);
           MessageBox.error(
-            "Error al guardar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
-            { title: "Error al guardar" }
+            "Error al validar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
+            { title: "Error de validación" }
           );
         });
-      /*
-        })
-      .catch(function (oError) {
-        oViewModel.setProperty("/solicitudEnabled", true);
-        MessageBox.error(
-          "Error al validar la solicitud: " + (oError.message || oError.statusText || "Error desconocido"),
-          { title: "Error de validación" }
-        );
-      });
-     */
+
 
       // Aquí se construiría el payload para crear la solicitud de préstamo
 
@@ -1284,7 +1284,14 @@ sap.ui.define([
         return;
       }
 
-      var mTipos = { "1": "Soporte Calamidad", "2": "Otro" };
+      var mTipos = {
+        "1": "Soporte Calamidad",
+        "2": "Pensum Académico",
+        "3": "Certificado de Notas",
+        "4": "Pagaré",
+        "5": "Pagaré Firmado",
+        "6": "Memorando"
+      };
 
       var oViewModel = this.getView().getModel("educaView");
       var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];

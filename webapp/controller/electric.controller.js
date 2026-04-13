@@ -288,7 +288,7 @@ sap.ui.define([
 				DARBT: 0,
 				PERNR: "",
 				ENDDA: "9999-12-31",
-				BEGDA: new Date().toISOString().slice(0, 10),
+				//BEGDA: new Date().toISOString().slice(0, 10),
 				DBTCU: "COP",
 				ZWAERS: "COP",
 				ZMOCA: "",
@@ -351,16 +351,19 @@ sap.ui.define([
 			that._oBackendService.validarSolPrestamo(validateDataService)
 				.then(function (oValidResponse) {
 					var oValidResult = oValidResponse["n0:ZCOHCMFM_VALIDACIONESResponse"];
-					/*
-					if (!oValidResult || oValidResult.EV_SUCCESS !== "X") {
+
+					// Evaluar errores en RESPONSE.item — si algún registro tiene TYPE "E", detener y mostrar mensajes de error
+					var aItems = oValidResult && oValidResult.RESPONSE && oValidResult.RESPONSE.item;
+					if (!Array.isArray(aItems)) {
+						aItems = aItems ? [aItems] : [];
+					}
+					var aErrores = aItems.filter(function (oItem) { return oItem.TYPE === "E"; });
+					if (aErrores.length > 0) {
 						oViewModel.setProperty("/solicitudEnabled", true);
-						MessageBox.error(
-							(oValidResult && oValidResult.EV_MESSAGE) || "La solicitud no pasó las validaciones.",
-							{ title: "Validación fallida" }
-						);
+						var sMensajes = aErrores.map(function (oItem) { return oItem.MESSAGE; }).join("\n");
+						MessageBox.error(sMensajes, { title: "Validación fallida" });
 						return;
 					}
-					*/	
 
 					that._oBackendService.guardarSolPrestamo(dataService)
 						.then(function (oResponse) {

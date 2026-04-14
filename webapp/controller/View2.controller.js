@@ -649,6 +649,18 @@ sap.ui.define([
 									that._oBackendService.guardarPDFsToSolPrestamo(oAdjuntosServiceData);
 								}
 
+								if (sIdSolicitud) {
+									that.GuardarPrimas(sIdSolicitud, oData.employeeNumber)
+										.then(function () {
+
+											MessageToast.show("Primas guardadas exitosamente.");
+											// éxito
+										})
+										.catch(function (oError) {
+											MessageBox.error("Error al guardar primas: " + (oError.message || oError.statusText || "Error desconocido"), { title: "Error" });
+										});
+								}
+
 							} else {
 
 								message_success = "Solicitud de Préstamo Calamidad creada exitosamente.";
@@ -1226,6 +1238,27 @@ sap.ui.define([
 		},
 
 
+
+		/**
+		 * Guarda las primas asociadas a la solicitud de préstamo.
+		 * @param {string} NumSolicitud - ID de la solicitud (campo UUID en cada registro)
+		 * @param {string} NumEmpleado  - Número de empleado (campo EMPLEADO en cada registro)
+		 * @returns {Promise} Promise que resuelve con la respuesta del servicio
+		 */
+		GuardarPrimas: function (NumSolicitud, NumEmpleado) {
+			var aItems = this.getView().getModel("listprimas").getProperty("/items") || [];
+
+			var jsonprimas = aItems.map(function (oItem) {
+				return {
+					"UUID": NumSolicitud,
+					"EMPLEADO": NumEmpleado,
+					"FECHA_PRIMA": oItem.FECHA_PRIMA || "",
+					"VALOR_PRIMA": oItem.VALOR_PRIMA || ""
+				};
+			});
+
+			return this._oBackendService.guardarPrimas(jsonprimas);
+		},
 
 		onNavBack: function () {
 			this._resetCalamView();

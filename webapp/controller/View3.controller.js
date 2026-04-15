@@ -630,6 +630,7 @@ sap.ui.define([
         ZWAERS: "COP",
         SUBTY: "",
         DARBT: "",
+        VALOR_POR_MES: 0,
         DATBW: new Date().toISOString().slice(0, 10),
         ZNUEXT: "",
         ZNOEXT: "",
@@ -750,6 +751,11 @@ sap.ui.define([
         );
         return;
       }
+
+      if (lv_ValorCuota && lv_ValorCuota > 0) {
+        oPayload.VALOR_POR_MES = (parseFloat(lv_ValorCuota) / 100).toFixed(2);
+      }
+      
 
       if (lv_DBTCU && lv_DBTCU.trim() !== "") {
         oPayload.DBTCU = lv_DBTCU;

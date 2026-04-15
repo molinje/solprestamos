@@ -442,6 +442,7 @@ sap.ui.define([
 
 				SUBTY: "",
 				DARBT: 0,
+				VALOR_POR_MES: 0,
 				PERNR: "",
 				ENDDA: "9999-12-31",
 				//BEGDA: new Date().toISOString().slice(0, 10),
@@ -532,6 +533,7 @@ sap.ui.define([
 				//dataSolic.ZVALSO = oData.valorPrestamo / 100;
 				dataSolic.DARBT = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
 				dataSolic.ZVALSO = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
+				
 
 			} else {
 
@@ -541,6 +543,11 @@ sap.ui.define([
 				return;
 
 			}
+
+			if (oData.valorCuota) {
+
+				dataSolic.VALOR_POR_MES = (parseFloat(oData.valorCuota) / 100).toFixed(2) || "0.00";	
+			} 
 
 			if (oData.numeroCuotas >= 0) {
 

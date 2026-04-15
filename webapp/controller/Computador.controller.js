@@ -342,6 +342,7 @@ sap.ui.define([
       var dataSolic = {
         SUBTY: "",
         DARBT: 0,
+        VALOR_POR_MES : 0,
         PERNR: "",
         ENDDA: "9999-12-31",
        // BEGDA: new Date().toISOString().slice(0, 10),
@@ -377,6 +378,7 @@ sap.ui.define([
         //dataSolic.ZVALSO = oData.valorPrestamo;
         dataSolic.DARBT = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
 				dataSolic.ZVALSO = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
+        dataSolic.VALOR_POR_MES = (parseFloat(oData.valorCuota) / 100).toFixed(2) || "0.00";
       } else {
         MessageBox.error("Por favor registre el valor a solicitar");
         return;

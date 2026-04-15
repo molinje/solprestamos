@@ -371,11 +371,28 @@ sap.ui.define([
 						.then(function (oResponse) {
 							oViewModel.setProperty("/solicitudEnabled", true);
 
+							var oRespData = oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"];
 							var message_success = "";
-							if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_SUCCESS == "X") {
-								message_success = oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_MESSAGE;
+							var sIdSolicitud = "";
+
+							if (oRespData.EV_SUCCESS == "X") {
+								message_success = oRespData.EV_MESSAGE;
+								var oMatch = message_success.match(/(\d+)$/);
+								sIdSolicitud = oMatch ? oMatch[1] : "";
 							} else {
 								message_success = "Solicitud de Préstamo Movilidad Eléctrica creada exitosamente.";
+							}
+
+							// Guardar primas si la solicitud fue creada y existen primas cargadas
+							var aPrimas = that.getView().getModel("listprimasElectric").getProperty("/items") || [];
+							if (sIdSolicitud && aPrimas.length > 0) {
+								that.GuardarPrimas(sIdSolicitud, oUserData.PERNR)
+									.catch(function (oError) {
+										MessageBox.error(
+											"Error al guardar primas: " + (oError.message || oError.statusText || "Error desconocido"),
+											{ title: "Error al guardar primas" }
+										);
+									});
 							}
 
 							MessageBox.success(message_success, {
@@ -473,6 +490,27 @@ sap.ui.define([
 				aPrimas.pop();
 				oViewModelPrimas.setProperty("/items", aPrimas);
 			}
+		},
+
+		/**
+		 * Guarda las primas asociadas a una solicitud enviándolas al backend.
+		 * @param {string} NumSolicitud - Número/UUID de la solicitud
+		 * @param {string} NumEmpleado  - Número de empleado
+		 * @returns {Promise} Promise que resuelve con la respuesta del servicio
+		 */
+		GuardarPrimas: function (NumSolicitud, NumEmpleado) {
+			var aItems = this.getView().getModel("listprimasElectric").getProperty("/items") || [];
+
+			var jsonprimas = aItems.map(function (oItem) {
+				return {
+					"UUID": NumSolicitud,
+					"EMPLEADO": NumEmpleado,
+					"FECHA_PRIMA": oItem.FECHA_PRIMA || "",
+					"VALOR_PRIMA": oItem.VALOR_PRIMA || ""
+				};
+			});
+
+			return this._oBackendService.guardarPrimas(jsonprimas);
 		},
 
 		onNavBack: function () {

@@ -948,8 +948,17 @@ sap.ui.define([
                 message_success = oResponse['n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse'].EV_MESSAGE;
 
                 // Extraer el número de solicitud del mensaje (ej: 'Registro guardado correctamente 8000000026')
-                var oMatch = message_success.match(/(\d+)$/);
-                var sIdSolicitud = oMatch ? oMatch[1] : "";
+                var sIdSolicitud = "";
+                if (oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_ID) {
+                  sIdSolicitud = oResponse["n0:ZCOHCMFM_0045GUARDARPRESTAMOResponse"].EV_ID;
+                } else {
+
+
+                  var oMatch = message_success.match(/(\d+)$/);
+                  sIdSolicitud = oMatch ? oMatch[1] : "";
+                }
+
+
 
                 var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
 
@@ -974,15 +983,16 @@ sap.ui.define([
 
                 if (sIdSolicitud) {
                   // Guardar las primas asociadas a la solicitud
-                  
-                  this.GuardarPrimas(sIdSolicitud, lv_PERNR)
+
+                  that.GuardarPrimas(sIdSolicitud, lv_PERNR)
                     .then(function (oResponse) {
+                      MessageToast.show("Primas guardadas exitosamente.");
                       // éxito
                     })
                     .catch(function (oError) {
                       MessageBox.error("Error al guardar primas: " + (oError.message || oError.statusText || "Error desconocido"), { title: "Error" });
                     });
-                  
+
 
                 }
 

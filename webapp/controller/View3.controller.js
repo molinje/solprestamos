@@ -985,6 +985,7 @@ sap.ui.define([
                   // Guardar las primas asociadas a la solicitud
 
                   that.GuardarPrimas(sIdSolicitud, lv_PERNR)
+                  
                     .then(function (oResponse) {
                       MessageToast.show("Primas guardadas exitosamente.");
                       // éxito

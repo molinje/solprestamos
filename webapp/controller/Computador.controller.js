@@ -504,6 +504,7 @@ sap.ui.define([
      * Agrega una prima consultando el servicio Add_PrimaService
      */
     onAddPrimas: function () {
+      var that = this;
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
       var oUserData = oGlobalModel.getProperty("/userData");
       var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");

@@ -463,7 +463,7 @@ sap.ui.define([
 					var iIdx = 0;
 					while (iIdx < aItems.length) {
 						var fValorPrima = parseFloat(aItems[iIdx].VALOR_PRIMA) || 0;
-						var iValorEntero = Math.trunc(fValorPrima * 100);
+						var iValorEntero = Math.trunc(fValorPrima);
 						aItems[iIdx].VALOR_PRIMA = String(iValorEntero);
 						aItems[iIdx].MONEDA_PRIMA = moneda;
 						fTotalPrimas = fTotalPrimas + fValorPrima;
@@ -484,12 +484,78 @@ sap.ui.define([
 		 * Elimina el último registro de la tabla de primas
 		 */
 		onReducePrimas: function () {
+			var that = this;
+
+			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+			var oUserData = oGlobalModel.getProperty("/userData");
+			var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
+
+			var oViewModel = this.getView().getModel("movelectricView");
+			var fValorSolicitado = oViewModel.getProperty("/valorSolicitado");
+			var moneda = oViewModel.getProperty("/moneda");
+			var employeenumber = oUserData ? oUserData.PERNR : "";
+			var idPrestamo = oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : "";
+
 			var oViewModelPrimas = this.getView().getModel("listprimasElectric");
 			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
-			if (aPrimas.length > 0) {
-				aPrimas.pop();
-				oViewModelPrimas.setProperty("/items", aPrimas);
+			var aTimes = aPrimas.length;
+
+			if (aTimes === 0) {
+				return;
 			}
+
+			if (aTimes === 1) {
+				oViewModelPrimas.setProperty("/items", []);
+				oViewModel.setProperty("/valorTotalPrimas", 0);
+				that._calcularValorPrestamo();
+				return;
+			}
+
+			var NoPrimas = aTimes - 1;
+			var dataPrima = {
+				"EMPLEADO": employeenumber,
+				"VALOR_PRESTAMO": String(fValorSolicitado),
+				"CANTIDAD_PRIMAS": String(NoPrimas),
+				"TIPO_PRESTAMO": idPrestamo,
+				"PORCENTAJE": "50"
+			};
+
+			this._oBackendService.Add_PrimaService(dataPrima)
+				.then(function (oResponse) {
+					var aItems = oResponse["n0:ZCOHCMF_PRIMAS_PRESTAMOSResponse"]
+						.RESPONSE_INFO_PRIMA.item;
+					if (!aItems) {
+						MessageToast.show("No se encontraron primas para los datos ingresados");
+						return;
+					}
+					if (!Array.isArray(aItems)) {
+						aItems = [aItems];
+					}
+
+					var fTotalPrimas = 0;
+					var iIdx = 0;
+					while (iIdx < aItems.length) {
+						var fValorPrima = parseFloat(aItems[iIdx].VALOR_PRIMA) || 0;
+						var iValorEntero = Math.trunc(fValorPrima);
+						aItems[iIdx].VALOR_PRIMA = String(iValorEntero);
+						aItems[iIdx].MONEDA_PRIMA = moneda;
+						fTotalPrimas = fTotalPrimas + fValorPrima;
+						iIdx = iIdx + 1;
+					}
+
+					oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
+					oViewModelPrimas.setProperty("/items", aItems);
+
+					if (fTotalPrimas > 0) {
+						that._calcularValorPrestamo();
+					}
+				})
+				.catch(function (oError) {
+					MessageBox.error(
+						"Error al consultar primas: " + (oError.message || oError.statusText || "Error desconocido"),
+						{ title: "Error" }
+					);
+				});
 		},
 
 		/**

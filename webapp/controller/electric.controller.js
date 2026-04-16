@@ -473,6 +473,9 @@ sap.ui.define([
 					}
 					oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
 					oViewModelPrimas.setProperty("/items", aItems);
+					if (fTotalPrimas > 0) {
+						that._calcularValorPrestamo();
+					}
 				})
 				.catch(function (oError) {
 					MessageBox.error(

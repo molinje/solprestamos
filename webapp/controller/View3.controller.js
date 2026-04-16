@@ -755,7 +755,7 @@ sap.ui.define([
       if (lv_ValorCuota && lv_ValorCuota > 0) {
         oPayload.VALOR_POR_MES = (parseFloat(lv_ValorCuota) / 100).toFixed(2);
       }
-      
+
 
       if (lv_DBTCU && lv_DBTCU.trim() !== "") {
         oPayload.DBTCU = lv_DBTCU;
@@ -974,15 +974,15 @@ sap.ui.define([
 
                 if (sIdSolicitud) {
                   // Guardar las primas asociadas a la solicitud
-                  /*
-                  this.GuardarPrimas(sUUID, sEmpleado)
+                  
+                  this.GuardarPrimas(sIdSolicitud, lv_PERNR)
                     .then(function (oResponse) {
                       // éxito
                     })
                     .catch(function (oError) {
                       MessageBox.error("Error al guardar primas: " + (oError.message || oError.statusText || "Error desconocido"), { title: "Error" });
                     });
-                  */
+                  
 
                 }
 
@@ -1385,7 +1385,7 @@ sap.ui.define([
           "UUID": NumSolicitud,
           "EMPLEADO": NumEmpleado,
           "FECHA_PRIMA": oItem.FECHA_PRIMA || "",
-          "VALOR_PRIMA": oItem.VALOR_PRIMA || ""
+          "VALOR_PRIMA": (parseFloat(oItem.VALOR_PRIMA) / 100).toFixed(2) || "0.00"
         };
       });
 

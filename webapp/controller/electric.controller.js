@@ -578,7 +578,7 @@ sap.ui.define([
 					"UUID": NumSolicitud,
 					"EMPLEADO": NumEmpleado,
 					"FECHA_PRIMA": oItem.FECHA_PRIMA || "",
-					"VALOR_PRIMA": oItem.VALOR_PRIMA || ""
+					"VALOR_PRIMA": (parseFloat(oItem.VALOR_PRIMA) / 100).toFixed(2) || "0.00"
 				};
 			});
 

@@ -28,6 +28,19 @@
       "id": "@sap/generator-fiori:basic",
       "version": "1.20.0",
       "toolsId": "8c1e7ff7-a002-4a09-b341-ad1150f97f6c"
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "solprestamosccb-show": {
+          "semanticObject": "solprestamosccb",
+          "action": "show",
+          "title": "{{solprestamosccb-show.flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {

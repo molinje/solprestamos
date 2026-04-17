@@ -1,1 +1,11 @@
 /* Enter your custom styles here */
+
+.userInfoName {
+    font-size: 0.75rem;
+    color: #666666;
+}
+
+.userInfoDetail {
+    font-size: 0.70rem;
+    color: #888888;
+}

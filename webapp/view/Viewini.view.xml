@@ -3,6 +3,13 @@
     xmlns:core="sap.ui.core"
     xmlns="sap.m">
     <Page id="page" title="{i18n>title}">
+    <headerContent>
+        <VBox alignItems="End" class="sapUiTinyMarginEnd">
+            <Text text="{datainiView>/userFullName}" class="userInfoName sapUiTinyMarginBottom"/>
+            <Text text="{datainiView>/userEmail}" class="userInfoDetail"/>
+            <Text text="{datainiView>/userId}" class="userInfoDetail"/>
+        </VBox>
+    </headerContent>
     <content>
       <VBox alignItems="Center" justifyContent="Center" class="sapUiMediumMargin">
             <VBox width="400px" class="sapUiSmallMarginTop">

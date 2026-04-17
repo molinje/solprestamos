@@ -18,6 +18,20 @@ sap.ui.define([
             // Obtener el modelo global para almacenar datos del usuario y otros datos globales
             var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 
+            // Modelo de datos para la vista
+			var oViewModel = new JSONModel({
+
+				// Datos del usuario
+                userId: oGlobalModel.getProperty("/userLogin/id") || "",
+                userEmail: oGlobalModel.getProperty("/userLogin/email") || "",
+                userFullName: oGlobalModel.getProperty("/userLogin/fullName") || "",
+	
+
+			});
+
+
+			this.getView().setModel(oViewModel, "datainiView");
+
 
 
             this._loadDatafromEmployee();
@@ -72,6 +86,8 @@ sap.ui.define([
 
              // Obtener el modelo global para almacenar datos del usuario y otros datos globales
             var oGlobalModel = this.getOwnerComponent().getModel("globalData");
+
+            var Userlogin = oGlobalModel.getProperty("/userLogin");
 
             var that = this;
 

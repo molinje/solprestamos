@@ -29,9 +29,21 @@ sap.ui.define([
             oModel.loadData("model/data.json");
             this.setModel(oModel);
 
+            // Obtener datos del usuario logueado desde Work Zone / Fiori Launchpad
+            var oUserData = { id: "", email: "", fullName: "" };
+            if (sap.ushell && sap.ushell.Container) {
+                var oUserInfo = sap.ushell.Container.getService("UserInfo");
+                oUserData.id        = oUserInfo.getId()       || "";
+                oUserData.email     = oUserInfo.getEmail()    || "";
+                oUserData.fullName  = oUserInfo.getFullName() || "";
+            }
+
+            console.log("Datos del usuario logueado:", oUserData);
+
             // Crear modelo global para datos del servicio
             var oGlobalDataModel = new JSONModel({
-                userData: null,             // Datos del usuario actual
+                userLogin: oUserData,        // Datos del usuario actual
+                userData: null,        // Datos del usuario actual
                 prestamoSeleccionado: null, // Préstamo elegido en Viewini
                 gt_motcalamidad: null,
                 consulData: null,           // Datos de la consulta

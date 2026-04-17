@@ -30,6 +30,7 @@ sap.ui.define([
             this.setModel(oModel);
 
             // Obtener datos del usuario logueado desde Work Zone / Fiori Launchpad
+            console.log("Antes de ejecutar la logica de lectura de usuario");
             var oUserData = { id: "", email: "", fullName: "" };
             if (sap.ushell && sap.ushell.Container) {
                 var oUserInfo = sap.ushell.Container.getService("UserInfo");

@@ -12,7 +12,7 @@
     showNavButton="true"
     navButtonPress=".onNavBack">
     <content>
-        <Wizard id="wizardComputador" complete="onWizardComplete" class="sapUiResponsiveMargin">
+        <Wizard id="wizardComputador" complete="onCrearSolicitud" finishButtonText="Enviar Solicitud" class="sapUiResponsiveMargin">
                 
                <!-- Paso 1: Datos del Préstamo Computador -->
                 <WizardStep

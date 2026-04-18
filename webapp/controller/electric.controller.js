@@ -39,6 +39,11 @@ sap.ui.define([
 				ValorPrestamoMelectric: 0,
 				ValorDescPrimasMelectric: 0,
 
+				// Destino
+				selectedDestino: "",
+				destinoValueState: "None",
+				destinoValueStateText: "",
+
 				// Descuento en primas
 				descuentoPrimas: "NO",
 
@@ -109,6 +114,9 @@ sap.ui.define([
 				ValorCuotaMelectric: 0,
 				ValorPrestamoMelectric: 0,
 				ValorDescPrimasMelectric: 0,
+				selectedDestino: "",
+				destinoValueState: "None",
+				destinoValueStateText: "",
 				descuentoPrimas: "NO",
 				valorTotalPrimas: 0,
 				solicitudEnabled: true,
@@ -237,6 +245,8 @@ sap.ui.define([
 			oViewModel.setProperty("/cuotasValueStateText", "");
 			oViewModel.setProperty("/valorValueState", "None");
 			oViewModel.setProperty("/valorValueStateText", "");
+			oViewModel.setProperty("/destinoValueState", "None");
+			oViewModel.setProperty("/destinoValueStateText", "");
 
 			// Validar cuotas
 			var sSelectedCuotas = oViewModel.getProperty("/selectedCuotas");
@@ -253,6 +263,15 @@ sap.ui.define([
 				oViewModel.setProperty("/valorValueState", "Error");
 				oViewModel.setProperty("/valorValueStateText", "Debe ingresar un valor válido");
 				aErrorMessages.push("• Valor solicitado");
+				bValid = false;
+			}
+
+			// Validar destino
+			var sSelectedDestino = oViewModel.getProperty("/selectedDestino");
+			if (!sSelectedDestino || sSelectedDestino === "") {
+				oViewModel.setProperty("/destinoValueState", "Error");
+				oViewModel.setProperty("/destinoValueStateText", "Debe seleccionar el destino del préstamo");
+				aErrorMessages.push("• Destino");
 				bValid = false;
 			}
 

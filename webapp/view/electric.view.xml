@@ -26,26 +26,33 @@
                             layout="ResponsiveGridLayout">
 
                         <Label text="Valor Solicitado *" labelFor="inputValorSolicMelectric" class="sapUiSmallMarginBottom" required="true"/>
-                        <Input
-                            id="inputValorSolicMelectric"
-                            value="{
-                                parts: [
-                                    {path: 'movelectricView>/valorSolicitado'},
-                                    {path: 'movelectricView>/moneda'}
-                                ],
-                                type: 'sap.ui.model.type.Currency',
-                                formatOptions: {
-                                    showMeasure: true,
-                                    currencyCode: true,
-                                    maxFractionDigits: 0
-                                }
-                            }"
-                            change="onValorSolicitadoChange"
-                            width="100%"
-                            textAlign="End"
-                            valueState="{movelectricView>/valorValueState}"
-                            valueStateText="{movelectricView>/valorValueStateText}"
-                            placeholder="Ingrese el valor solicitado"/>
+                        <HBox width="100%" alignItems="Center">
+                            <Input
+                                id="inputValorSolicMelectric"
+                                value="{
+                                    parts: [
+                                        {path: 'movelectricView>/valorSolicitado'},
+                                        {path: 'movelectricView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: false,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
+                                change="onValorSolicitadoChange"
+                                width="100%"
+                                textAlign="End"
+                                valueState="{movelectricView>/valorValueState}"
+                                valueStateText="{movelectricView>/valorValueStateText}"
+                                placeholder="Ingrese el valor solicitado"/>
+                            <Input
+                                value="{movelectricView>/moneda}"
+                                editable="false"
+                                width="5rem"
+                                textAlign="Center"
+                                class="sapUiSmallMarginBegin"/>
+                        </HBox>
 
                         <Label text="N Cuotas *" labelFor="selectCuotasMelectric" class="sapUiSmallMarginBottom" required="true"/>
                         <Select
@@ -97,8 +104,16 @@
                             width="100%"
                             textAlign="End"/>
 
-                        <Label text="Destino" labelFor="selectDestinoMelectric"/>
-                        <Select selectedKey="{/Destino}" width="100%" id="selectDestinoMelectric">
+                        <Label text="Destino *" labelFor="selectDestinoMelectric" required="true"/>
+                        <Select
+                            id="selectDestinoMelectric"
+                            forceSelection="false"
+                            selectedKey="{movelectricView>/selectedDestino}"
+                            change="onDestinoChange"
+                            width="100%"
+                            valueState="{movelectricView>/destinoValueState}"
+                            valueStateText="{movelectricView>/destinoValueStateText}">
+                            <core:Item key="" text="Seleccione una opción"/>
                             <core:Item key="01" text="Colaborador"/>
                             <core:Item key="02" text="Proveedor"/>
                         </Select>
@@ -167,38 +182,7 @@
                     </VBox>
                 </WizardStep>
 
-                <!-- Paso 2: Primas y Bonificaciones -->
-                <WizardStep
-                    id="stepMElectric02"
-                    title="Primas y Bonificaciones"
-                    validated="true">
-                    <VBox class="sapUiSmallMargin">
-                        <form:SimpleForm
-                            editable="true"
-                            layout="ResponsiveGridLayout">
-                        <Label text="Descuento en Primas" labelFor="ValorDescPrimasMelectric"/>
-                        <Input
-                            id="ValorDescPrimasMelectric"
-                            value="{
-                                parts: [
-                                    {path: 'movelectricView>/ValorDescPrimasMelectric'},
-                                    {path: 'movelectricView>/moneda'}
-                                ],
-                                type: 'sap.ui.model.type.Currency',
-                                formatOptions: {
-                                    showMeasure: true,
-                                    currencyCode: true,
-                                    maxFractionDigits: 0
-                                }
-                            }"
-                            editable="false"
-                            width="100%"
-                            textAlign="End"/>
-                        </form:SimpleForm>
-                    </VBox>
-                </WizardStep>
-
-                <!-- Paso 3: Soportes -->
+                <!-- Paso 2: Soportes -->
                 <WizardStep
                     id="stepMElectric03"
                     title="Soportes"

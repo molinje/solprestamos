@@ -105,13 +105,15 @@
                                 textAlign="End"/>
 
                             <Label text="Destino *" labelFor="selectDestino" required="true"/>
-                            <Select 
-                                id="selectDestino" 
+                            <Select
+                                id="selectDestino"
+                                forceSelection="false"
                                 selectedKey="{compuView>/selectedDestino}"
                                 change="onDestinoChange"
                                 width="100%"
                                 valueState="{compuView>/destinoValueState}"
                                 valueStateText="{compuView>/destinoValueStateText}">
+                                <core:Item key="" text="Seleccione una opción"/>
                                 <core:Item key="01" text="Colaborador"/>
                                 <core:Item key="02" text="Proveedor"/>
                             </Select>
@@ -182,39 +184,7 @@
                     </VBox>
                 </WizardStep>
                 
-                <!-- Paso 2: Primas y Bonificaciones -->
-                <WizardStep
-                    id="stepComput02"
-                    title="Primas y Bonificaciones"
-                    validated="true">
-                    <VBox class="sapUiSmallMargin">
-                        <form:SimpleForm
-                            editable="true"
-                            layout="ResponsiveGridLayout">
-                            
-                            <Label text="Valor Descuento Primas" labelFor="ValorDescPrinasCompu"/> 
-                            <Input
-                                id="ValorDescPrinasCompu"
-                                value="{
-                                    parts: [
-                                        {path: 'compuView>/valorDescuentoPrimas'},
-                                        {path: 'compuView>/moneda'}
-                                    ],
-                                    type: 'sap.ui.model.type.Currency',
-                                    formatOptions: {
-                                        showMeasure: true,
-                                        currencyCode: true,
-                                        maxFractionDigits: 0
-                                    }
-                                }"
-                                editable="false"
-                                width="100%"
-                                textAlign="End"/>
-                        </form:SimpleForm>
-                    </VBox>
-                </WizardStep>
-                
-                <!-- Paso 3: Documentos -->
+                <!-- Paso 2: Documentos -->
                 <WizardStep
                     id="stepComput03"
                     title="Soportes"

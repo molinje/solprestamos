@@ -199,14 +199,7 @@
                             uploadComplete="onUploadComplete">
                         </UploadCollection>
 
-                        <Button
-                            id="btnCrearSolicPMelectric"
-                            text="Crear Solicitud"
-                            type="Emphasized"
-                            press="onCrearSolicitud"
-                            enabled="{movelectricView>/solicitudEnabled}"
-                            class="sapUiMediumMarginTop"
-                            width="200px"/>
+                     
                     </VBox>
                 </WizardStep>
 

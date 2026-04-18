@@ -198,14 +198,7 @@
                             uploadComplete="onUploadComplete">
                         </UploadCollection>
                         
-                        <Button
-                            id="btnCrearSolicPComput"
-                            text="Crear Solicitud"
-                            type="Emphasized"
-                            press="onCrearSolicitud"
-                            enabled="{compuView>/solicitudEnabled}"
-                            class="sapUiMediumMarginTop"
-                            width="200px"/>
+                      
                     </VBox>
                 </WizardStep>
                 

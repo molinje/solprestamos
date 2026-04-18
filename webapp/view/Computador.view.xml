@@ -26,26 +26,33 @@
                             layout="ResponsiveGridLayout">
                             
                             <Label text="Valor Solicitado *" labelFor="inputValorSolicCompu" required="true"/>
-                            <Input
-                                id="inputValorSolicCompu"
-                                value="{
-                                    parts: [
-                                        {path: 'compuView>/valorSolicitado'},
-                                        {path: 'compuView>/moneda'}
-                                    ],
-                                    type: 'sap.ui.model.type.Currency',
-                                    formatOptions: {
-                                        showMeasure: true,
-                                        currencyCode: true,
-                                        maxFractionDigits: 0
-                                    }
-                                }"
-                                change="onValorSolicitadoChange"
-                                width="100%"
-                                textAlign="End"
-                                valueState="{compuView>/valorValueState}"
-                                valueStateText="{compuView>/valorValueStateText}"
-                                placeholder="Ingrese el valor solicitado"/>
+                            <HBox width="100%" alignItems="Center">
+                                <Input
+                                    id="inputValorSolicCompu"
+                                    value="{
+                                        parts: [
+                                            {path: 'compuView>/valorSolicitado'},
+                                            {path: 'compuView>/moneda'}
+                                        ],
+                                        type: 'sap.ui.model.type.Currency',
+                                        formatOptions: {
+                                            showMeasure: false,
+                                            maxFractionDigits: 0
+                                        }
+                                    }"
+                                    change="onValorSolicitadoChange"
+                                    width="100%"
+                                    textAlign="End"
+                                    valueState="{compuView>/valorValueState}"
+                                    valueStateText="{compuView>/valorValueStateText}"
+                                    placeholder="Ingrese el valor solicitado"/>
+                                <Input
+                                    value="{compuView>/moneda}"
+                                    editable="false"
+                                    width="5rem"
+                                    textAlign="Center"
+                                    class="sapUiSmallMarginBegin"/>
+                            </HBox>
                             
                             <Label text="Número de Cuotas *" labelFor="selectCuotasCompu" required="true"/>
                             <Select

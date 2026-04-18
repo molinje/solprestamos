@@ -103,7 +103,9 @@ sap.ui.define([
                 var userEmail = String(Userlogin.email).toUpperCase();
                sServiceUrl = sAppBase + "/http/CCB_Prestamos?$filter=Correo eq " + "'" + userEmail.toUpperCase() + "'";
             } else {
-               sServiceUrl = sAppBase + "/http/CCB_Prestamos?$filter=Correo eq '79395346@CCB.ORG.CO'";
+               //sServiceUrl = sAppBase + "/http/CCB_Prestamos?$filter=Correo eq '79395346@CCB.ORG.CO'";
+               sServiceUrl = sAppBase + "/http/CCB_Prestamos?$filter=Correo eq 'JOHN.MOLINA@HRSOLUTIONS-CO.COM'";
+               
             }
 
             

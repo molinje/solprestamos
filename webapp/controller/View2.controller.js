@@ -136,16 +136,47 @@ sap.ui.define([
 
 		/**
 		 * Se ejecuta cada vez que el router navega a RouteView2.
-		 * Lee el préstamo seleccionado desde globalData (guardado en Viewini).
+		 * Resetea el formulario y el wizard al estado inicial.
 		 * @private
 		 */
 		_onRouteMatched: function () {
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
 			var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
-			var oViewModel = this.getView().getModel("calamView");
 
+			// Resetear datos del formulario
+			this._resetCalamView();
+
+			// Actualizar montoMaximo desde el préstamo seleccionado
 			if (oPrestamoSeleccionado && oPrestamoSeleccionado.MontoMaximo) {
-				oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, "")));
+				this.getView().getModel("calamView").setProperty(
+					"/montoMaximo",
+					parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, ""))
+				);
+			}
+
+			// Resetear el wizard al paso 1
+			this._resetWizard();
+		},
+
+		/**
+		 * Reinicia el wizard al primer paso, bloqueando todos los pasos siguientes.
+		 * @private
+		 */
+		_resetWizard: function () {
+			var oWizard = this.byId("wizardCalam");
+			var oStep1 = this.byId("step1");
+
+			if (oWizard && oStep1) {
+				// Descarta el progreso: deja solo step1 accesible y bloquea los demás
+				oWizard.discardProgress(oStep1);
+				// Marca step1 como no validado para que el usuario deba completarlo
+				oStep1.setValidated(false);
+			}
+
+			// Limpiar también la tabla de primas
+			var oPrimasModel = this.getView().getModel("listprimas");
+			if (oPrimasModel) {
+				oPrimasModel.setProperty("/items", []);
 			}
 		},
 
@@ -1268,7 +1299,6 @@ sap.ui.define([
 		},
 
 		onNavBack: function () {
-			this._resetCalamView();
 			var oRouter = this.getOwnerComponent().getRouter();
 			oRouter.navTo("RouteViewini");
 		}

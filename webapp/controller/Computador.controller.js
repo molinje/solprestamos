@@ -60,21 +60,24 @@ sap.ui.define([
 
     /**
      * Se ejecuta cada vez que el router navega a RouteComputador.
-     * Lee el préstamo seleccionado desde globalData (guardado en Viewini).
+     * Resetea el formulario y el wizard al estado inicial.
      * @private
      */
     _onRouteMatched: function () {
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
       var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
-      var oViewModel = this.getView().getModel("compuView");
+
+      // Resetear datos del formulario
+      this._resetCompuView();
 
       if (oPrestamoSeleccionado && oPrestamoSeleccionado.MontoMaximo) {
-       //oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo));
-        oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, "")));
+        this.getView().getModel("compuView").setProperty(
+          "/montoMaximo",
+          parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, ""))
+        );
       }
 
       // Construir CuotasCollection dinámicamente según oPrestamoSeleccionado.Cuotas
-      // El valor llega como string con ceros a la izquierda, ej: "0018" → 18 cuotas
       var iMaxCuotas = oPrestamoSeleccionado && oPrestamoSeleccionado.Cuotas
         ? parseInt(oPrestamoSeleccionado.Cuotas, 10)
         : 12;
@@ -82,7 +85,29 @@ sap.ui.define([
       for (var i = 1; i <= iMaxCuotas; i++) {
         aCuotasCollection.push({ CuotasId: String(i), Name: String(i) });
       }
-      oViewModel.setProperty("/CuotasCollection", aCuotasCollection);
+      this.getView().getModel("compuView").setProperty("/CuotasCollection", aCuotasCollection);
+
+      // Resetear el wizard al paso 1
+      this._resetWizard();
+    },
+
+    /**
+     * Reinicia el wizard al primer paso, bloqueando todos los pasos siguientes.
+     * @private
+     */
+    _resetWizard: function () {
+      var oWizard = this.byId("wizardComputador");
+      var oStep1 = this.byId("stepComput01");
+
+      if (oWizard && oStep1) {
+        oWizard.discardProgress(oStep1);
+        oStep1.setValidated(false);
+      }
+
+      var oPrimasModel = this.getView().getModel("listprimasCompu");
+      if (oPrimasModel) {
+        oPrimasModel.setProperty("/items", []);
+      }
     },
 
     /**
@@ -671,7 +696,6 @@ sap.ui.define([
      * Navega hacia atrás
      */
     onNavBack: function () {
-      this._resetCompuView();
       var oRouter = this.getOwnerComponent().getRouter();
       oRouter.navTo("RouteViewini");
     }

@@ -159,6 +159,23 @@ sap.ui.define([
       oViewModel.setProperty("/programaNIT", "");
       oViewModel.setProperty("/programaCodigo", "");
       oViewModel.setProperty("/programaPostGradoBusqueda", "");
+
+      // Resetear el wizard al paso 1
+      this._resetWizard();
+    },
+
+    /**
+     * Reinicia el wizard al primer paso, bloqueando todos los pasos siguientes.
+     * @private
+     */
+    _resetWizard: function () {
+      var oWizard = this.byId("wizardEduca");
+      var oStep1 = this.byId("step01");
+
+      if (oWizard && oStep1) {
+        oWizard.discardProgress(oStep1);
+        oStep1.setValidated(false);
+      }
     },
 
     /**

@@ -717,6 +717,18 @@ sap.ui.define([
       var lv_ZNOMFOR = oViewModel.getProperty("/programaTitulo");
       var lv_ZCODPRO = oViewModel.getProperty("/programaCodigo");
 
+      // Inicio Validar que se haya adjuntado la matrícula
+
+      var aAdjuntos = this.getView().getModel("educaView").getProperty("/adjuntos");
+      var bTieneMatricula = Array.isArray(aAdjuntos) && aAdjuntos.some(function (oAdj) {
+        return oAdj.tipoArchivo === 1 && oAdj.base64Content;
+      });
+      if (!bTieneMatricula) {
+        MessageBox.error("Adjuntar la Matricula es obligatorio");
+        return;
+      }
+      // Fin Validar que se haya adjuntado la matrícula
+
       if (lv_Periodicidad && lv_Periodicidad.trim() !== "") {
         oPayload.ZPERPE = lv_Periodicidad;
       } else {

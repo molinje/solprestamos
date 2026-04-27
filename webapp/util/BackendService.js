@@ -10,6 +10,7 @@ sap.ui.define([
         _validarPrestamosUrl: "/http/CCB_Consulta_Validaciones",
         _guardarDFsUrl: "/http/CCB_Guardar_Documentos",
         _colaboradoresUrl: "/http/CCB_Colaboradores",
+        _solicitdesFromEmployee: "/http/CCB_Prestamo_Detalle",
         _consultPrimasUrl: "/http/CCB_Consult_Prima",
         _getMemorandoUrl: "/http/CCB_Consult_Memorando",
         _valorCondonadoUrl: "/http/CCB_Condonados",
@@ -193,6 +194,18 @@ sap.ui.define([
             });
             return gt_codeudores;
         },
+
+         /**
+         * Consulta las solicitudfes de un empleado
+         * @param {string} sEmployeeNumeber- Identificación nacional del colaborador
+         * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
+         */
+        getSolicitudesFromEmployee: function (sEmployeeNumeber) {
+            var sId = String(sEmployeeNumeber).trim();
+            //return this._executeGet(this._colaboradoresUrl, { Identificacion_Nacional: "'" + sId + "'" });
+            return this._executeGet(this._getAppBase() + this._solicitdesFromEmployee, { Identificacion: "'" + sId + "'" });
+        },
+
 
         /**
          * Consulta los datos de un colaborador por su identificación nacional

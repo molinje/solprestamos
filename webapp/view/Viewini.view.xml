@@ -11,30 +11,67 @@
         </VBox>
     </headerContent>
     <content>
-      <VBox alignItems="Center" justifyContent="Center" class="sapUiMediumMargin">
-            <VBox width="400px" class="sapUiSmallMarginTop">
+      <VBox class="sapUiMediumMargin">
+            <VBox alignItems="Center">
+                <VBox width="400px" class="sapUiSmallMarginTop">
                     <Label text="Tipo Préstamo" labelFor="selectPrestamo" class="sapUiSmallMarginBottom"/>
-
-
-                <Select
-					forceSelection="false"
-					selectedKey="{/selectedPrestamo}"
-					items="{
-						path: 'prestamos>/PrestamoCollection',
-                        sorter: { path: 'Name' }
-					}">
-					<core:Item key="{prestamos>PrestamoId}" text="{prestamos>Name}" />
-				</Select>
-                    
+                    <Select
+                        forceSelection="false"
+                        selectedKey="{/selectedPrestamo}"
+                        items="{
+                            path: 'prestamos>/PrestamoCollection',
+                            sorter: { path: 'Name' }
+                        }">
+                        <core:Item key="{prestamos>PrestamoId}" text="{prestamos>Name}" />
+                    </Select>
                     <Button
                         text="Ir"
                         type="Emphasized"
                         press="onNavigate"
                         class="sapUiMediumMarginTop"
                         width="100%"/>
+                </VBox>
             </VBox>
+
+            <Table
+                id="tablaSolicitudes"
+                items="{solicitudesEmpleado>/items}"
+                noDataText="No hay solicitudes registradas"
+                class="sapUiMediumMarginTop">
+                <headerToolbar>
+                    <Toolbar>
+                        <Title text="Mis Solicitudes de Préstamo"/>
+                    </Toolbar>
+                </headerToolbar>
+                <columns>
+                    <Column><Text text="Tipo Préstamo"/></Column>
+                    <Column hAlign="Right" width="7rem"><Text text="N° Cuotas"/></Column>
+                    <Column hAlign="Right" width="11rem"><Text text="Valor Cuota"/></Column>
+                    <Column width="9rem"><Text text="Fecha Solicitud"/></Column>
+                    <Column hAlign="Right" width="12rem"><Text text="Valor Solicitado"/></Column>
+                    <Column width="6rem"><Text text="Moneda"/></Column>
+                </columns>
+                <items>
+                    <ColumnListItem>
+                        <cells>
+                            <Text text="{solicitudesEmpleado>TEXTO_TIPO_PRESTAMO}"/>
+                            <Text text="{solicitudesEmpleado>NUM_COUTAS}"/>
+                            <Text text="{
+                                parts: [{path: 'solicitudesEmpleado>VALOR_POR_MES'}, {path: 'solicitudesEmpleado>DBTCU'}],
+                                formatter: '.formatAmount'
+                            }"/>
+                            <Text text="{solicitudesEmpleado>DATBW}"/>
+                            <Text text="{
+                                parts: [{path: 'solicitudesEmpleado>DARBT'}, {path: 'solicitudesEmpleado>DBTCU'}],
+                                formatter: '.formatAmount'
+                            }"/>
+                            <Text text="{solicitudesEmpleado>DBTCU}"/>
+                        </cells>
+                    </ColumnListItem>
+                </items>
+            </Table>
       </VBox>
-      
+
     </content>
     </Page>
 </mvc:View>

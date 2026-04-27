@@ -2,14 +2,16 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     'sap/ui/model/json/JSONModel',
     "sap/m/MessageBox",
-    "sap/ui/core/BusyIndicator"
+    "sap/ui/core/BusyIndicator",
+    "prestamos/ccb/org/solprestamos/util/BackendService"
 
-], (Controller, JSONModel, MessageBox, BusyIndicator) => {
+], (Controller, JSONModel, MessageBox, BusyIndicator, BackendService) => {
     "use strict";
 
 
     return Controller.extend("prestamos.ccb.org.solprestamos.controller.Viewini", {
         onInit() {
+            this._oBackendService = new BackendService();
             var oRouter = this.getOwnerComponent().getRouter();
             //oRouter.getRoute("RouteViewini").attachPatternMatched(this._onObjectMatched, this);
 
@@ -167,6 +169,21 @@ sap.ui.define([
                         });
                     }
 
+                    // Consultar solicitudes del empleado usando el PERNR obtenido
+                    that._oBackendService.getSolicitudesFromEmployee(empleadoInfo.PERNR)
+                        .then(function (oSolResponse) {
+                            var oData = oSolResponse["n0:ZCOHCMFM_0045CONSULTAPRESTAMOResponse"];
+                            var aItems = [];
+                            if (oData && oData.ET_PRESTAMO && oData.ET_PRESTAMO.item) {
+                                aItems = Array.isArray(oData.ET_PRESTAMO.item)
+                                    ? oData.ET_PRESTAMO.item
+                                    : [oData.ET_PRESTAMO.item];
+                            }
+                            that.getView().setModel(new JSONModel({ items: aItems }), "solicitudesEmpleado");
+                        })
+                        .catch(function (oError) {
+                            MessageBox.error("Error al cargar solicitudes: " + (oError.statusText || oError.message || "Error desconocido"));
+                        });
 
                 },
                 error: function (error) {
@@ -218,6 +235,13 @@ sap.ui.define([
 
         },
        
+        formatAmount: function (sValue, sCurrency) {
+            if (sValue === undefined || sValue === null || sValue === "") return "";
+            var fValue = parseFloat(sValue) || 0;
+            var oFormat = sap.ui.core.format.NumberFormat.getCurrencyInstance({ showMeasure: false });
+            return oFormat.format(fValue) + (sCurrency ? " " + sCurrency : "");
+        },
+
         _onObjectMatched: function () {
             //       // Limpiar selección al volver a la vista principal
             var oModel = this.getView().getModel();

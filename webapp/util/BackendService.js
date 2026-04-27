@@ -202,8 +202,13 @@ sap.ui.define([
          */
         getSolicitudesFromEmployee: function (sEmployeeNumeber) {
             var sId = String(sEmployeeNumeber).trim();
-            //return this._executeGet(this._colaboradoresUrl, { Identificacion_Nacional: "'" + sId + "'" });
-            return this._executeGet(this._getAppBase() + this._solicitdesFromEmployee, { Identificacion: "'" + sId + "'" });
+
+             var sServiceUrl = this._getAppBase() +  "/http/CCB_Prestamo_Detalle?$filter=Identificacion eq '" + sId + "'";
+            
+            return this._executeGet(sServiceUrl);
+
+            
+            
         },
 
 

@@ -174,7 +174,7 @@ sap.ui.define([
 
       if (oWizard && oStep1) {
         oWizard.discardProgress(oStep1);
-        oStep1.setValidated(false);
+        oStep1.setValidated(true);
       }
     },
 

@@ -28,9 +28,7 @@
                     valueState="{adjuntoDlg>/tipoValueState}"
                     valueStateText="{adjuntoDlg>/tipoValueStateText}">
                     <core:Item key="" text="-- Seleccione --"/>
-                    <core:Item key="1" text="Cotización del vehículo"/>
-                    <core:Item key="2" text="Factura de compra"/>
-                    <core:Item key="3" text="Otro"/>
+                    <core:Item key="1" text="Factura de compra"/>
                 </Select>
             </VBox>
         </content>

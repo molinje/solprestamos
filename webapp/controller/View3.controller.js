@@ -1092,6 +1092,11 @@ sap.ui.define([
       var moneda = oViewModel.getProperty("/moneda");
       var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
 
+      if (!porcentajePrima || porcentajePrima === "") {
+        MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
+        return;
+      }
+
       var oViewModelPrimas = this.getView().getModel("listprimas3");
       var aPrimas = oViewModelPrimas.getProperty("/items") || [];
       var NoPrimas = aPrimas.length + 1;
@@ -1157,6 +1162,11 @@ sap.ui.define([
       var idPrestamo = oViewModel.getProperty("/idPrestamo");
       var moneda = oViewModel.getProperty("/moneda");
       var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+
+      if (!porcentajePrima || porcentajePrima === "") {
+        MessageBox.error("Debe seleccionar un porcentaje antes de modificar las primas.");
+        return;
+      }
 
       var oViewModelPrimas = this.getView().getModel("listprimas3");
       var aPrimas = oViewModelPrimas.getProperty("/items") || [];
@@ -1333,7 +1343,7 @@ sap.ui.define([
       }
 
       var mTipos = {
-        "1": "Soporte Calamidad",
+        "1": "Recibo matrícula",
         "2": "Pensum Académico",
         "3": "Certificado de Notas",
         "4": "Pagaré",

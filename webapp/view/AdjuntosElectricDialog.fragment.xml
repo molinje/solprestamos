@@ -1,0 +1,51 @@
+<core:FragmentDefinition
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:u="sap.ui.unified">
+
+    <Dialog
+        id="adjuntosDialogElectric"
+        title="Agregar Documento"
+        contentWidth="420px"
+        draggable="true">
+
+        <content>
+            <VBox class="sapUiSmallMargin sapUiSmallMarginBottom">
+                <Label text="Archivo *" required="true" class="sapUiSmallMarginBottom"/>
+                <u:FileUploader
+			id="fileUploaderDialogElectric"
+			name="myFileUpload"
+			uploadUrl="upload/"
+			tooltip="Upload your file to the local server"
+			change="onArchivoSeleccionado"/>
+
+                <Label text="Tipo de Documento *" required="true" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
+                <Select
+                    id="selectTipoDocDialogElectric"
+                    width="100%"
+                    selectedKey="{adjuntoDlg>/tipoArchivo}"
+                    forceSelection="false"
+                    valueState="{adjuntoDlg>/tipoValueState}"
+                    valueStateText="{adjuntoDlg>/tipoValueStateText}">
+                    <core:Item key="" text="-- Seleccione --"/>
+                    <core:Item key="1" text="Cotización del vehículo"/>
+                    <core:Item key="2" text="Factura de compra"/>
+                    <core:Item key="3" text="Otro"/>
+                </Select>
+            </VBox>
+        </content>
+
+        <buttons>
+            <Button
+                text="Cancelar"
+                press="onCancelarAdjunto"/>
+            <Button
+                text="Aceptar"
+                type="Emphasized"
+                press="onAceptarAdjunto"
+                enabled="{= !${adjuntoDlg>/isReadingFile} }"/>
+        </buttons>
+
+    </Dialog>
+
+</core:FragmentDefinition>

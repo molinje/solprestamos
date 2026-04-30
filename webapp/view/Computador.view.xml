@@ -184,21 +184,44 @@
                     </VBox>
                 </WizardStep>
                 
-                <!-- Paso 2: Documentos -->
+                <!-- Paso 2: Documentos Adjuntos -->
                 <WizardStep
                     id="stepComput03"
                     title="Soportes"
                     validated="true">
                     <VBox class="sapUiSmallMargin">
-                        <Label text="Adjuntar Documentos" class="sapUiSmallMarginBottom"/>
-                        <UploadCollection
-                            id="uploadCollectionComput"
-                            uploadUrl="/upload"
-                            multiple="true"
-                            uploadComplete="onUploadComplete">
-                        </UploadCollection>
-                        
-                      
+                        <Toolbar>
+                            <Title text="Documentos Adjuntos"/>
+                            <ToolbarSpacer/>
+                            <Button
+                                text="Agregar"
+                                icon="sap-icon://add"
+                                type="Emphasized"
+                                press="onAgregarDocumento"/>
+                        </Toolbar>
+
+                        <Table
+                            id="tableAdjuntosCompu"
+                            items="{compuView>/adjuntos}"
+                            noDataText="No hay documentos adjuntos. Use el botón Agregar."
+                            class="sapUiSmallMarginBottom">
+                            <columns>
+                                <Column width="60%">
+                                    <Text text="Nombre de Archivo"/>
+                                </Column>
+                                <Column width="40%">
+                                    <Text text="Tipo de Documento"/>
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <cells>
+                                        <Text text="{compuView>nombreArchivo}"/>
+                                        <Text text="{compuView>tipoArchivoText}"/>
+                                    </cells>
+                                </ColumnListItem>
+                            </items>
+                        </Table>
                     </VBox>
                 </WizardStep>
                 

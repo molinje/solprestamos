@@ -24,6 +24,25 @@
                         <form:SimpleForm
                             editable="true"
                             layout="ResponsiveGridLayout">
+                        <Label text="Monto máximo a solicitar" labelFor="MaxValorCompu" />
+                        <Input
+                            id="MaxValorCompu"
+                            value="{
+                                parts: [
+                                    {path: 'compuView>/montoMaximo'},
+                                    {path: 'compuView>/moneda'}
+                                ],
+                                type: 'sap.ui.model.type.Currency',
+                                formatOptions: {
+                                    showMeasure: true,
+                                    currencyCode: true,
+                                    maxFractionDigits: 0
+                                }
+                            }"
+                            editable="false"
+                            width="100%"
+                            textAlign="End"
+                            />
                             
                             <Label text="Valor Solicitado *" labelFor="inputValorSolicCompu" required="true"/>
                             <HBox width="100%" alignItems="Center">

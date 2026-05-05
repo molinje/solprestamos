@@ -22,6 +22,32 @@
                     <!-- Grid responsivo: 2 columnas en L/M, 1 columna en S -->
                     <layout:Grid defaultSpan="L6 M6 S12" class="sapUiSmallMargin">
 
+                        <!-- Monto máximo a solicitar (ancho completo) -->
+                        <VBox>
+                            <layoutData>
+                                <layout:GridData span="L12 M12 S12"/>
+                            </layoutData>
+                            <Label text="Monto máximo a solicitar" labelFor="MaxValorEduca"/>
+                            <Input
+                                id="MaxValorEduca"
+                                value="{
+                                    parts: [
+                                        {path: 'educaView>/montoMaximo'},
+                                        {path: 'educaView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: true,
+                                        currencyCode: true,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
+                                editable="false"
+                                width="100%"
+                                textAlign="End"
+                                />
+                        </VBox>
+
                         <!-- Fila 1: Tipo de Educación | Nivel -->
                         <VBox>
                             <Label text="Tipo de Educación"/>

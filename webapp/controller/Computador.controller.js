@@ -654,6 +654,8 @@ sap.ui.define([
 
 
 
+
+
       if (aTimes === 0) {
         oViewModel.setProperty("/valorTotalPrimas", 0);
         that._calcularValorPrestamo();
@@ -796,12 +798,37 @@ sap.ui.define([
     },
 
     /**
+     * Rechaza archivos que no sean PDF (disparado por typeMissmatch del FileUploader)
+     */
+    onArchivoTipoInvalido: function (oEvent) {
+      var oFileUploader = oEvent.getSource();
+      oFileUploader.clear();
+      oFileUploader.setValueState("Error");
+      oFileUploader.setValueStateText("Solo se permiten archivos PDF");
+      var oDialogModel = this._oAdjuntosDialog.getModel("adjuntoDlg");
+      oDialogModel.setProperty("/nombreArchivo", "");
+      oDialogModel.setProperty("/rutaArchivo", "");
+      oDialogModel.setProperty("/base64Content", null);
+    },
+
+    /**
      * Captura el archivo seleccionado en el FileUploader del diálogo
      */
     onArchivoSeleccionado: function (oEvent) {
       var oFileUploader = oEvent.getSource();
       var sFileName = oEvent.getParameter("newValue") || oFileUploader.getValue();
       var oDialogModel = this._oAdjuntosDialog.getModel("adjuntoDlg");
+
+      if (sFileName && sFileName.split(".").pop().toLowerCase() !== "pdf") {
+        oFileUploader.clear();
+        oFileUploader.setValueState("Error");
+        oFileUploader.setValueStateText("Solo se permiten archivos PDF");
+        oDialogModel.setProperty("/nombreArchivo", "");
+        oDialogModel.setProperty("/rutaArchivo", "");
+        oDialogModel.setProperty("/base64Content", null);
+        return;
+      }
+
       oDialogModel.setProperty("/nombreArchivo", sFileName);
       oDialogModel.setProperty("/rutaArchivo", sFileName);
       oDialogModel.setProperty("/base64Content", null);
@@ -842,6 +869,12 @@ sap.ui.define([
         if (oFileUploader) {
           oFileUploader.setValueState("Error");
           oFileUploader.setValueStateText("Debe seleccionar un archivo");
+        }
+        bValid = false;
+      } else if (sNombreArchivo.split(".").pop().toLowerCase() !== "pdf") {
+        if (oFileUploader) {
+          oFileUploader.setValueState("Error");
+          oFileUploader.setValueStateText("Solo se permiten archivos PDF");
         }
         bValid = false;
       }

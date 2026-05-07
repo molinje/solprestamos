@@ -16,8 +16,11 @@
 			id="fileUploaderDialogCompu"
 			name="myFileUpload"
 			uploadUrl="upload/"
-			tooltip="Upload your file to the local server"
-			change="onArchivoSeleccionado"/>
+			tooltip="Solo se permiten archivos PDF"
+			fileType="pdf"
+			mimeType="application/pdf"
+			change="onArchivoSeleccionado"
+			typeMissmatch="onArchivoTipoInvalido"/>
 
                 <Label text="Tipo de Documento *" required="true" class="sapUiSmallMarginTop sapUiSmallMarginBottom"/>
                 <Select

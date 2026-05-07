@@ -132,9 +132,20 @@
                             <Label text="Valor Préstamo" labelFor="inputValorPrestamo"/>
                             <Input
                                 id="inputValorPrestamo"
-                                value="{educaView>/valorPrestamo}"
-                                type="Number"
+                                value="{
+                                    parts: [
+                                        {path: 'educaView>/valorPrestamo'},
+                                        {path: 'educaView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: true,
+                                        currencyCode: true,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
                                 width="100%"
+                                textAlign="End"
                                 editable="false"/>
                         </VBox>
 
@@ -143,18 +154,40 @@
                             <Label text="Valor a pagar" labelFor="inputValorValorPagar"/>
                             <Input
                                 id="inputValorValorPagar"
-                                value="{educaView>/ValorPagar}"
-                                type="Number"
+                                value="{
+                                    parts: [
+                                        {path: 'educaView>/ValorPagar'},
+                                        {path: 'educaView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: true,
+                                        currencyCode: true,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
                                 width="100%"
+                                textAlign="End"
                                 editable="false"/>
                         </VBox>
                         <VBox>
                             <Label text="Valor condonado" labelFor="inputValorCondonado"/>
                             <Input
                                 id="inputValorCondonado"
-                                value="{educaView>/valorCondonado}"
-                                type="Number"
+                                value="{
+                                    parts: [
+                                        {path: 'educaView>/valorCondonado'},
+                                        {path: 'educaView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: true,
+                                        currencyCode: true,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
                                 width="100%"
+                                textAlign="End"
                                 editable="false"/>
                         </VBox>
 
@@ -163,9 +196,20 @@
                             <Label text="Valor cuota" labelFor="inputValorValorCuota"/>
                             <Input
                                 id="inputValorValorCuota"
-                                value="{educaView>/ValorCuota}"
-                                type="Number"
+                                value="{
+                                    parts: [
+                                        {path: 'educaView>/ValorCuota'},
+                                        {path: 'educaView>/moneda'}
+                                    ],
+                                    type: 'sap.ui.model.type.Currency',
+                                    formatOptions: {
+                                        showMeasure: true,
+                                        currencyCode: true,
+                                        maxFractionDigits: 0
+                                    }
+                                }"
                                 width="100%"
+                                textAlign="End"
                                 editable="false"/>
                         </VBox>
                         <VBox/>

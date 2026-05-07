@@ -566,7 +566,7 @@ sap.ui.define([
 				//dataSolic.ZVALSO = oData.valorPrestamo / 100;
 				dataSolic.DARBT = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
 				dataSolic.ZVALSO = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
-				
+
 
 			} else {
 
@@ -579,8 +579,8 @@ sap.ui.define([
 
 			if (oData.valorCuota) {
 
-				dataSolic.VALOR_POR_MES = (parseFloat(oData.valorCuota) / 100).toFixed(2) || "0.00";	
-			} 
+				dataSolic.VALOR_POR_MES = (parseFloat(oData.valorCuota) / 100).toFixed(2) || "0.00";
+			}
 
 			if (oData.numeroCuotas >= 0) {
 
@@ -1093,11 +1093,11 @@ sap.ui.define([
 			var aTimes = aPrimas.length;
 
 			var NoPrimas = aTimes + 1;
-		    var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+			var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
 
 			if (!porcentajePrima || porcentajePrima === "") {
-					MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
-					return;
+				MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
+				return;
 			}
 
 
@@ -1182,22 +1182,35 @@ sap.ui.define([
 			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
 
 			var aTimes = aPrimas.length;
-            var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+			var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
 
-			
+
+			if (aTimes === 0) {
+				that._calcularValorPrestamo();
+				return;
+			} else {
+
+				if (!porcentajePrima || porcentajePrima === "") {
+					MessageBox.error("Debe seleccionar un porcentaje antes de modificar las primas.");
+					return;
+				}
+
+			}
 
 
 			if (aTimes > 0) {
 
 				if (aTimes === 1) {
 					oViewModelPrimas.setProperty("/items", []);
+					oViewModel.setProperty("/valorTotalPrimas", 0);
+					that._calcularValorPrestamo();
 					return;
 				} else if (aTimes > 1) {
 
-				if (!porcentajePrima || porcentajePrima === "") {
-					MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
-					return;
-			}	
+					if (!porcentajePrima || porcentajePrima === "") {
+						MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
+						return;
+					}
 
 					// calculamos de nuevo la cantidad de primas a descontar restando 1 a la cantidad actual, 
 					// para enviar ese valor al servicio y que retorne la nueva lista de primas actualizada sin la última prima que se quiere eliminar	
@@ -1243,7 +1256,7 @@ sap.ui.define([
 								oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
 								that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
 								that.getView().getModel("listprimas").setProperty("/items", aItems);
-                                
+
 								/*
 								if (fTotalPrimas > 0) {
 

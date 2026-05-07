@@ -1016,7 +1016,7 @@ sap.ui.define([
                   // Guardar las primas asociadas a la solicitud
 
                   that.GuardarPrimas(sIdSolicitud, lv_PERNR)
-                  
+
                     .then(function (oResponse) {
                       MessageToast.show("Primas guardadas exitosamente.");
                       // éxito
@@ -1078,6 +1078,7 @@ sap.ui.define([
       if (sSelectedKey !== "DESCONTAR_PRIMAS") {
         this.getView().getModel("listprimas3").setProperty("/items", []);
       }
+      this._calcularValorPrestamo();
     },
 
     /**
@@ -1165,10 +1166,7 @@ sap.ui.define([
       var moneda = oViewModel.getProperty("/moneda");
       var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
 
-      if (!porcentajePrima || porcentajePrima === "") {
-        MessageBox.error("Debe seleccionar un porcentaje antes de modificar las primas.");
-        return;
-      }
+
 
       var oViewModelPrimas = this.getView().getModel("listprimas3");
       var aPrimas = oViewModelPrimas.getProperty("/items") || [];
@@ -1177,6 +1175,13 @@ sap.ui.define([
       if (aTimes === 0) {
         that._calcularValorPrestamo();
         return;
+      } else {
+
+        if (!porcentajePrima || porcentajePrima === "") {
+          MessageBox.error("Debe seleccionar un porcentaje antes de modificar las primas.");
+          return;
+        }
+
       }
 
       if (aTimes === 1) {

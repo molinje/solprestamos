@@ -31,6 +31,7 @@ sap.ui.define([
         // Destino y descuentos
         selectedDestino: "",
         descuentoPrimas: "NO",
+        PorcentajePrima: "",
 
         // Estados de validación
         valorValueState: "None",
@@ -180,13 +181,14 @@ sap.ui.define([
 
       // 3. Validar Destino
       var sSelectedDestino = oViewModel.getProperty("/selectedDestino");
+      /*
       if (!sSelectedDestino || sSelectedDestino === "") {
         oViewModel.setProperty("/destinoValueState", "Error");
         oViewModel.setProperty("/destinoValueStateText", "Debe seleccionar el destino del préstamo");
         aErrorMessages.push("• Destino");
         bValid = false;
       }
-
+      */
       if (!bValid) {
         MessageBox.error(
           "Por favor complete los siguientes campos obligatorios:\n\n" +
@@ -566,17 +568,23 @@ sap.ui.define([
       var moneda = oViewModel.getProperty("/moneda");
       var employeenumber = oUserData ? oUserData.PERNR : "";
       var idPrestamo = oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : "";
-
+      
       var oViewModelPrimas = this.getView().getModel("listprimasCompu");
       var aPrimas = oViewModelPrimas.getProperty("/items") || [];
       var NoPrimas = aPrimas.length + 1;
+      var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+
+      if (!porcentajePrima || porcentajePrima === "") {
+        MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
+        return;
+      }
 
       var dataPrima = {
         "EMPLEADO": employeenumber,
         "VALOR_PRESTAMO": String(fValorSolicitado),
         "CANTIDAD_PRIMAS": String(NoPrimas),
         "TIPO_PRESTAMO": idPrestamo,
-        "PORCENTAJE": "50"
+        "PORCENTAJE": porcentajePrima
       };
 
       this._oBackendService.Add_PrimaService(dataPrima)
@@ -605,9 +613,13 @@ sap.ui.define([
           oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
           oViewModel.setProperty("/primasADescontar", aItems);
           oViewModelPrimas.setProperty("/items", aItems);
+
+          /*
           if (fTotalPrimas > 0) {
             that._calcularValorPrestamo();
           }
+          */
+           that._calcularValorPrestamo();
 
         })
         .catch(function (oError) {
@@ -637,6 +649,13 @@ sap.ui.define([
       var oViewModelPrimas = this.getView().getModel("listprimasCompu");
       var aPrimas = oViewModelPrimas.getProperty("/items") || [];
       var aTimes = aPrimas.length;
+      
+      var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+
+      if (!porcentajePrima || porcentajePrima === "") {
+        MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
+        return;
+      }
 
       if (aTimes === 0) {
         return;
@@ -656,7 +675,7 @@ sap.ui.define([
         "VALOR_PRESTAMO": String(fValorSolicitado),
         "CANTIDAD_PRIMAS": String(NoPrimas),
         "TIPO_PRESTAMO": idPrestamo,
-        "PORCENTAJE": "50"
+        "PORCENTAJE": porcentajePrima
       };
 
       this._oBackendService.Add_PrimaService(dataPrima)
@@ -686,9 +705,14 @@ sap.ui.define([
           oViewModel.setProperty("/primasADescontar", aItems);
           oViewModelPrimas.setProperty("/items", aItems);
 
+          /*
           if (fTotalPrimas > 0) {
             that._calcularValorPrestamo();
           }
+          */
+
+          that._calcularValorPrestamo();
+
         })
         .catch(function (oError) {
           MessageBox.error(

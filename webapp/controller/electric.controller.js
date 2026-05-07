@@ -47,6 +47,7 @@ sap.ui.define([
 
 				// Descuento en primas
 				descuentoPrimas: "NO",
+				PorcentajePrima: "",
 
 				// Total primas a descontar
 				valorTotalPrimas: 0,
@@ -147,6 +148,7 @@ sap.ui.define([
 				destinoValueState: "None",
 				destinoValueStateText: "",
 				descuentoPrimas: "NO",
+				PorcentajePrima: "",
 				valorTotalPrimas: 0,
 				solicitudEnabled: true,
 				CuotasCollection: [],
@@ -221,7 +223,7 @@ sap.ui.define([
 				return;
 			}
 
-			var fValorCuota = Math.round((fValorSolicitado - valorTotalPrimas) / iNumeroCuotas) || 0 ;
+			var fValorCuota = Math.round((fValorSolicitado - valorTotalPrimas) / iNumeroCuotas) || 0;
 
 			oViewModel.setProperty("/valorPrestamo", Math.round(fValorSolicitado));
 			oViewModel.setProperty("/valorCuota", fValorCuota);
@@ -298,12 +300,14 @@ sap.ui.define([
 
 			// Validar destino
 			var sSelectedDestino = oViewModel.getProperty("/selectedDestino");
+			/*
 			if (!sSelectedDestino || sSelectedDestino === "") {
 				oViewModel.setProperty("/destinoValueState", "Error");
 				oViewModel.setProperty("/destinoValueStateText", "Debe seleccionar el destino del préstamo");
 				aErrorMessages.push("• Destino");
 				bValid = false;
 			}
+			*/
 
 			if (!bValid) {
 				MessageBox.error(
@@ -331,7 +335,7 @@ sap.ui.define([
 		 */
 		onCrearSolicitud: function () {
 			var oGlobalModel = this.getOwnerComponent().getModel("globalData");
-			 var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
+			var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
 			var oUserData = oGlobalModel.getProperty("/userData");
 
 			var dataSolic = {
@@ -350,7 +354,7 @@ sap.ui.define([
 				DATBW: new Date().toISOString().slice(0, 10)
 			};
 
-			  if (oPrestamoSeleccionado.PrestamoId) {
+			if (oPrestamoSeleccionado.PrestamoId) {
 				// tiene valor
 				dataSolic.SUBTY = oPrestamoSeleccionado.PrestamoId;
 			}
@@ -513,12 +517,19 @@ sap.ui.define([
 			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
 			var NoPrimas = aPrimas.length + 1;
 
+			var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+
+			if (!porcentajePrima || porcentajePrima === "") {
+					MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
+					return;
+			}
+
 			var dataPrima = {
 				"EMPLEADO": employeenumber,
 				"VALOR_PRESTAMO": String(fValorSolicitado),
 				"CANTIDAD_PRIMAS": String(NoPrimas),
 				"TIPO_PRESTAMO": idPrestamo,
-				"PORCENTAJE": "50"
+				"PORCENTAJE": porcentajePrima
 			};
 
 			this._oBackendService.Add_PrimaService(dataPrima)
@@ -545,9 +556,13 @@ sap.ui.define([
 					}
 					oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
 					oViewModelPrimas.setProperty("/items", aItems);
+					/*
 					if (fTotalPrimas > 0) {
 						that._calcularValorPrestamo();
 					}
+					*/
+					that._calcularValorPrestamo();
+
 				})
 				.catch(function (oError) {
 					MessageBox.error(
@@ -576,9 +591,20 @@ sap.ui.define([
 			var oViewModelPrimas = this.getView().getModel("listprimasElectric");
 			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
 			var aTimes = aPrimas.length;
+			var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+
+
 
 			if (aTimes === 0) {
 				return;
+
+			} else {
+
+				if (!porcentajePrima || porcentajePrima === "") {
+					MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
+					return;
+				}
+
 			}
 
 			if (aTimes === 1) {
@@ -594,7 +620,7 @@ sap.ui.define([
 				"VALOR_PRESTAMO": String(fValorSolicitado),
 				"CANTIDAD_PRIMAS": String(NoPrimas),
 				"TIPO_PRESTAMO": idPrestamo,
-				"PORCENTAJE": "50"
+				"PORCENTAJE": porcentajePrima
 			};
 
 			this._oBackendService.Add_PrimaService(dataPrima)
@@ -622,10 +648,14 @@ sap.ui.define([
 
 					oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
 					oViewModelPrimas.setProperty("/items", aItems);
-
+					/*
 					if (fTotalPrimas > 0) {
 						that._calcularValorPrestamo();
 					}
+					*/
+					that._calcularValorPrestamo();
+
+
 				})
 				.catch(function (oError) {
 					MessageBox.error(
@@ -765,7 +795,7 @@ sap.ui.define([
 				return;
 			}
 
-			var mTipos = {  "1": "Factura de compra" };
+			var mTipos = { "1": "Factura de compra" };
 
 			var oViewModel = this.getView().getModel("movelectricView");
 			var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
@@ -807,7 +837,7 @@ sap.ui.define([
 				if (oAdjunto.tipoArchivo === "1") {
 					oPayload.BIN_FACTURA_COMPRA = oAdjunto.base64Content || "";
 					oPayload.FILE_NAME_FACTURA_COMPRA = oAdjunto.nombreArchivo || "";
-				} 
+				}
 			});
 
 			return oPayload;

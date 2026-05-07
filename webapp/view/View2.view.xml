@@ -13,14 +13,15 @@
     showNavButton="true"
     navButtonPress=".onNavBack">
     <content>
-      <Wizard id="wizardCalam" complete="onWizardComplete" class="sapUiResponsiveMargin">
+      <Wizard id="wizardCalam" complete="onCrearSolicitud" finishButtonText="Enviar Solicitud" class="sapUiResponsiveMargin">
                 
                 <!-- Paso 1: Datos del Préstamo -->
                 <WizardStep
                     id="step1"
                     title="Datos del Préstamo"
                     validated="false"
-                    activate="onStep1Activate">
+                    activate="onStep1Activate"
+                    nextButtonText="Paso 2">
                     <VBox class="sapUiSmallMargin">
                     	<form:SimpleForm
 										editable="true"
@@ -153,6 +154,7 @@
                     id="step2Codeudor"
                     title="Datos codeudor"
                     validated="false"
+                    nextButtonText="Paso 3"
                     
                     activate="onStepCodeudorActivate">
                     <VBox class="sapUiSmallMargin">
@@ -246,7 +248,8 @@
                 <WizardStep
                     id="step3"
                     title="Primas y bonificaciones"
-                    validated="true">
+                    validated="true"
+                    nextButtonText="Paso 4">
                     <VBox class="sapUiSmallMargin">
                        <form:SimpleForm
 										editable="true"
@@ -262,7 +265,16 @@
                                         <core:Item key="NO_APLICA" text="No Aplica"/>
                                         <core:Item key="DESCONTAR_PRIMAS" text="Descontar Primas"/>
                                     </items>
-                                </Select>  
+                                </Select>
+                             <Label text="Porcentaje %"/>
+                            <Select selectedKey="{calamView>/PorcentajePrima}" forceSelection="false" width="100%">
+                                <core:Item key="10" text="10%"/>
+                                <core:Item key="20" text="20%"/>
+                                <core:Item key="30" text="30%"/>
+                                <core:Item key="40" text="40%"/>
+                                <core:Item key="50" text="50%"/>
+                                <core:Item key="60" text="60%"/>
+                            </Select>      
 
                         </form:SimpleForm>
 

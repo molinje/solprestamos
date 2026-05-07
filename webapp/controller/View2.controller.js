@@ -73,6 +73,7 @@ sap.ui.define([
 				fecha: "",
 				selectedMotCalamidad: "",
 				SelectedPrimas: "NO_APLICA",
+				PorcentajePrima: "",
 				primasADescontar: [],
 				solicitudEnabled: true,
 				adjuntos: [],
@@ -222,6 +223,7 @@ sap.ui.define([
 				fecha: "",
 				selectedMotCalamidad: "",
 				SelectedPrimas: "NO_APLICA",
+				PorcentajePrima: "",
 				primasADescontar: [],
 				solicitudEnabled: true,
 				adjuntos: [],
@@ -1091,6 +1093,12 @@ sap.ui.define([
 			var aTimes = aPrimas.length;
 
 			var NoPrimas = aTimes + 1;
+		    var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+
+			if (!porcentajePrima || porcentajePrima === "") {
+					MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
+					return;
+			}
 
 
 			var dataPrima = {
@@ -1098,7 +1106,7 @@ sap.ui.define([
 				"VALOR_PRESTAMO": String(fValorSolicitado),
 				"CANTIDAD_PRIMAS": String(NoPrimas),
 				"TIPO_PRESTAMO": idPrestamo,
-				"PORCENTAJE": "50"
+				"PORCENTAJE": porcentajePrima
 			};
 
 
@@ -1174,6 +1182,10 @@ sap.ui.define([
 			var aPrimas = oViewModelPrimas.getProperty("/items") || [];
 
 			var aTimes = aPrimas.length;
+            var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+
+			
+
 
 			if (aTimes > 0) {
 
@@ -1181,6 +1193,11 @@ sap.ui.define([
 					oViewModelPrimas.setProperty("/items", []);
 					return;
 				} else if (aTimes > 1) {
+
+				if (!porcentajePrima || porcentajePrima === "") {
+					MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
+					return;
+			}	
 
 					// calculamos de nuevo la cantidad de primas a descontar restando 1 a la cantidad actual, 
 					// para enviar ese valor al servicio y que retorne la nueva lista de primas actualizada sin la última prima que se quiere eliminar	
@@ -1192,7 +1209,7 @@ sap.ui.define([
 						"VALOR_PRESTAMO": String(fValorSolicitado),
 						"CANTIDAD_PRIMAS": String(NoPrimas),
 						"TIPO_PRESTAMO": idPrestamo,
-						"PORCENTAJE": "50"
+						"PORCENTAJE": porcentajePrima
 					};
 
 					this._oBackendService.Add_PrimaService(dataPrima)
@@ -1226,11 +1243,15 @@ sap.ui.define([
 								oViewModel.setProperty("/valorTotalPrimas", fTotalPrimas);
 								that.getView().getModel("calamView").setProperty("/primasADescontar", aItems);
 								that.getView().getModel("listprimas").setProperty("/items", aItems);
-
+                                
+								/*
 								if (fTotalPrimas > 0) {
 
 									that._calcularValorPrestamo();
 								}
+								*/
+
+								that._calcularValorPrestamo();
 
 
 								/*

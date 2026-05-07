@@ -123,19 +123,7 @@
                                 width="100%"
                                 textAlign="End"/>
 
-                            <Label text="Destino *" labelFor="selectDestino" required="true"/>
-                            <Select
-                                id="selectDestino"
-                                forceSelection="false"
-                                selectedKey="{compuView>/selectedDestino}"
-                                change="onDestinoChange"
-                                width="100%"
-                                valueState="{compuView>/destinoValueState}"
-                                valueStateText="{compuView>/destinoValueStateText}">
-                                <core:Item key="" text="Seleccione una opción"/>
-                                <core:Item key="01" text="Colaborador"/>
-                                <core:Item key="02" text="Proveedor"/>
-                            </Select>
+                          
                             
                             <Label text="Descuento en Primas" labelFor="selectDescuentoPrimas"/>
                             <Select 
@@ -144,6 +132,15 @@
                                 width="100%">
                                 <core:Item key="NO" text="No Aplica"/>
                                 <core:Item key="SI" text="Descontar Primas"/>
+                            </Select>
+                            <Label text="Porcentaje %"/>
+                            <Select selectedKey="{compuView>/PorcentajePrima}" forceSelection="false" width="100%">
+                                <core:Item key="10" text="10%"/>
+                                <core:Item key="20" text="20%"/>
+                                <core:Item key="30" text="30%"/>
+                                <core:Item key="40" text="40%"/>
+                                <core:Item key="50" text="50%"/>
+                                <core:Item key="60" text="60%"/>
                             </Select>
                         </form:SimpleForm>
 

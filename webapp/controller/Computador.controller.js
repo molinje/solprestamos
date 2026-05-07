@@ -300,7 +300,7 @@ sap.ui.define([
         return;
       }
 
-      var fValorCuota = Math.round((fValorSolicitado - valorTotalPrimas) / iNumeroCuotas) || 0 ;
+      var fValorCuota = Math.round((fValorSolicitado - valorTotalPrimas) / iNumeroCuotas) || 0;
 
       oViewModel.setProperty("/valorPrestamo", Math.round(fValorSolicitado));
       oViewModel.setProperty("/valorCuota", fValorCuota);
@@ -376,10 +376,10 @@ sap.ui.define([
       var dataSolic = {
         SUBTY: "",
         DARBT: 0,
-        VALOR_POR_MES : 0,
+        VALOR_POR_MES: 0,
         PERNR: "",
         ENDDA: "9999-12-31",
-       // BEGDA: new Date().toISOString().slice(0, 10),
+        // BEGDA: new Date().toISOString().slice(0, 10),
         DBTCU: "COP",
         ZWAERS: "COP",
         ZMOCA: "",
@@ -392,9 +392,9 @@ sap.ui.define([
       };
 
       if (oPrestamoSeleccionado.PrestamoId) {
-				// tiene valor
-				dataSolic.SUBTY = oPrestamoSeleccionado.PrestamoId;
-			}
+        // tiene valor
+        dataSolic.SUBTY = oPrestamoSeleccionado.PrestamoId;
+      }
 
       if (oUserData && oUserData.PERNR != undefined) {
         dataSolic.PERNR = oUserData.PERNR;
@@ -408,10 +408,10 @@ sap.ui.define([
       var oData = oViewModel.getData();
 
       if (oData.valorPrestamo > 0) {
-       // dataSolic.DARBT = oData.valorPrestamo;
+        // dataSolic.DARBT = oData.valorPrestamo;
         //dataSolic.ZVALSO = oData.valorPrestamo;
         dataSolic.DARBT = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
-				dataSolic.ZVALSO = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
+        dataSolic.ZVALSO = (parseFloat(oData.valorPrestamo) / 100).toFixed(2);
         dataSolic.VALOR_POR_MES = (parseFloat(oData.valorCuota) / 100).toFixed(2) || "0.00";
       } else {
         MessageBox.error("Por favor registre el valor a solicitar");
@@ -496,7 +496,7 @@ sap.ui.define([
               // Guardar adjuntos si existen
               if (sIdSolicitud) {
                 var adjuntosPayload = that.Guardar_adjuntosFrom_idSol(sIdSolicitud);
-                if ( adjuntosPayload.BIN_FACTURA_COMPRA.length > 0) {
+                if (adjuntosPayload.BIN_FACTURA_COMPRA.length > 0) {
                   var oAdjuntosServiceData = {
                     "n0:ZCOHCMFM_GUARDAR_PROCPASIT45": {
                       "-xmlns:n0": "urn:sap-com:document:sap:rfc:functions",
@@ -568,7 +568,7 @@ sap.ui.define([
       var moneda = oViewModel.getProperty("/moneda");
       var employeenumber = oUserData ? oUserData.PERNR : "";
       var idPrestamo = oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : "";
-      
+
       var oViewModelPrimas = this.getView().getModel("listprimasCompu");
       var aPrimas = oViewModelPrimas.getProperty("/items") || [];
       var NoPrimas = aPrimas.length + 1;
@@ -619,7 +619,7 @@ sap.ui.define([
             that._calcularValorPrestamo();
           }
           */
-           that._calcularValorPrestamo();
+          that._calcularValorPrestamo();
 
         })
         .catch(function (oError) {
@@ -649,15 +649,14 @@ sap.ui.define([
       var oViewModelPrimas = this.getView().getModel("listprimasCompu");
       var aPrimas = oViewModelPrimas.getProperty("/items") || [];
       var aTimes = aPrimas.length;
-      
+
       var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
 
-      if (!porcentajePrima || porcentajePrima === "") {
-        MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
-        return;
-      }
+
 
       if (aTimes === 0) {
+        oViewModel.setProperty("/valorTotalPrimas", 0);
+        that._calcularValorPrestamo();
         return;
       }
 
@@ -666,6 +665,11 @@ sap.ui.define([
         oViewModel.setProperty("/valorTotalPrimas", 0);
         oViewModel.setProperty("/primasADescontar", []);
         that._calcularValorPrestamo();
+        return;
+      }
+
+      if (!porcentajePrima || porcentajePrima === "") {
+        MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
         return;
       }
 
@@ -852,7 +856,7 @@ sap.ui.define([
         return;
       }
 
-      var mTipos = {  "1": "Factura de compra" };
+      var mTipos = { "1": "Factura de compra" };
 
       var oViewModel = this.getView().getModel("compuView");
       var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
@@ -894,7 +898,7 @@ sap.ui.define([
         if (oAdjunto.tipoArchivo === "1") {
           oPayload.BIN_FACTURA_COMPRA = oAdjunto.base64Content || "";
           oPayload.FILE_NAME_FACTURA_COMPRA = oAdjunto.nombreArchivo || "";
-        } 
+        }
       });
 
       return oPayload;

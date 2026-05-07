@@ -596,6 +596,8 @@ sap.ui.define([
 
 
 			if (aTimes === 0) {
+				oViewModel.setProperty("/valorTotalPrimas", 0);
+				that._calcularValorPrestamo();				
 				return;
 
 			} else {

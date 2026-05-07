@@ -1173,14 +1173,12 @@ sap.ui.define([
       var aTimes = aPrimas.length;
 
       if (aTimes === 0) {
+        oViewModel.setProperty("/valorTotalPrimas", 0);
         that._calcularValorPrestamo();
         return;
       } else {
 
-        if (!porcentajePrima || porcentajePrima === "") {
-          MessageBox.error("Debe seleccionar un porcentaje antes de modificar las primas.");
-          return;
-        }
+       
 
       }
 
@@ -1191,6 +1189,11 @@ sap.ui.define([
         that._calcularValorPrestamo();
         return;
       }
+
+       if (!porcentajePrima || porcentajePrima === "") {
+          MessageBox.error("Debe seleccionar un porcentaje antes de modificar las primas.");
+          return;
+        }
 
       var NoPrimas = aTimes - 1;
       var dataPrima = {

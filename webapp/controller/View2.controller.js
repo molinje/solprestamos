@@ -1186,16 +1186,10 @@ sap.ui.define([
 
 
 			if (aTimes === 0) {
+				 oViewModel.setProperty("/valorTotalPrimas", 0);
 				that._calcularValorPrestamo();
 				return;
-			} else {
-
-				if (!porcentajePrima || porcentajePrima === "") {
-					MessageBox.error("Debe seleccionar un porcentaje antes de modificar las primas.");
-					return;
-				}
-
-			}
+			} 
 
 
 			if (aTimes > 0) {
@@ -1206,6 +1200,8 @@ sap.ui.define([
 					that._calcularValorPrestamo();
 					return;
 				} else if (aTimes > 1) {
+
+
 
 					if (!porcentajePrima || porcentajePrima === "") {
 						MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");

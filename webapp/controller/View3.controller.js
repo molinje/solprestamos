@@ -122,9 +122,7 @@ sap.ui.define([
         oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, "")));
       }
 
-      this.onValidartipoEduca(oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : null);
-
-
+      //this.onValidartipoEduca(oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : null);
 
       // Limpiar campos calculados al navegar
       oViewModel.setProperty("/valorSolicitado", 0);
@@ -163,6 +161,8 @@ sap.ui.define([
       oViewModel.setProperty("/programaNIT", "");
       oViewModel.setProperty("/programaCodigo", "");
       oViewModel.setProperty("/programaPostGradoBusqueda", "");
+
+      this.onValidartipoEduca(oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : null);
 
       // Resetear el wizard al paso 1
       this._resetWizard();

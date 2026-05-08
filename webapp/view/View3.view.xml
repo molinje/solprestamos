@@ -51,7 +51,7 @@
                         <!-- Fila 1: Tipo de Educación | Nivel -->
                         <VBox>
                             <Label text="Tipo de Educación"/>
-                            <Select id="selectTipoEducacion" selectedKey="{educaView>/tipoEducacion}" forceSelection="false" width="100%" change="onTipoEducacionChange">
+                            <Select id="selectTipoEducacion" editable="false" selectedKey="{educaView>/tipoEducacion}" forceSelection="false" width="100%" change="onTipoEducacionChange">
                                 <core:Item key="2" text="Pregrado"/>
                                 <core:Item key="1" text="Postgrado"/>
                             </Select>

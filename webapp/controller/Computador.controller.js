@@ -425,13 +425,14 @@ sap.ui.define([
         MessageBox.error("Por favor registre el número de cuotas");
         return;
       }
-
+      /*
       if (!oData.selectedDestino || oData.selectedDestino === "") {
         MessageBox.error("Por favor seleccione el destino del préstamo");
         return;
       }
-
+      
       dataSolic.ZDESTINO = oData.selectedDestino;
+      */
       dataSolic.ZDESCPRIMAS = oData.descuentoPrimas;
 
       oViewModel.setProperty("/solicitudEnabled", false);
@@ -530,8 +531,7 @@ sap.ui.define([
               MessageBox.success(message_success, {
                 details: "Monto: " + that._formatCurrency(oData.valorPrestamo, oData.moneda) +
                   "\nCuotas: " + oData.numeroCuotas +
-                  "\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda) +
-                  "\nDestino: " + (oData.selectedDestino === "01" ? "Colaborador" : "Proveedor"),
+                  "\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda) ,
                 onClose: function () {
                   that.onNavBack();
                 }

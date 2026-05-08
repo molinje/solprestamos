@@ -122,6 +122,10 @@ sap.ui.define([
         oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, "")));
       }
 
+      this.onValidartipoEduca(oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : null);
+
+
+
       // Limpiar campos calculados al navegar
       oViewModel.setProperty("/valorSolicitado", 0);
       oViewModel.setProperty("/valorPrestamo", 0);
@@ -408,6 +412,34 @@ sap.ui.define([
 
     },
 
+    onValidartipoEduca: function (sPrestamoId) {
+      var mKeyPorPrestamo = { "03": "2", "05": "1" };
+      var sKey = mKeyPorPrestamo[sPrestamoId];
+      if (!sKey) return;
+
+      this.byId("selectTipoEducacion").setSelectedKey(sKey);
+      this.getView().getModel("educaView").setProperty("/tipoEducacion", sKey);
+      this.byId("vboxPregrado").setVisible(sKey === "2");
+      this.byId("vboxPostgrado").setVisible(sKey === "1");
+    },
+
+    onPeriodicidadChange: function (oEvent) {
+      var sKey = oEvent.getParameter("selectedItem").getKey();
+      var oViewModel = this.getView().getModel("educaView");
+
+      // key "1" Anual → 10 cuotas | key "4" Cuatrimestral o "2" Semestral → 5 cuotas
+      var mCuotas = {
+        "1": { CuotasId: "10", Name: "10" },
+        "4": { CuotasId: "5",  Name: "5"  },
+        "2": { CuotasId: "5",  Name: "5"  }
+      };
+      var oCuota = mCuotas[sKey];
+
+      oViewModel.setProperty("/CuotasEducaCollection", oCuota ? [oCuota] : []);
+      oViewModel.setProperty("/NCuotas", oCuota ? oCuota.CuotasId : "");
+      oViewModel.setProperty("/numeroCuotas", oCuota ? parseInt(oCuota.CuotasId) : 0);
+    },
+
     /**
      * Evento cuando cambia el tipo de educación.
      * Filtra las cuotas disponibles según la selección:
@@ -421,7 +453,8 @@ sap.ui.define([
       // Mostrar/ocultar buscador según tipo: "2" = Pregrado, "1" = Postgrado
       this.byId("vboxPregrado").setVisible(sKey === "2");
       this.byId("vboxPostgrado").setVisible(sKey === "1");
-
+      
+      /*
       var oCuotasPorTipo = {
         "2": { CuotasId: "5", Name: "5" },   // Pregrado
         "1": { CuotasId: "10", Name: "10" }    // Postgrado
@@ -437,6 +470,8 @@ sap.ui.define([
         oViewModel.setProperty("/NCuotas", "");
         oViewModel.setProperty("/numeroCuotas", 0);
       }
+
+      */
 
       // Limpiar estado de validación de cuotas al cambiar tipo
       oViewModel.setProperty("/cuotasValueState", "None");

@@ -77,7 +77,7 @@
                         <!-- Fila 2: Periodicidad | N. Cuotas -->
                         <VBox>
                             <Label text="Periodicidad"/>
-                            <Select id="selectPeriodicidad" selectedKey="{educaView>/Periodicidad}" forceSelection="false" width="100%">
+                            <Select id="selectPeriodicidad" selectedKey="{educaView>/Periodicidad}" forceSelection="false" width="100%" change="onPeriodicidadChange">
                                 <core:Item key="1" text="Anual"/>
                                 <core:Item key="4" text="Cuatrimestral"/>
                                 <core:Item key="2" text="Semestral"/>

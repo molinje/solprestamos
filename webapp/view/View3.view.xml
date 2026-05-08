@@ -504,14 +504,7 @@
                             </items>
                         </Table>
 
-                        <Button
-                            id="btnCrearSolicitud3"
-                            text="Crear Solicitud"
-                            type="Emphasized"
-                            press="onCrearSolicitud"
-                            enabled="{educaView>/solicitudEnabled}"
-                            class="sapUiMediumMarginTop"
-                            width="200px"/>
+                      
                     </VBox>
                 </WizardStep>
                 

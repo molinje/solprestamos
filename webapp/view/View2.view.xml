@@ -366,15 +366,6 @@
                                 </ColumnListItem>
                             </items>
                         </Table>
-
-                        <Button
-                            id="btnCrearSolicitud"
-                            text="Crear Solicitud"
-                            type="Emphasized"
-                            press="onCrearSolicitud"
-                            enabled="{calamView>/solicitudEnabled}"
-                            class="sapUiMediumMarginTop"
-                            width="200px"/>
                     </VBox>
                 </WizardStep>
                 

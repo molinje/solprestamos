@@ -433,6 +433,19 @@ sap.ui.define([
       
       dataSolic.ZDESTINO = oData.selectedDestino;
       */
+
+      // validar adjuntos 
+      var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
+      var bTieneSoporte = aAdjuntos.some(function (oAdj) {
+        return String(oAdj.tipoArchivo) === "1";
+      });
+      if (!bTieneSoporte) {
+        MessageBox.error(
+          "Debe adjuntar la factura de compra."
+        );
+        return;
+      }
+
       dataSolic.ZDESCPRIMAS = oData.descuentoPrimas;
 
       oViewModel.setProperty("/solicitudEnabled", false);
@@ -531,7 +544,7 @@ sap.ui.define([
               MessageBox.success(message_success, {
                 details: "Monto: " + that._formatCurrency(oData.valorPrestamo, oData.moneda) +
                   "\nCuotas: " + oData.numeroCuotas +
-                  "\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda) ,
+                  "\nValor Cuota: " + that._formatCurrency(oData.valorCuota, oData.moneda),
                 onClose: function () {
                   that.onNavBack();
                 }

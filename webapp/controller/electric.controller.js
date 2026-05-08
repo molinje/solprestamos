@@ -389,6 +389,18 @@ sap.ui.define([
 				return;
 			}
 
+				// validacion adjuntos
+			var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
+			var bTieneSoporte = aAdjuntos.some(function (oAdj) {
+				return String(oAdj.tipoArchivo) === "1";
+			});
+			if (!bTieneSoporte) {
+				MessageBox.error(
+					"Debe adjuntar la factura de compra."
+				);
+				return;
+			}
+
 			oViewModel.setProperty("/solicitudEnabled", false);
 
 			var dataService = {

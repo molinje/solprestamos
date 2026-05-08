@@ -718,11 +718,23 @@ sap.ui.define([
       var lv_ZCODPRO = oViewModel.getProperty("/programaCodigo");
 
       // Inicio Validar que se haya adjuntado la matrícula
-
+      /*
       var aAdjuntos = this.getView().getModel("educaView").getProperty("/adjuntos");
       var bTieneMatricula = Array.isArray(aAdjuntos) && aAdjuntos.some(function (oAdj) {
         return oAdj.tipoArchivo === 1 && oAdj.base64Content;
       });
+      */
+      var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
+      var bTieneSoporte = aAdjuntos.some(function (oAdj) {
+        return String(oAdj.tipoArchivo) === "1";
+      });
+      if (!bTieneSoporte) {
+        MessageBox.error(
+          "Debe adjuntar copia de la matrícula."
+        );
+        return;
+      }
+
       /*
       if (!bTieneMatricula) {
         MessageBox.error("Adjuntar la Matricula es obligatorio");
@@ -1178,7 +1190,7 @@ sap.ui.define([
         return;
       } else {
 
-       
+
 
       }
 
@@ -1190,10 +1202,10 @@ sap.ui.define([
         return;
       }
 
-       if (!porcentajePrima || porcentajePrima === "") {
-          MessageBox.error("Debe seleccionar un porcentaje antes de modificar las primas.");
-          return;
-        }
+      if (!porcentajePrima || porcentajePrima === "") {
+        MessageBox.error("Debe seleccionar un porcentaje antes de modificar las primas.");
+        return;
+      }
 
       var NoPrimas = aTimes - 1;
       var dataPrima = {

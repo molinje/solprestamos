@@ -592,12 +592,15 @@ sap.ui.define([
         return;
       }
 
+      var sCuotas = oViewModel.getProperty("/selectedCuotas") || "";
+
       var dataPrima = {
         "EMPLEADO": employeenumber,
         "VALOR_PRESTAMO": String(fValorSolicitado),
         "CANTIDAD_PRIMAS": String(NoPrimas),
         "TIPO_PRESTAMO": idPrestamo,
-        "PORCENTAJE": porcentajePrima
+        "PORCENTAJE": porcentajePrima,
+        "CUOTAS": String(sCuotas)
       };
 
       this._oBackendService.Add_PrimaService(dataPrima)
@@ -689,12 +692,15 @@ sap.ui.define([
       }
 
       var NoPrimas = aTimes - 1;
+      var sCuotas = oViewModel.getProperty("/selectedCuotas") || "";
+
       var dataPrima = {
         "EMPLEADO": employeenumber,
         "VALOR_PRESTAMO": String(fValorSolicitado),
         "CANTIDAD_PRIMAS": String(NoPrimas),
         "TIPO_PRESTAMO": idPrestamo,
-        "PORCENTAJE": porcentajePrima
+        "PORCENTAJE": porcentajePrima,
+        "CUOTAS": String(sCuotas)
       };
 
       this._oBackendService.Add_PrimaService(dataPrima)

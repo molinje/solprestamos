@@ -438,6 +438,8 @@ sap.ui.define([
       oViewModel.setProperty("/CuotasEducaCollection", oCuota ? [oCuota] : []);
       oViewModel.setProperty("/NCuotas", oCuota ? oCuota.CuotasId : "");
       oViewModel.setProperty("/numeroCuotas", oCuota ? parseInt(oCuota.CuotasId) : 0);
+      // si cambio la periodicidad se recalcula el valor de la cuota
+      this._calcularValorPrestamo();
     },
 
     /**

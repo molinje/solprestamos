@@ -14,7 +14,7 @@ sap.ui.define([
         _consultPrimasUrl: "/http/CCB_Consult_Prima",
         _getMemorandoUrl: "/http/CCB_Consult_Memorando",
         _valorCondonadoUrl: "/http/CCB_Condonados",
-        _estPregradoUrl: "/http/CCCB_Pregrado",
+        _estPregradoUrl: "/http/CCB_Pregrado",
         _estPosgradoUrl: "/http/CCB_Posgrado",
 
         _getAppBase: function () {

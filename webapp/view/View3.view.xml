@@ -212,7 +212,16 @@
                                 textAlign="End"
                                 editable="false"/>
                         </VBox>
-                        <VBox/>
+                        <VBox>
+                            <Label text="Buscar programa de pregrado (servicio)" labelFor="inputBuscarProgramaPregrado"/>
+                            <Input
+                                id="inputBuscarProgramaPregrado"
+                                width="100%"
+                                showValueHelp="true"
+                                valueHelpRequest="onBuscarProgramaPregradoValueHelp"
+                                placeholder="Digite un texto y presione la ayuda de búsqueda"
+                                value="{educaView>/busquedaProgramaPregrado}"/>
+                        </VBox>
 
                         <!-- Buscador de programa: ancho completo siempre -->
                         <VBox id="vboxPregrado" visible="false">

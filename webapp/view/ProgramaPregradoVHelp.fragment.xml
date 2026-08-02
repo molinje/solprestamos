@@ -1,0 +1,39 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">
+    <Dialog title="Seleccione un programa de pregrado" class="sapUiPopupWithPadding" contentWidth="75%">
+        <content>
+        <Table id="tablaProgramaPregradoVH" items="{ path: 'educaView>/ProgramasPregradoResultado'}"
+               growing="true"
+               growingThreshold="10"
+               growingScrollToLoad="true"
+               noDataText="No se encontraron programas de pregrado para el texto buscado.">
+            <columns>
+                <Column>
+                    <Text text="Título" />
+                </Column>
+                <Column>
+                    <Text text="Programa" />
+                </Column>
+                <Column>
+                    <Text text="Universidad" />
+                </Column>
+                <Column>
+                    <Text text="Ciudad" />
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem type="Active" press="onProgramaPregradoVHSelect">
+                    <cells>
+                        <Text text="{educaView>TITULO}" />
+                        <Text text="{educaView>NAME2}" />
+                        <Text text="{educaView>NAME1}" />
+                        <Text text="{educaView>CIUDAD}" />
+                    </cells>
+                </ColumnListItem>
+            </items>
+        </Table>
+        </content>
+        <endButton>
+            <Button text="Cerrar" type="Reject" press="onCerrarProgramaPregradoVHelp" />
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>

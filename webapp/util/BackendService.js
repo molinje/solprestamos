@@ -14,6 +14,8 @@ sap.ui.define([
         _consultPrimasUrl: "/http/CCB_Consult_Prima",
         _getMemorandoUrl: "/http/CCB_Consult_Memorando",
         _valorCondonadoUrl: "/http/CCB_Condonados",
+        _estPregradoUrl: "/http/CCCB_Pregrado",
+        _estPosgradoUrl: "/http/CCB_Posgrado",
 
         _getAppBase: function () {
             return sap.ui.require.toUrl("prestamos/ccb/org/solprestamos");
@@ -34,6 +36,22 @@ sap.ui.define([
          getValorCondonado: function (oData) {
 
             var sUrl = this._getAppBase() + this._valorCondonadoUrl;
+            var sToken = this.Get_tokenfromservice(sUrl);
+            return this._executePostService(sUrl, oData, sToken);
+
+        },
+
+         getEstPregrado: function (oData) {
+
+            var sUrl = this._getAppBase() + this._estPregradoUrl;
+            var sToken = this.Get_tokenfromservice(sUrl);
+            return this._executePostService(sUrl, oData, sToken);
+
+        },
+
+         getEstPosgrado: function (oData) {
+
+            var sUrl = this._getAppBase() + this._estPosgradoUrl;
             var sToken = this.Get_tokenfromservice(sUrl);
             return this._executePostService(sUrl, oData, sToken);
 

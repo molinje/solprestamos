@@ -860,6 +860,16 @@ sap.ui.define([
         return;
       }
 
+      var bTienePensum = aAdjuntos.some(function (oAdj) {
+        return String(oAdj.tipoArchivo) === "2";
+      });
+      if (!bTienePensum) {
+        MessageBox.error(
+          "Debe adjuntar el pensum académico."
+        );
+        return;
+      }
+
       /*
       if (!bTieneMatricula) {
         MessageBox.error("Adjuntar la Matricula es obligatorio");

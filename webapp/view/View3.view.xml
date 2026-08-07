@@ -283,13 +283,12 @@
                         </VBox>
                         <VBox>
                             <Label text="Origen Universidad"/>
-                            <Select selectedKey="{educaView>/OrigenU}" forceSelection="false" width="100%">
-                                <core:Item key="01" text="Colombia"/>
-                                <core:Item key="02" text="Ecuador"/>
-                                <core:Item key="03" text="Perú"/>
-                                <core:Item key="04" text="Brasil"/>
-                                <core:Item key="05" text="España"/>
-                                <core:Item key="06" text="EE.UU."/>
+                            <Select
+                                selectedKey="{educaView>/OrigenU}"
+                                forceSelection="false"
+                                width="100%"
+                                items="{globalData>/gt_paises}">
+                                <core:Item key="{globalData>LAND1}" text="{globalData>LANDX}"/>
                             </Select>
                         </VBox>
 

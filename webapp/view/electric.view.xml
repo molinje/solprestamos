@@ -81,6 +81,7 @@
                         <Select
                             id="selectCuotasMelectric"
                             selectedKey="{movelectricView>/selectedCuotas}"
+                            forceSelection="false"
                             width="100%"
                             change="onCuotasChange"
                             valueState="{movelectricView>/cuotasValueState}"

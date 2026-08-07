@@ -50,6 +50,7 @@
                             id="selectCuotas"
                             width="100%"
                             selectedKey="{calamView>/selectedCuotas}"
+                            forceSelection="false"
                             change="onCuotasChange"
                             items="{/CuotasCollection}"
                             valueState="{calamView>/cuotasValueState}"

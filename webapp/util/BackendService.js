@@ -16,6 +16,7 @@ sap.ui.define([
         _valorCondonadoUrl: "/http/CCB_Condonados",
         _estPregradoUrl: "/http/CCB_Pregrado",
         _estPosgradoUrl: "/http/CCB_Posgrado",
+        _consultaPaisesUrl: "/http/Consulta_Pais",
 
         _getAppBase: function () {
             return sap.ui.require.toUrl("prestamos/ccb/org/solprestamos");
@@ -250,8 +251,16 @@ sap.ui.define([
 
          get_Memorando: function (IdSolicitud) {
             var sId = String(IdSolicitud).trim();
-            
+
             return this._executeGet(this._getMemorandoUrl, { uuid: "'" + sId + "'" });
+        },
+
+        /**
+         * Consulta el catálogo de países (Origen Universidad, etc.)
+         * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
+         */
+        getPaises: function () {
+            return this._executeGet(this._getAppBase() + this._consultaPaisesUrl);
         },
 
         /**
@@ -394,20 +403,20 @@ sap.ui.define([
         /**
          * Ejecuta una petición GET al servicio con parámetros en la query string
          * @param {string} sUrl - URL base del servicio
-         * @param {object} oParams - Parámetros a enviar en la query string
+         * @param {object} [oParams] - Parámetros a enviar en la query string (opcional)
          * @returns {Promise} Promise que resuelve con el JSON de respuesta
          * @private
          */
         _executeGet: function (sUrl, oParams) {
             return new Promise(function (resolve, reject) {
-                var sQueryString = Object.keys(oParams)
+                var sQueryString = oParams ? Object.keys(oParams)
                     .map(function (sKey) {
                         return encodeURIComponent(sKey) + "=" + encodeURIComponent(oParams[sKey]);
                     })
-                    .join("&");
+                    .join("&") : "";
 
                 var xhr = new XMLHttpRequest();
-                xhr.open("GET", sUrl + "?" + sQueryString, true);
+                xhr.open("GET", sQueryString ? (sUrl + "?" + sQueryString) : sUrl, true);
 
                 xhr.setRequestHeader("Accept", "application/json");
 

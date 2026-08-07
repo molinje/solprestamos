@@ -2,8 +2,9 @@ sap.ui.define([
     "sap/ui/core/UIComponent",
     "sap/ui/Device",
     "prestamos/ccb/org/solprestamos/model/models",
-    "sap/ui/model/json/JSONModel"
-], (UIComponent, Device, models, JSONModel) => {
+    "sap/ui/model/json/JSONModel",
+    "prestamos/ccb/org/solprestamos/util/BackendService"
+], (UIComponent, Device, models, JSONModel, BackendService) => {
     "use strict";
 
     return UIComponent.extend("prestamos.ccb.org.solprestamos.Component", {
@@ -49,12 +50,20 @@ sap.ui.define([
                 gt_motcalamidad: null,
                 consulData: null,           // Datos de la consulta
                 isLoading: false,           // Indicador de carga
-                lastUpdate: null            // Última actualización
+                lastUpdate: null,           // Última actualización
+                gt_paises: []                // Catálogo de países (Origen Universidad, etc.)
             });
             this.setModel(oGlobalDataModel, "globalData");
 
+            this._oBackendService = new BackendService();
+
             // Opcional: Cargar datos iniciales
             this._loadInitialData();
+
+            // Catálogo de países: se consulta una sola vez por sesión y queda
+            // disponible en globalData>/gt_paises para cualquier vista que lo necesite.
+            // Es asíncrono (no bloquea el arranque de la app, a diferencia de _loadInitialData).
+            this._loadPaises();
 
         },
 
@@ -138,6 +147,31 @@ sap.ui.define([
                 }
 
             });
+        },
+
+        /**
+         * Consulta el catálogo de países (servicio Consulta_Pais) y lo deja
+         * disponible en globalData>/gt_paises. Se ejecuta una única vez al
+         * iniciar la app; las vistas solo leen/enlazan el resultado.
+         * @private
+         */
+        _loadPaises: function () {
+            var oGlobalDataModel = this.getModel("globalData");
+
+            this._oBackendService.getPaises()
+                .then(function (oResponse) {
+                    var oResult = oResponse["n0:ZCOHCMF_PAISESResponse"] &&
+                        oResponse["n0:ZCOHCMF_PAISESResponse"].TABLE_PAISES;
+                    var vItems = oResult ? oResult.item : [];
+                    var aPaises = Array.isArray(vItems) ? vItems : (vItems ? [vItems] : []);
+
+                    oGlobalDataModel.setProperty("/gt_paises", aPaises);
+                })
+                .catch(function (oError) {
+                    // No es un dato crítico para arrancar la app: se registra el error
+                    // y el Select de Origen Universidad simplemente queda vacío.
+                    console.error("Error al consultar el catálogo de países:", oError);
+                });
         }
     });
 });

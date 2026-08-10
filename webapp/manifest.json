@@ -138,6 +138,13 @@
           "target": [
             "Targetelectric"
           ]
+        },
+        {
+          "name": "RouteDetail",
+          "pattern": "detail/{uuid}",
+          "target": [
+            "TargetDetail"
+          ]
         }
       ],
       "targets": {
@@ -182,6 +189,13 @@
           "clearControlAggregation": false,
           "id": "electric",
           "name": "electric"
+        },
+        "TargetDetail": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "id": "Detail",
+          "name": "Detail"
         }
       }
     },

@@ -248,6 +248,20 @@ sap.ui.define([
             oModel.setProperty("/selectedPrestamo", "");
         },
 
+        onVerDetalleSolicitud: function (oEvent) {
+            var oItem = oEvent.getParameter("listItem");
+            var oContext = oItem.getBindingContext("solicitudesEmpleado");
+            var sUUID = oContext.getProperty("UUID");
+
+            if (!sUUID) {
+                MessageBox.error("La solicitud seleccionada no tiene un identificador (UUID) válido.");
+                return;
+            }
+
+            var oRouter = this.getOwnerComponent().getRouter();
+            oRouter.navTo("RouteDetail", { uuid: encodeURIComponent(sUUID) });
+        },
+
         onNavigateToView2: function () {
             var oRouter = this.getOwnerComponent().getRouter();
             oRouter.navTo("RouteView2");

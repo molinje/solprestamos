@@ -17,6 +17,7 @@ sap.ui.define([
         _estPregradoUrl: "/http/CCB_Pregrado",
         _estPosgradoUrl: "/http/CCB_Posgrado",
         _consultaPaisesUrl: "/http/Consulta_Pais",
+        _documentosUrl: "/http/CCB_Documentos",
 
         _getAppBase: function () {
             return sap.ui.require.toUrl("prestamos/ccb/org/solprestamos");
@@ -231,12 +232,45 @@ sap.ui.define([
 
             return this._executeGet(this._getAppBase() + this._solicitdesFromEmployee, { Identificacion: "'" + sId + "'" });
 
-            
 
-            
-            
+
+
+
         },
 
+        /**
+         * Consulta el detalle de una solicitud de préstamo puntual por su UUID
+         * (mismo servicio CCB_Prestamo_Detalle usado por getSolicitudesFromEmployee,
+         * filtrando por el campo UUID en vez de Identificacion)
+         * @param {string} sUUID - UUID de la solicitud de préstamo
+         * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
+         */
+        getSolicitudDetalle: function (sUUID) {
+            var sId = String(sUUID).trim();
+            return this._executeGet(this._getAppBase() + this._solicitdesFromEmployee, { UUID: "'" + sId + "'" });
+        },
+
+        /**
+         * Consulta los documentos adjuntos ya guardados de una solicitud de préstamo
+         * @param {string} sUUID - UUID de la solicitud de préstamo
+         * @returns {Promise} Promise que resuelve con el JSON de respuesta del servicio
+         */
+        getDocumentos: function (sUUID) {
+            var sId = String(sUUID).trim();
+            var sUrl = this._getAppBase() + this._documentosUrl + "?$filter=identificacion eq '" + encodeURIComponent(sId) + "'";
+
+            return fetch(sUrl, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }).then(function (oResponse) {
+                if (!oResponse.ok) {
+                    throw new Error("HTTP " + oResponse.status + " - " + oResponse.statusText);
+                }
+                return oResponse.json();
+            });
+        },
 
         /**
          * Consulta los datos de un colaborador por su identificación nacional

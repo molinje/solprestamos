@@ -348,6 +348,8 @@
                         <Table
                             id="tableAdjuntos"
                             items="{calamView>/adjuntos}"
+                            mode="Delete"
+                            delete="onEliminarAdjunto"
                             noDataText="No hay documentos adjuntos. Use el botón Agregar."
                             class="sapUiSmallMarginBottom">
                             <columns>

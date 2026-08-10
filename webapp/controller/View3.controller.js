@@ -93,6 +93,10 @@ sap.ui.define([
         busquedaProgramaPregrado: "",
         ProgramasPregradoResultado: [],
 
+        // Buscador de programa posgrado vía servicio (ayuda de búsqueda / diálogo)
+        busquedaProgramaPosgrado: "",
+        ProgramasPosgradoResultado: [],
+
         programaTitulo: "",
         programaUniversidad: "",
         programaCarrera: "",
@@ -743,6 +747,87 @@ sap.ui.define([
     onCerrarProgramaPregradoVHelp: function () {
       if (this._oDialogProgramaPregradoVH) {
         this._oDialogProgramaPregradoVH.close();
+      }
+    },
+
+    /**
+     * Abre el diálogo de ayuda para buscar un programa de posgrado.
+     * Consulta el servicio getEstPosgrado con el texto digitado por el usuario
+     * (IV_ESTUDIO) y muestra los resultados en un diálogo de selección.
+     */
+    onBuscarProgramaPosgradoValueHelp: function () {
+      var that = this;
+      var oViewModel = this.getView().getModel("educaView");
+      var sTexto = String(this.byId("inputBuscarProgramaPosgrado").getValue() || "").trim();
+
+      if (!sTexto) {
+        MessageBox.warning("Digite un texto para buscar el programa de posgrado.", { title: "Búsqueda de programa" });
+        return;
+      }
+
+      sap.ui.core.BusyIndicator.show(0);
+
+      this._oBackendService.getEstPosgrado({ IV_ESTUDIO: sTexto })
+        .then(function (oResponse) {
+          sap.ui.core.BusyIndicator.hide();
+
+          var oResult = oResponse["n0:ZCOHCMMF_EDUCATIVO_POSGRADOResponse"] &&
+            oResponse["n0:ZCOHCMMF_EDUCATIVO_POSGRADOResponse"].GET_ESTUDIOS;
+          var vItems = oResult ? oResult.item : [];
+          var aProgramas = Array.isArray(vItems) ? vItems : (vItems ? [vItems] : []);
+
+          oViewModel.setProperty("/ProgramasPosgradoResultado", aProgramas);
+
+          if (that._oDialogProgramaPosgradoVH === undefined) {
+            that._oDialogProgramaPosgradoVH = sap.ui.xmlfragment(
+              that.getView().getId(),
+              "prestamos.ccb.org.solprestamos.view.ProgramaPosgradoVHelp",
+              that
+            );
+            that.getView().addDependent(that._oDialogProgramaPosgradoVH);
+          }
+          that._oDialogProgramaPosgradoVH.open();
+
+          if (aProgramas.length === 0) {
+            MessageToast.show("No se encontraron programas de posgrado para \"" + sTexto + "\".");
+          }
+        })
+        .catch(function (oError) {
+          sap.ui.core.BusyIndicator.hide();
+          MessageBox.error(
+            "Error al buscar el programa de posgrado: " + (oError.message || oError.statusText || "Error desconocido"),
+            { title: "Error de búsqueda" }
+          );
+        });
+    },
+
+    /**
+     * Selecciona un programa de posgrado de la tabla del diálogo y lo carga en el modelo.
+     */
+    onProgramaPosgradoVHSelect: function (oEvent) {
+      var oPrograma = oEvent.getSource().getBindingContext("educaView").getObject();
+      var oViewModel = this.getView().getModel("educaView");
+
+      oViewModel.setProperty("/programaNIT", oPrograma.NIT);
+      oViewModel.setProperty("/programaTitulo", oPrograma.TITULO);
+      oViewModel.setProperty("/programaUniversidad", oPrograma.NAME1);
+      oViewModel.setProperty("/programaCarrera", oPrograma.NAME2);
+      oViewModel.setProperty("/programaCodigo", oPrograma.STCD1);
+      oViewModel.setProperty("/busquedaProgramaPosgrado", oPrograma.TITULO + " — " + oPrograma.NAME1);
+
+      MessageToast.show("Programa seleccionado: " + oPrograma.TITULO);
+
+      if (this._oDialogProgramaPosgradoVH) {
+        this._oDialogProgramaPosgradoVH.close();
+      }
+    },
+
+    /**
+     * Cierra el diálogo de búsqueda de programa de posgrado.
+     */
+    onCerrarProgramaPosgradoVHelp: function () {
+      if (this._oDialogProgramaPosgradoVH) {
+        this._oDialogProgramaPosgradoVH.close();
       }
     },
 
@@ -1558,6 +1643,32 @@ sap.ui.define([
      */
     onCancelarAdjunto: function () {
       this._oAdjuntosDialog3.close();
+    },
+
+    /**
+     * Elimina un documento adjunto de la tabla (evento "delete" del sap.m.Table en modo Delete)
+     */
+    onEliminarAdjunto: function (oEvent) {
+      var that = this;
+      var oItem = oEvent.getParameter("listItem");
+      var oContext = oItem.getBindingContext("educaView");
+      var sPath = oContext.getPath();
+      var iIndex = parseInt(sPath.split("/").pop(), 10);
+
+      MessageBox.confirm(
+        "¿Desea eliminar el documento '" + oContext.getProperty("nombreArchivo") + "'?", {
+          title: "Eliminar adjunto",
+          onClose: function (sAction) {
+            if (sAction !== MessageBox.Action.OK) {
+              return;
+            }
+            var oViewModel = that.getView().getModel("educaView");
+            var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
+            aAdjuntos.splice(iIndex, 1);
+            oViewModel.setProperty("/adjuntos", aAdjuntos);
+          }
+        }
+      );
     },
 
     /**

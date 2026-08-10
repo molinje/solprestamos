@@ -220,6 +220,8 @@
                         <Table
                             id="tableAdjuntosCompu"
                             items="{compuView>/adjuntos}"
+                            mode="Delete"
+                            delete="onEliminarAdjunto"
                             noDataText="No hay documentos adjuntos. Use el botón Agregar."
                             class="sapUiSmallMarginBottom">
                             <columns>

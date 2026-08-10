@@ -212,7 +212,7 @@
                                 textAlign="End"
                                 editable="false"/>
                         </VBox>
-                        <VBox>
+                         <VBox id="vboxPregrado" visible="false">
                             <Label text="Buscar programa de pregrado (servicio)" labelFor="inputBuscarProgramaPregrado"/>
                             <Input
                                 id="inputBuscarProgramaPregrado"
@@ -222,9 +222,19 @@
                                 placeholder="Digite un texto y presione la ayuda de búsqueda"
                                 value="{educaView>/busquedaProgramaPregrado}"/>
                         </VBox>
+                        <VBox id="vboxPostgrado" visible="false">
+                            <Label text="Buscar programa de posgrado (servicio)" labelFor="inputBuscarProgramaPosgrado"/>
+                            <Input
+                                id="inputBuscarProgramaPosgrado"
+                                width="100%"
+                                showValueHelp="true"
+                                valueHelpRequest="onBuscarProgramaPosgradoValueHelp"
+                                placeholder="Digite un texto y presione la ayuda de búsqueda"
+                                value="{educaView>/busquedaProgramaPosgrado}"/>
+                        </VBox>
 
                         <!-- Buscador de programa: ancho completo siempre -->
-                        <VBox id="vboxPregrado" visible="false">
+                        <VBox id="vboxPregrado2" visible="false">
                             <layoutData>
                                 <layout:GridData span="L12 M12 S12"/>
                             </layoutData>
@@ -239,7 +249,7 @@
                                 value="{educaView>/programaBusqueda}"/>
                         </VBox>
 
-                        <VBox id="vboxPostgrado" visible="false">
+                        <VBox id="vboxPostgrado2" visible="false">
                             <layoutData>
                                 <layout:GridData span="L12 M12 S12"/>
                             </layoutData>
@@ -492,6 +502,8 @@
                         <Table
                             id="tableAdjuntos3"
                             items="{educaView>/adjuntos}"
+                            mode="Delete"
+                            delete="onEliminarAdjunto"
                             noDataText="No hay documentos adjuntos. Use el botón Agregar."
                             class="sapUiSmallMarginBottom">
                             <columns>

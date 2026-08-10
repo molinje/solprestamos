@@ -1083,6 +1083,32 @@
 		},
 
 		/**
+		 * Elimina un documento adjunto de la tabla (evento "delete" del sap.m.Table en modo Delete)
+		 */
+		onEliminarAdjunto: function (oEvent) {
+			var that = this;
+			var oItem = oEvent.getParameter("listItem");
+			var oContext = oItem.getBindingContext("calamView");
+			var sPath = oContext.getPath();
+			var iIndex = parseInt(sPath.split("/").pop(), 10);
+
+			MessageBox.confirm(
+				"¿Desea eliminar el documento '" + oContext.getProperty("nombreArchivo") + "'?", {
+					title: "Eliminar adjunto",
+					onClose: function (sAction) {
+						if (sAction !== MessageBox.Action.OK) {
+							return;
+						}
+						var oViewModel = that.getView().getModel("calamView");
+						var aAdjuntos = oViewModel.getProperty("/adjuntos") || [];
+						aAdjuntos.splice(iIndex, 1);
+						oViewModel.setProperty("/adjuntos", aAdjuntos);
+					}
+				}
+			);
+		},
+
+		/**
 		 * Guarda los adjuntos asociados a una solicitud de préstamo
 		 * @param {string} id_prestamo - ID de la solicitud de préstamo (UUID)
 		 */

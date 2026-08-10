@@ -222,6 +222,8 @@
                         <Table
                             id="tableAdjuntosElectric"
                             items="{movelectricView>/adjuntos}"
+                            mode="Delete"
+                            delete="onEliminarAdjunto"
                             noDataText="No hay documentos adjuntos. Use el botón Agregar."
                             class="sapUiSmallMarginBottom">
                             <columns>

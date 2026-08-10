@@ -37,6 +37,7 @@
                 id="tablaSolicitudes"
                 items="{solicitudesEmpleado>/items}"
                 noDataText="No hay solicitudes registradas"
+                itemPress="onVerDetalleSolicitud"
                 class="sapUiMediumMarginTop">
                 <headerToolbar>
                     <Toolbar>
@@ -44,6 +45,7 @@
                     </Toolbar>
                 </headerToolbar>
                 <columns>
+                    <Column width="16rem"><Text text="N° Préstamo"/></Column>
                     <Column><Text text="Tipo Préstamo"/></Column>
                     <Column hAlign="Right" width="7rem"><Text text="N° Cuotas"/></Column>
                     <Column hAlign="Right" width="11rem"><Text text="Valor Cuota"/></Column>
@@ -52,8 +54,9 @@
                     <Column width="6rem"><Text text="Moneda"/></Column>
                 </columns>
                 <items>
-                    <ColumnListItem>
+                    <ColumnListItem type="Navigation">
                         <cells>
+                            <Text text="{solicitudesEmpleado>UUID}"/>
                             <Text text="{solicitudesEmpleado>TEXTO_TIPO_PRESTAMO}"/>
                             <Text text="{solicitudesEmpleado>NUM_COUTAS}"/>
                             <Text text="{

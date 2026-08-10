@@ -1,0 +1,231 @@
+<mvc:View
+	controllerName="prestamos.ccb.org.solprestamos.controller.Detail"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:form="sap.ui.layout.form"
+	xmlns:core="sap.ui.core"
+	xmlns:u="sap.ui.unified"
+	xmlns:mvc="sap.ui.core.mvc"
+	core:require="{ Formatter: 'prestamos/ccb/org/solprestamos/model/formatter' }">
+
+	<Page
+		id="pageDetail"
+		title="Detalle de Solicitud"
+		showNavButton="true"
+		navButtonPress=".onNavBack"
+		busy="{detailView>/busy}"
+		busyIndicatorDelay="0">
+
+		<content>
+			<VBox class="sapUiSmallMargin">
+
+				<!-- Sección: Información del Préstamo -->
+				<Panel
+					headerText="Información del Préstamo"
+					expandable="true"
+					expanded="true"
+					class="sapUiSmallMarginBottom">
+
+					<form:SimpleForm
+						editable="false"
+						layout="ResponsiveGridLayout"
+						labelSpanXL="4"
+						labelSpanL="4"
+						labelSpanM="4"
+						labelSpanS="12"
+						columnsXL="2"
+						columnsL="2"
+						columnsM="2"
+						singleContainerFullSize="false">
+
+						<form:content>
+							<Label text="Nombre Empleado"/>
+							<Text text="{detailsolicitud>/TEXTO_NAME_EMP}"/>
+
+							<Label text="Tipo de Préstamo"/>
+							<Text text="{detailsolicitud>/TEXTO_TIPO_PRESTAMO}"/>
+
+							<Label text="Valor del Préstamo"/>
+							<ObjectNumber
+								number="{
+									parts: [
+										{path: 'detailsolicitud>/DARBT'},
+										{path: 'detailsolicitud>/DBTCU'}
+									],
+									type: 'sap.ui.model.type.Currency',
+									formatOptions: { showMeasure: false }
+								}"
+								unit="{detailsolicitud>/DBTCU}"/>
+
+							<Label text="N° Cuotas"/>
+							<Text text="{detailsolicitud>/NUM_COUTAS}"/>
+
+							<Label text="Valor Cuota"/>
+							<ObjectNumber
+								number="{
+									parts: [
+										{path: 'detailsolicitud>/VALOR_POR_MES'},
+										{path: 'detailsolicitud>/DBTCU'}
+									],
+									type: 'sap.ui.model.type.Currency',
+									formatOptions: { showMeasure: false }
+								}"
+								unit="{detailsolicitud>/DBTCU}"/>
+
+							<Label text="N° Personal"/>
+							<Text text="{detailsolicitud>/PERNR}"/>
+
+							<Label text="Fecha del Préstamo"/>
+							<Text text="{detailsolicitud>/DATBW}"/>
+
+							<Label text="Motivo"/>
+							<Text text="{detailsolicitud>/TEXTO_TIPO_CALAMIDAD}"/>
+						</form:content>
+					</form:SimpleForm>
+				</Panel>
+
+				<!-- Sección: Primas Comprometidas -->
+				<Panel
+					headerText="Primas comprometidas"
+					expandable="true"
+					expanded="true"
+					class="sapUiSmallMarginBottom">
+
+					<Table
+						id="tablaPrimasDetail"
+						items="{detailsolicitud>/PRIMAS/item}"
+						noDataText="No hay primas comprometidas">
+						<columns>
+							<Column>
+								<Text text="Fecha Prima"/>
+							</Column>
+							<Column>
+								<Text text="Valor Prima"/>
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem>
+								<cells>
+									<Text text="{= Formatter.formatFechaEs(${detailsolicitud>FECHA_PRIMA}) }"/>
+									<ObjectNumber
+										number="{
+											parts: [
+												{path: 'detailsolicitud>VALOR_PRIMA'},
+												{value: 'COP'}
+											],
+											type: 'sap.ui.model.type.Currency',
+											formatOptions: { showMeasure: true }
+										}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</Panel>
+
+				<!-- Sección: Adjuntar Documentos -->
+				<Panel
+					headerText="Adjuntar Documentos"
+					expandable="true"
+					expanded="true"
+					class="sapUiSmallMarginBottom">
+
+					<Toolbar>
+						<ToolbarSpacer/>
+						<Button
+							text="Guardar Adjuntos"
+							icon="sap-icon://save"
+							type="Accept"
+							press=".onSaveAttachments"/>
+						<Button
+							text="Agregar"
+							icon="sap-icon://add"
+							type="Emphasized"
+							press=".onAgregarDocumento"/>
+					</Toolbar>
+
+					<Table
+						id="tableAdjuntosDetail"
+						items="{detailView>/adjuntos}"
+						mode="Delete"
+						delete=".onEliminarAdjunto"
+						noDataText="No hay documentos adjuntos. Use el botón Agregar."
+						class="sapUiSmallMarginBottom">
+						<columns>
+							<Column width="60%">
+								<Text text="Nombre de Archivo"/>
+							</Column>
+							<Column width="40%">
+								<Text text="Tipo de Documento"/>
+							</Column>
+						</columns>
+						<items>
+							<ColumnListItem>
+								<cells>
+									<Text text="{detailView>nombreArchivo}"/>
+									<Text text="{detailView>tipoArchivoText}"/>
+								</cells>
+							</ColumnListItem>
+						</items>
+					</Table>
+				</Panel>
+
+				<!-- Sección: Documentos Adjuntos -->
+				<Panel
+					headerText="Documentos Adjuntos"
+					expandable="true"
+					expanded="true"
+					class="sapUiSmallMarginBottom"
+					busy="{detailView>/busyDocumentos}"
+					busyIndicatorDelay="0">
+
+					<List
+						noDataText="No hay documentos disponibles"
+						items="{documentos>/items}"
+						showSeparators="Inner">
+
+						<items>
+							<CustomListItem>
+								<FlexBox
+									alignItems="Center"
+									justifyContent="SpaceBetween"
+									class="sapUiSmallMarginBeginEnd sapUiTinyMarginTopBottom">
+
+									<FlexBox alignItems="Center">
+										<core:Icon
+											src="sap-icon://document"
+											size="1.5rem"
+											class="sapUiSmallMarginEnd"/>
+										<VBox>
+											<Text
+												text="{documentos>nombre}"
+												wrapping="false"/>
+											<ObjectStatus
+												text="{documentos>extension}"
+												state="Information"/>
+										</VBox>
+									</FlexBox>
+
+									<FlexBox alignItems="Center">
+										<Button
+											icon="sap-icon://display"
+											tooltip="Ver documento"
+											press=".onVerDocumento"
+											type="Transparent"/>
+										<Button
+											icon="sap-icon://download"
+											tooltip="Descargar documento"
+											press=".onDescargarDocumento"
+											type="Transparent"/>
+									</FlexBox>
+
+								</FlexBox>
+							</CustomListItem>
+						</items>
+
+					</List>
+				</Panel>
+
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

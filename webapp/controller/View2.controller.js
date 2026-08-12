@@ -1163,6 +1163,7 @@
 
 			var NoPrimas = aTimes + 1;
 			var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+			var sCuotas = oViewModel.getProperty("/selectedCuotas");
 
 			if (!porcentajePrima || porcentajePrima === "") {
 				MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
@@ -1175,7 +1176,8 @@
 				"VALOR_PRESTAMO": String(fValorSolicitado),
 				"CANTIDAD_PRIMAS": String(NoPrimas),
 				"TIPO_PRESTAMO": idPrestamo,
-				"PORCENTAJE": porcentajePrima
+				"PORCENTAJE": porcentajePrima,
+				"CUOTAS": sCuotas
 			};
 
 
@@ -1281,13 +1283,15 @@
 					// para enviar ese valor al servicio y que retorne la nueva lista de primas actualizada sin la última prima que se quiere eliminar	
 
 					var NoPrimas = aTimes - 1;
+					var sCuotas = oViewModel.getProperty("/selectedCuotas");
 
 					var dataPrima = {
 						"EMPLEADO": employeenumber,
 						"VALOR_PRESTAMO": String(fValorSolicitado),
 						"CANTIDAD_PRIMAS": String(NoPrimas),
 						"TIPO_PRESTAMO": idPrestamo,
-						"PORCENTAJE": porcentajePrima
+						"PORCENTAJE": porcentajePrima,
+						"CUOTAS": sCuotas
 					};
 
 					this._oBackendService.Add_PrimaService(dataPrima)

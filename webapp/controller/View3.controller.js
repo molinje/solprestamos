@@ -1326,6 +1326,7 @@ sap.ui.define([
       var idPrestamo = oViewModel.getProperty("/idPrestamo");
       var moneda = oViewModel.getProperty("/moneda");
       var porcentajePrima = oViewModel.getProperty("/PorcentajePrima");
+      var sCuotas = oViewModel.getProperty("/NCuotas");
 
       if (!porcentajePrima || porcentajePrima === "") {
         MessageBox.error("Debe seleccionar un porcentaje antes de agregar una prima.");
@@ -1341,7 +1342,8 @@ sap.ui.define([
         "VALOR_PRESTAMO": String(fValorPagar),
         "CANTIDAD_PRIMAS": String(NoPrimas),
         "TIPO_PRESTAMO": idPrestamo,
-        "PORCENTAJE": porcentajePrima
+        "PORCENTAJE": porcentajePrima,
+        "CUOTAS": sCuotas
       };
 
       this._oBackendService.Add_PrimaService(dataPrima)
@@ -1428,12 +1430,14 @@ sap.ui.define([
       }
 
       var NoPrimas = aTimes - 1;
+      var sCuotas = oViewModel.getProperty("/NCuotas");
       var dataPrima = {
         "EMPLEADO": employeenumber,
         "VALOR_PRESTAMO": String(fValorPagar),
         "CANTIDAD_PRIMAS": String(NoPrimas),
         "TIPO_PRESTAMO": idPrestamo,
-        "PORCENTAJE": porcentajePrima
+        "PORCENTAJE": porcentajePrima,
+        "CUOTAS": sCuotas
       };
 
       this._oBackendService.Add_PrimaService(dataPrima)

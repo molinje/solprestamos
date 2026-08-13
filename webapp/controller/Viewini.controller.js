@@ -179,6 +179,12 @@ sap.ui.define([
                                     ? oData.ET_PRESTAMO.item
                                     : [oData.ET_PRESTAMO.item];
                             }
+
+                            // Ordenar por N° Préstamo (UUID) descendente, más reciente primero
+                            aItems.sort(function (a, b) {
+                                return String(b.UUID).localeCompare(String(a.UUID), undefined, { numeric: true });
+                            });
+
                             that.getView().setModel(new JSONModel({ items: aItems }), "solicitudesEmpleado");
                         })
                         .catch(function (oError) {

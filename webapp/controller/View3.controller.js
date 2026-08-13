@@ -859,6 +859,7 @@ sap.ui.define([
         DARBT: "",
         VALOR_POR_MES: 0,
         DATBW: new Date().toISOString().slice(0, 10),
+        NUM_COUTAS: 0,
         ZNUEXT: "",
         ZNOEXT: "",
         ZFORP1: "",
@@ -1103,6 +1104,8 @@ sap.ui.define([
 
       if (lv_ZNUCUPE && lv_ZNUCUPE > 0) {
         oPayload.ZNUCUPE = lv_ZNUCUPE;
+        oPayload.NUM_COUTAS = lv_ZNUCUPE;
+
       } else {
 
         MessageBox.error(

@@ -52,6 +52,7 @@
                     <Column width="9rem"><Text text="Fecha Solicitud"/></Column>
                     <Column hAlign="Right" width="12rem"><Text text="Valor Solicitado"/></Column>
                     <Column width="6rem"><Text text="Moneda"/></Column>
+                    <Column width="9rem"><Text text="Estado"/></Column>
                 </columns>
                 <items>
                     <ColumnListItem type="Navigation">
@@ -69,6 +70,7 @@
                                 formatter: '.formatAmount'
                             }"/>
                             <Text text="{solicitudesEmpleado>DBTCU}"/>
+                            <Text text="{solicitudesEmpleado>LOG_STATUS/item/SATUS}"/>
                         </cells>
                     </ColumnListItem>
                 </items>

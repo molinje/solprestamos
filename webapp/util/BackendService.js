@@ -224,14 +224,14 @@ sap.ui.define([
             var sId = String(sEmployeeNumeber).trim();
 
             // Codigo anterior que no funcionaba correctamente, se reemplazo por el siguiente
-            //var sServiceUrl = this._getAppBase() +  "/http/CCB_Prestamo_Detalle?$filter=Identificacion eq '" + sId + "'";            
+            var sServiceUrl = this._getAppBase() +  "/http/CCB_Prestamo_Detalle?$filter=Identificacion eq '" + sId + "'";            
             //return this._executeGet(sServiceUrl);
             
             // Ejemplo como esta funcionando bien en otro metodo 
             // return this._executeGet(this._getAppBase() + this._getMemorandoUrl, { uuid: "'" + sId + "'" });
 
-            return this._executeGet(this._getAppBase() + this._solicitdesFromEmployee, { Identificacion: "'" + sId + "'" });
-
+            //return this._executeGet(this._getAppBase() + this._solicitdesFromEmployee, { Identificacion: "'" + sId + "'" });
+            return this._executeGet(sServiceUrl);
 
 
 

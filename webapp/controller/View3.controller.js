@@ -17,11 +17,35 @@ sap.ui.define([
       var programasPregrado = oGlobalModel ? oGlobalModel.getProperty("/gt_pregrado") : [];
       var programasPostgrado = oGlobalModel ? oGlobalModel.getProperty("/gt_postgrado") : [];
 
-
       var oUserData = oGlobalModel ? oGlobalModel.getProperty("/userData") : null;
       var oPrestamoSeleccionado = oGlobalModel ? oGlobalModel.getProperty("/prestamoSeleccionado") : null;
 
-      var oViewModel = new JSONModel({
+      var oViewModel = new JSONModel(
+        this._getEducaViewDefaults(oUserData, oPrestamoSeleccionado, programasPregrado, programasPostgrado)
+      );
+
+      this.getView().setModel(oViewModel, "educaView");
+
+      // Modelo para la colección de primas a descontar
+      var oPrimasModel = new JSONModel({ items: [] });
+      this.getView().setModel(oPrimasModel, "listprimas3");
+
+      this._wizard = this.byId("wizardEduca");
+
+      // Suscribirse al evento de ruta
+      var oRouter = this.getOwnerComponent().getRouter();
+      oRouter.getRoute("RouteView3").attachPatternMatched(this._onRouteMatched, this);
+    },
+
+    /**
+     * Construye el objeto de datos por defecto del modelo "educaView".
+     * Se usa tanto en onInit (primera carga) como en _resetFormulario
+     * (cada vez que se reingresa al formulario) para evitar que queden
+     * datos de una solicitud anterior.
+     * @private
+     */
+    _getEducaViewDefaults: function (oUserData, oPrestamoSeleccionado, programasPregrado, programasPostgrado) {
+      return {
         // Datos del usuario / préstamo
         employeeNumber: oUserData ? oUserData.PERNR : "",
         idPrestamo: oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : "",
@@ -78,8 +102,8 @@ sap.ui.define([
 
         // Opciones de cuotas según tipo de educación (se construye en onTipoEducacionChange)
         CuotasEducaCollection: [],
-        programasPregrado: programasPregrado,
-        programasPostgrado: programasPostgrado,
+        programasPregrado: programasPregrado || [],
+        programasPostgrado: programasPostgrado || [],
         mostrarPregrado: false,
         mostrarPostgrado: false,
 
@@ -102,57 +126,37 @@ sap.ui.define([
         programaCarrera: "",
         programaNIT: "",
         programaCodigo: ""
-      });
-
-      this.getView().setModel(oViewModel, "educaView");
-
-      // Modelo para la colección de primas a descontar
-      var oPrimasModel = new JSONModel({ items: [] });
-      this.getView().setModel(oPrimasModel, "listprimas3");
-
-      this._wizard = this.byId("wizardEduca");
-
-      // Suscribirse al evento de ruta
-      var oRouter = this.getOwnerComponent().getRouter();
-      oRouter.getRoute("RouteView3").attachPatternMatched(this._onRouteMatched, this);
+      };
     },
 
     /**
-     * Se ejecuta cada vez que el router navega a RouteView3.
-     * Lee el préstamo seleccionado desde globalData.
+     * Reinicia por completo el formulario: modelo "educaView", primas,
+     * wizard, buscadores de programa y campos de adjuntos. Se invoca en
+     * cada _onRouteMatched para que no queden datos de una solicitud
+     * previa cuando el usuario vuelve a entrar a crear otra.
      * @private
      */
-    _onRouteMatched: function () {
+    _resetFormulario: function () {
       var oGlobalModel = this.getOwnerComponent().getModel("globalData");
       var oPrestamoSeleccionado = oGlobalModel.getProperty("/prestamoSeleccionado");
+      var oUserData = oGlobalModel.getProperty("/userData");
+      var aProgramasPregrado = oGlobalModel.getProperty("/gt_pregrado");
+      var aProgramasPostgrado = oGlobalModel.getProperty("/gt_postgrado");
+
       var oViewModel = this.getView().getModel("educaView");
+
+      // Reemplaza TODO el contenido del modelo por los valores por defecto,
+      // eliminando cualquier dato residual de una solicitud anterior.
+      oViewModel.setData(
+        this._getEducaViewDefaults(oUserData, oPrestamoSeleccionado, aProgramasPregrado, aProgramasPostgrado)
+      );
 
       if (oPrestamoSeleccionado && oPrestamoSeleccionado.MontoMaximo) {
         oViewModel.setProperty("/montoMaximo", parseFloat(oPrestamoSeleccionado.MontoMaximo.replace(/\./g, "")));
       }
 
-      //this.onValidartipoEduca(oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : null);
-
-      // Limpiar campos calculados al navegar
-      oViewModel.setProperty("/valorSolicitado", 0);
-      oViewModel.setProperty("/valorPrestamo", 0);
-      oViewModel.setProperty("/ValorPagar", 0);
-      oViewModel.setProperty("/ValorCuota", 0);
-      oViewModel.setProperty("/NCuotas", "");
-      oViewModel.setProperty("/numeroCuotas", 0);
-      oViewModel.setProperty("/valorValueState", "None");
-      oViewModel.setProperty("/valorValueStateText", "");
-      oViewModel.setProperty("/cuotasValueState", "None");
-      oViewModel.setProperty("/cuotasValueStateText", "");
-
-      // Refrescar programasPregrado desde globalData (por si cargó después del onInit)
-      var aProgramas = oGlobalModel.getProperty("/gt_pregrado");
-      if (aProgramas) {
-        oViewModel.setProperty("/programasPregrado", aProgramas);
-      }
       // Limpiar primas al navegar
       this.getView().getModel("listprimas3").setProperty("/items", []);
-      oViewModel.setProperty("/SelectedPrimas", "NO_APLICA");
 
       // Ocultar buscadores hasta que el usuario elija tipo de educación
       this.byId("vboxPregrado").setVisible(false);
@@ -163,20 +167,22 @@ sap.ui.define([
       this.byId("selectProgPregado").removeAllSuggestionItems();
       this._aUltimosFiltradosPost = [];
       this.byId("selectPostPregado").removeAllSuggestionItems();
-      oViewModel.setProperty("/programaBusqueda", "");
-      oViewModel.setProperty("/programaTitulo", "");
-      oViewModel.setProperty("/programaUniversidad", "");
-      oViewModel.setProperty("/programaCarrera", "");
-      oViewModel.setProperty("/programaNIT", "");
-      oViewModel.setProperty("/programaCodigo", "");
-      oViewModel.setProperty("/programaPostGradoBusqueda", "");
-      oViewModel.setProperty("/busquedaProgramaPregrado", "");
-      oViewModel.setProperty("/ProgramasPregradoResultado", []);
-
-      this.onValidartipoEduca(oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : null);
 
       // Resetear el wizard al paso 1
       this._resetWizard();
+
+      return oPrestamoSeleccionado;
+    },
+
+    /**
+     * Se ejecuta cada vez que el router navega a RouteView3.
+     * Lee el préstamo seleccionado desde globalData.
+     * @private
+     */
+    _onRouteMatched: function () {
+      var oPrestamoSeleccionado = this._resetFormulario();
+
+      this.onValidartipoEduca(oPrestamoSeleccionado ? oPrestamoSeleccionado.PrestamoId : null);
     },
 
     /**

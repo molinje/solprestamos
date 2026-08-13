@@ -247,7 +247,9 @@ sap.ui.define([
          */
         getSolicitudDetalle: function (sUUID) {
             var sId = String(sUUID).trim();
-            return this._executeGet(this._getAppBase() + this._solicitdesFromEmployee, { UUID: "'" + sId + "'" });
+            var sUrl = this._getAppBase() + "/http/CCB_Prestamo_Detalle?$filter=UUID eq '" + sId + "'";
+           // return this._executeGet(this._getAppBase() + this._solicitdesFromEmployee, { UUID: "'" + sId + "'" });
+            return this._executeGet(sUrl);
         },
 
         /**

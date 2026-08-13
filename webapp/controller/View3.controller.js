@@ -1528,7 +1528,7 @@ sap.ui.define([
       });
       this._oAdjuntosDialog3.setModel(oDialogModel, "adjuntoDlg");
 
-      var oFileUploader = this.byId("fileUploaderDialog");
+      var oFileUploader = this.byId("fileUploaderDialogEduca");
       if (oFileUploader) {
         oFileUploader.clear();
         oFileUploader.setValueState("None");

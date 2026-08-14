@@ -244,8 +244,15 @@ sap.ui.define([
         formatAmount: function (sValue, sCurrency) {
             if (sValue === undefined || sValue === null || sValue === "") return "";
             var fValue = parseFloat(sValue) || 0;
+
+            // El backend SAP devuelve los importes en COP sin el ajuste de las
+            // 2 decimales internas que maneja el sistema para esta moneda.
+            if (sCurrency === "COP") {
+                fValue = fValue * 100;
+            }
+
             var oFormat = sap.ui.core.format.NumberFormat.getCurrencyInstance({ showMeasure: false });
-            return oFormat.format(fValue) + (sCurrency ? " " + sCurrency : "");
+            return oFormat.format(fValue, sCurrency) + (sCurrency ? " " + sCurrency : "");
         },
 
         _onObjectMatched: function () {

@@ -84,6 +84,52 @@
 					</form:SimpleForm>
 				</Panel>
 
+				<!-- Sección: Estado de Aprobación -->
+				<Panel
+					headerText="Estado de Aprobación"
+					expandable="true"
+					expanded="true"
+					class="sapUiSmallMarginBottom">
+
+					<form:SimpleForm
+						editable="false"
+						layout="ResponsiveGridLayout"
+						labelSpanXL="4"
+						labelSpanL="4"
+						labelSpanM="4"
+						labelSpanS="12"
+						columnsXL="2"
+						columnsL="2"
+						columnsM="2"
+						singleContainerFullSize="false">
+
+						<form:content>
+							<Label text="Nivel actual de aprobación"/>
+							<Text text="{detailsolicitud>/LOG_STATUS/item/NIVEL}"/>
+
+							<Label text="Niveles de aprobación"/>
+							<Text text="{detailsolicitud>/LOG_STATUS/item/NIVEL_MAX}"/>
+
+							<Label text="Ultimo Aprobador"/>
+							<Text text="{detailsolicitud>/LOG_STATUS/item/NOMBRE_APROBADOR}"/>
+
+							<Label text="Usuario Aprobador"/>
+							<Text text="{detailsolicitud>/LOG_STATUS/item/USRID}"/>
+
+							<Label text="Fecha de ultima aprobación"/>
+							<Text text="{detailsolicitud>/LOG_STATUS/item/DATUM}"/>
+
+							<Label text="Hora de ultima aprobación"/>
+							<Text text="{detailsolicitud>/LOG_STATUS/item/UZEIT}"/>
+
+							<Label text="Estado de Aprobación"/>
+							<ObjectStatus
+								text="{detailsolicitud>/LOG_STATUS/item/SATUS}"
+								state="Information"/>
+						</form:content>
+					</form:SimpleForm>
+				</Panel>
+
 				<!-- Sección: Primas Comprometidas -->
 				<Panel
 					headerText="Primas comprometidas"

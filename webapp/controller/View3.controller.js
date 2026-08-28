@@ -541,11 +541,20 @@ sap.ui.define([
       oViewModel.setProperty("/valorPrestamo", Math.round(fValorSolicitado));
 
       oViewModel.setProperty("/ValorPagar", Math.round(fValorPagar));
+      
+      var fValorCuota = 0;
 
       if ((fValorPagar > 0 && iNumeroCuotas > 0) && (fValorPagar > iNumeroCuotas)) {
-        var fValorCuota = Math.round((fValorPagar - valorTotalPrimas) / iNumeroCuotas) > 0 ? Math.round((fValorPagar - valorTotalPrimas) / iNumeroCuotas) : 0;
+        fValorCuota = Math.round((fValorPagar - valorTotalPrimas) / iNumeroCuotas) > 0 ? Math.round((fValorPagar - valorTotalPrimas) / iNumeroCuotas) : 0;
         oViewModel.setProperty("/ValorCuota", fValorCuota);
       }
+
+      if (fValorPagar <= 0) {
+        oViewModel.setProperty("/ValorCuota", 0);
+         
+      }
+
+     
 
 
       MessageToast.show("Cuota: " + this._formatCurrency(fValorCuota, "COP"));
@@ -1142,13 +1151,7 @@ sap.ui.define([
 
       if (lv_ZVALPEE && lv_ZVALPEE > 0) {
         oPayload.ZVALPEE = (parseFloat(lv_ZVALPEE) / 100).toFixed(2);
-      } else {
-
-        MessageBox.error(
-          "No se ha determinado el valor a pagar"
-        );
-        return;
-      }
+      } 
 
       if (lv_ZPORPEE && lv_ZPORPEE > 0) {
         oPayload.ZPORPEE = lv_ZPORPEE;
